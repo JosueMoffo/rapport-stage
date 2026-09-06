@@ -1,0 +1,29 @@
+# Dossier des fichiers auxiliaires LaTeX (genere par latexmk -aux-directory=build)
+build/
+
+# PDF genere (artefact de build, pas de code source)
+*.pdf
+
+# Fichiers auxiliaires generes par une compilation locale sans -aux-directory
+*.aux
+*.log
+*.toc
+*.lof
+*.lot
+*.out
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.glo
+*.gls
+*.glg
+*.ist
+*.acn
+*.acr
+*.alg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+scan_structure_raport.sh
+scan_structure_raport.txt

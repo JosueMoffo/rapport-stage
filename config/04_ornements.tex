@@ -1,0 +1,48 @@
+% ============================================================
+% config/04_ornements.tex
+% Motifs ornementaux (pgfornament) - POINT UNIQUE DE MODIFICATION
+% Identifiants issus du catalogue du package pgfornament (voir
+% "texdoc pgfornament" pour la planche complete des motifs disponibles).
+% Changer un identifiant ici suffit a changer le motif partout ou il
+% est utilise (page de garde, en-tetes, pieds de page).
+% ============================================================
+
+% --- Motifs de la bordure de page de garde ---
+\newcommand{\agtOrnCorner}{24}  % motif de coin
+\newcommand{\agtOrnSide}{19}    % motif de bordure repete (haut/bas)
+\newcommand{\agtOrnSize}{10mm}  % taille d'un motif de bordure
+
+% --- Motifs legers d'en-tete / pied de page (chaque page du corps) ---
+\newcommand{\agtOrnHeader}{80}
+\newcommand{\agtOrnFooter}{83}
+\newcommand{\agtOrnHeaderSize}{5mm}
+\newcommand{\agtOrnFooterSize}{4.5mm}
+
+% --- Bordure complete (page de garde uniquement) ---
+% CORRECTION : l'ancienne version (boucle \foreach avec rotation
+% manuelle des noeuds) faussait le calcul des ancres et produisait des
+% blocs pleins noirs au lieu du motif repete. Remplacee par la technique
+% eprouvee du template ENSPY (Yuhala, depot latex-thesis) : une chaine
+% de noeuds TikZ (bibliotheque "chains") qui tourne aux quatre coins,
+% bien plus fiable que des calculs de position manuels.
+% LIMITE ANTICIPEE : le nombre de motifs par cote (17 en haut/bas, 25
+% sur les cotes) est calibre pour une page A4 avec un motif de 10mm ;
+% si la taille du motif (\agtOrnSize) change, ces nombres doivent etre
+% ajustes en consequence pour ne pas deborder ou laisser un espace vide.
+\newcommand{\pageborderornament}{%
+  \begin{tikzpicture}[remember picture, overlay, start chain, node distance=-2mm, color=reportprimary]%
+    \node (agtnw) [shift={(5mm,-5mm)}, anchor=north west, on chain] at (current page.north west) {\pgfornament[width=\agtOrnSize]{\agtOrnCorner}};%
+    \foreach \i in {1,...,16} {\node [on chain] {\pgfornament[width=\agtOrnSize]{\agtOrnSide}};}%
+    \node (agtne) [on chain] {\pgfornament[width=\agtOrnSize]{\agtOrnCorner}};%
+    \foreach \i in {1,...,24} {\node [continue chain=going below, on chain] {\pgfornament[width=\agtOrnSize]{\agtOrnSide}};}%
+    \node (agtse) [on chain] {\pgfornament[width=\agtOrnSize]{\agtOrnCorner}};%
+    \foreach \i in {1,...,16} {\node [continue chain=going left, on chain] {\pgfornament[width=\agtOrnSize]{\agtOrnSide}};}%
+    \node (agtsw) [on chain] {\pgfornament[width=\agtOrnSize]{\agtOrnCorner}};%
+    \foreach \i in {1,...,24} {\node [continue chain=going above, on chain] {\pgfornament[width=\agtOrnSize]{\agtOrnSide}};}%
+  \end{tikzpicture}%
+}
+
+% --- Lettrine coloree (raccourci) ---
+% Usage dans un chapitre : \agtlettrine{P}{our mener a bien...}
+\setcounter{DefaultLines}{3}
+\newcommand{\agtlettrine}[2]{\lettrine[lines=3]{\color{reportprimary}#1}{#2}}

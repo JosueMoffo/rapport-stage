@@ -1,0 +1,213 @@
+\chapter{Implémentation}
+\label{chap:realisation}
+
+\agtlettrine{L}a conception ayant posé l'architecture et les
+comportements attendus du système, ce chapitre décrit sa mise en œuvre
+concrète : l'environnement et les outils retenus, la méthodologie de
+travail suivie, la réalisation module par module, les difficultés
+rencontrées et le déploiement réel de l'outil.
+\minisommaire
+
+\section{Environnement et outils de développement}
+
+Les choix technologiques présentés ici ne précèdent pas la conception,
+ils en découlent : chaque outil retenu répond à une contrainte déjà
+posée au chapitre précédent, plutôt qu'à une préférence de départ.
+
+\subsection{Backend}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{p{1.6cm}p{2.6cm}p{8.6cm}}
+\toprule
+\textbf{Logo} & \textbf{Technologie} & \textbf{Justification} \\
+\midrule
+\includegraphics[height=1cm]{assets/icons/04-icone_fastapi.png} &
+FastAPI &
+Le backend concentre toute vérification RBAC/IBAC à chaque requête et
+diffuse plusieurs flux temps réel (journaux, console web). FastAPI
+propose nativement les deux : une gestion asynchrone des requêtes et un
+support intégré des WebSocket, sans bibliothèque tierce. \\
+\addlinespace
+\includegraphics[height=1cm]{assets/icons/04-icone_postgresql.png} & PostgreSQL et SQLAlchemy 2.0 &
+La base de données relationnelle porte des entités aux relations
+riches (utilisateurs, rôles, permissions, portées). Un ORM mature,
+compatible avec l'écriture asynchrone de FastAPI, évite d'écrire du SQL
+brut pour chaque requête. \\
+\addlinespace
+(logo non disponible) & Alembic &
+Le modèle de données évolue au fil de l'implémentation du projet. Alembic
+permet de versionner chaque évolution du schéma sans perte de données
+sur un environnement déjà en service. \\
+\addlinespace
+(logo non disponible) & Pydantic v2 &
+Chaque requête et chaque réponse de l'API doivent être validées
+strictement, en particulier pour ne jamais exposer un secret en clair.
+Pydantic valide les schémas de données à l'entrée et à la sortie de
+l'API, avec un typage explicite. \\
+\addlinespace
+\includegraphics[height=1cm]{assets/icons/04-icone_ssh.png} &
+Paramiko &
+Toute opération sur un serveur distant passe par un unique adaptateur
+SSH, sans agent installé sur les cibles. Paramiko implémente le
+protocole SSH directement en Python, sans dépendre d'un client SSH
+externe installé sur la machine hôte. \\
+\bottomrule
+\end{tabular}
+\caption{Technologies backend et justification par contrainte de conception}
+\end{table}
+
+\subsection{Frontend}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{p{1.6cm}p{2.6cm}p{8.6cm}}
+\toprule
+\textbf{Logo} & \textbf{Technologie} & \textbf{Justification} \\
+\midrule
+\includegraphics[height=1cm]{assets/icons/04-icone_react.png} &
+React &
+L'interface web ne porte aucune logique d'autorisation, mais doit
+adapter dynamiquement l'affichage selon les permissions reçues de l'API.
+Un modèle par composants facilite ce masquage conditionnel, écran par
+écran. \\
+\addlinespace
+(logo non disponnible) & TypeScript &
+L'interface consomme des contrats de données définis côté backend. Le typage statique évite
+une classe entière d'erreurs d'intégration entre les deux couches. \\
+\addlinespace
+\includegraphics[height=1cm]{assets/icons/04-icone_vite.png} &
+Vite &
+Le développement de l'interface s'est fait par itérations rapprochées,
+module par module, tout au long des sessions d'implémentation. Vite réduit le
+temps de rechargement à chaque modification, ce qui a compté sur un
+développement aussi séquentiel. \\
+\addlinespace
+(logo non disponible) & Tailwind CSS &
+L'interface gère simultanément un mode clair et un mode sombre, avec
+une palette sémantique de statuts (succès, erreur, avertissement).
+Tailwind permet de centraliser ces jetons de style sans dupliquer de
+CSS écran par écran. \\
+\bottomrule
+\end{tabular}
+\caption{Technologies frontend et justification par contrainte de conception}
+\end{table}
+
+\subsection{Outils et intégrations transverses}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{p{1.6cm}p{2.6cm}p{8.6cm}}
+\toprule
+\textbf{Logo} & \textbf{Technologie} & \textbf{Justification} \\
+\midrule
+\includegraphics[height=1cm]{assets/icons/04-icone_docker.png} &
+Docker &
+AGT Infra pilote des conteneurs déjà en place chez AG Technologies,
+sans réimplémenter de moteur de conteneurisation. Docker est piloté
+exclusivement en ligne de commande via SSH, jamais par son API TCP, ce
+qui évite d'exposer un port supplémentaire sur chaque serveur. \\
+\addlinespace
+\includegraphics[height=1cm]{assets/icons/04-icone_git.png}
+\includegraphics[height=1cm]{assets/icons/04-icone_github.png} &
+Git / GitHub &
+Le déploiement continu se déclenche par un évènement webhook signé,
+émis par le dépôt du projet à déployer. GitHub héberge ces dépôts et
+fournit ce mécanisme de webhook nativement. \\
+\addlinespace
+(logo non fourni) & Nginx / Certbot &
+La publication applicative expose une application déjà déployée, sous
+HTTPS, sans que l'outil ne réimplémente de serveur web ni d'autorité de
+certification. Nginx et Certbot, pilotés par SSH comme le reste,
+couvrent ce besoin sans nouvelle dépendance sur les serveurs cibles. \\
+\addlinespace
+\includegraphics[height=1cm]{assets/icons/04-icone_netdata.png} &
+Netdata &
+La supervision continue repose sur un agent autonome, installé une
+seule fois manuellement, capable de notifier l'API backend par webhook
+en cas de dépassement de seuil, indépendamment de toute consultation en
+cours. \\
+\bottomrule
+\end{tabular}
+\caption{Outils et intégrations transverses}
+\end{table}
+
+
+
+
+\section{Méthodologie de travail}
+
+La réalisation du projet s'est étalée sur plusieurs sessions successives, chacune portant sur
+un domaine fonctionnel précis. Cet étalement a rendu nécessaire une
+méthodologie de travail rigoureuse, tant pour garantir la qualité de
+chaque livraison que pour assurer la continuité.
+
+\subsection{Cycle de développement}
+
+Chaque évolution du projet, qu'il s'agisse d'un nouveau module ou d'une
+correction, a suivi un cycle en quatre étapes, appliqué sans exception :
+
+\begin{enumerate}
+  \item \textbf{Audit} : avant toute modification, un état des lieux du
+        code existant concerné est établi, afin d'en comprendre la structure et les relations avant d'y intervenir.
+  \item \textbf{Plan et/ou maquette UI} : un plan de travail est défini, précisant les
+        changements à apporter et leur impact attendu sur le reste du
+        système, avant toute écriture de code.
+  \item \textbf{Implémentation} : le plan une fois arrêté, les
+        changements sont mis en œuvre.
+  \item \textbf{Test} : chaque changement est ensuite vérifié, afin de
+        s'assurer qu'il fonctionne comme attendu et qu'aucune
+        fonctionnalité existante n'a été affectée.
+\end{enumerate}
+
+Ce cycle a permis d'éviter un écueil fréquent dans un projet de cette
+ampleur : coder avant d'avoir complètement cerné l'impact d'un
+changement sur des modules déjà en place, en particulier pour le
+contrôle d'accès, dont une régression aurait pu affecter l'ensemble du
+système.
+
+\subsection{Traçabilité des décisions}
+
+Toute décision d'architecture prise pendant le projet est numérotée, 
+de même que tout bogue identifié. Cette numérotation continue permet de retrouver, à tout
+moment, la justification d'un choix technique précis sans avoir à
+reconstituer son historique de mémoire.
+
+\subsection{Continuité}
+
+Le projet s'étalant sur plusieurs sessions d 'implémntation, sa continuité repose sur un
+petit ensemble de documents tenus à jour :
+
+\begin{itemize}
+  \item Un journal de session, décrivant ce qui a été réalisé et ce qui
+        reste en suspens.
+  \item Une liste de tâches, corrigée à la fin de chaque session plutôt
+        que laissée à reconstituer au début de la suivante.
+  \item Un index recensant, session après session, ce qui a été livré.
+\end{itemize}
+
+Cette organisation a permis de reprendre chaque session de travail sans
+perte d'information et devoir refaire un audit complet, malgré l'étalement du projet sur plusieurs semaines
+et l'intervention de plusieurs domaines fonctionnels en parallèle.
+
+\bigskip
+\noindent\textit{Note : une partie de ce cycle de développement,
+notamment la relecture de code existant, a été accélérée par l'usage d'un assistant d'intelligence
+artificielle, sous la supervision et la validation systématique de
+l'auteur à chaque étape.}
+
+
+
+
+\section{Réalisations par module}
+% TODO : gestion serveurs/conteneurs, deploiement continu, publication
+% applicative, supervision, RBAC/IBAC dynamique
+
+\section{Difficultés rencontrées et solutions apportées}
+% TODO
+
+\section{Déploiement}
+% TODO : diagramme de deploiement, infrastructure physique reelle

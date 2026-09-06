@@ -1,0 +1,103 @@
+\chapter*{Introduction générale}
+\addcontentsline{toc}{chapter}{Introduction générale}
+
+Les entreprises reposent aujourd'hui de plus en plus sur des infrastructures
+numériques pour assurer la continuité de leurs services. Au delà de la
+simple mise en ligne d'une application, il s'agit de pouvoir la déployer,
+la surveiller, en contrôler l'accès et réagir rapidement à un incident,
+sans dépendre d'interventions manuelles dispersées sur chaque serveur.
+C'est dans cette optique qu'un stage a été effectué au sein d'AG
+Technologies, entreprise camerounaise spécialisée dans la conception de
+solutions digitales (présentée en détail au chapitre~\ref{chap:entreprise}),
+du 06 juillet 2026 au 05 août 2026. La mission confiée portait initialement
+sur la prise en main des outils internes de l'entreprise et l'amélioration
+de projets logiciels déjà existants, distincts du projet finalement au
+coeur de ce rapport.
+
+\section*{Contexte et problématique}
+
+AG Technologies exploite un parc de serveurs physiques hétérogènes
+hébergeant des applications critiques pour son activité, parmi lesquelles
+AGT-BOT, AGT ERP et MboaPay. Avant le développement du projet présenté
+dans ce rapport, ce parc était piloté de façon manuelle et dispersée
+(section~\ref{chap:entreprise} du chapitre suivant) : brancher un serveur,
+y lancer des conteneurs, surveiller sa charge, déployer une application,
+l'exposer publiquement, gérer les accès des personnes intervenant dessus,
+et ajuster ses ressources en cas de montée en charge constituaient autant
+d'opérations menées séparément, sans point de contrôle unique ni
+traçabilité homogène des actions effectuées.
+
+Cette dispersion posait un problème de fond : plus le nombre de serveurs
+et d'applications augmentait, plus le risque d'erreur, d'oubli ou d'accès
+non maîtrisé augmentait avec lui, sans qu'aucun outil interne ne permette
+d'avoir une vue d'ensemble ni un contrôle centralisé. C'est ce constat qui
+a conduit à la définition d'un projet interne, nommé AGT Infra, présenté
+en détail dans la suite de ce rapport.
+
+\section*{Objectifs du projet}
+
+L'objectif général du projet est de construire une interface interne
+unique capable de piloter l'essentiel du parc de serveurs depuis un seul
+point d'entrée, sans réimplémenter les outils déjà éprouvés sur lesquels
+elle s'appuie (Docker, SSH, Nginx, Certbot, GitHub) : AGT Infra se
+positionne comme un chef d'orchestre de ces briques, pas comme un
+remplacement. Cet objectif général se décline en plusieurs objectifs
+spécifiques :
+
+\begin{itemize}
+  \item Centraliser la gestion des serveurs physiques et des conteneurs
+        Docker déjà en place, avec un inventaire unique et une connectivité
+        exclusivement fondée sur SSH.
+  \item Automatiser le déploiement continu des applications à partir de
+        dépôts Git, déclenché par des évènements applicatifs (webhooks)
+        vérifiés.
+  \item Permettre l'exposition sécurisée, sous nom de domaine et en HTTPS,
+        des applications déjà déployées.
+  \item Superviser l'état des serveurs, à la demande comme en continu, et
+        déclencher des alertes en cas de dépassement de seuils.
+  \item Mettre en place un contrôle d'accès dynamique, fondé sur des rôles
+        et des permissions pilotés en base de données plutôt que figés
+        dans le code.
+  \item Tracer systématiquement toute action sensible dans un journal
+        d'audit horodaté et attribué.
+  \item Fournir une console web intégrée à l'interface, permettant
+        d'intervenir directement sur un serveur ou un conteneur sans ouvrir
+        de session SSH séparée.
+\end{itemize}
+
+Certains besoins identifiés dès la définition du projet, comme les
+sauvegardes automatiques des bases de données ou la montée en charge
+automatique, restent hors du périmètre effectivement réalisé à ce jour ;
+leur état d'avancement est précisé au fil des chapitres concernés. La
+gestion des machines virtuelles et de l'hyperviseur associé n'entre quant
+à elle pas dans le périmètre du projet, qui se concentre exclusivement sur
+le pilotage de serveurs physiques et de conteneurs Docker déjà en place.
+
+\section*{Structure du rapport}
+
+Le présent rapport est organisé de la façon suivante :
+
+\begin{itemize}
+  \item \textbf{Chapitre~\ref{chap:entreprise} : Présentation de
+        l'entreprise AGT} : activité et organisation d'AG Technologies,
+        puis environnement technique dont elle disposait avant le
+        développement d'AGT Infra.
+  \item \textbf{Chapitre~\ref{chap:etat-art} : État de l'art} : panorama
+        des solutions existantes du marché et justification du choix d'un
+        développement interne.
+  \item \textbf{Chapitre~\ref{chap:etude-technique} : Analyse et
+        conception} : analyse des besoins (acteurs, exigences,
+        diagramme de cas d'utilisation), architecture générale de
+        l'outil, modélisation de ses données et comportements clés.
+  \item \textbf{Chapitre~\ref{chap:realisation} : Implémentation} :
+        environnement et outils de développement, méthodologie de
+        travail suivie, réalisation du projet module par module,
+        difficultés rencontrées et déploiement.
+  \item \textbf{Chapitre~\ref{chap:resultats} : Résultats et bilan} :
+        résultats obtenus, workflows et captures d'écran de
+        l'application, tests effectués, limites actuelles et
+        perspectives d'évolution du projet.
+  \item \textbf{Conclusion générale} : bilan des compétences techniques
+        et humaines acquises durant le stage, et apport de cette
+        expérience.
+\end{itemize}

@@ -1,0 +1,80 @@
+% ============================================================
+% config/02_styles.tex
+% Styles des titres, en-tetes/pieds de page, blocs de code
+% NOTE : titlesec, fancyhdr, listings, tikz et pgfornament sont
+% charges dans config/00_preambule.tex, avant cet \input.
+% ============================================================
+
+% --- Bloc de chapitre (style Legrand Orange Book) ---
+% CORRECTION : le mot "CHAPITRE" etait auparavant empile A L'INTERIEUR
+% du bloc colore, au-dessus du chiffre, ce qui l'ecrasait. Il est
+% desormais place A L'EXTERIEUR du bloc, en label vertical a gauche,
+% cale sur la meme hauteur que le carre colore (cf. reference visuelle).
+\newcommand{\ChapterNumberBlock}{%
+  \begin{tikzpicture}[remember picture, baseline]
+    % Rectangle vertical
+    \node[fill=reportprimary, minimum width=2.0cm, minimum height=2.5cm, inner sep=0pt] (numbox) {};
+    
+    % Numéro étiré dynamiquement à 2.4cm de hauteur (remplit le bloc)
+    \node[text=white, inner sep=0pt] at (numbox.center) {%
+      \resizebox{!}{2.0cm}{\usefont{OT1}{pbd}{m}{n}\bfseries\thechapter}%
+    };
+
+    % Mot "CHAPITRE" étiré à la hauteur exacte du rectangle (3.0cm)
+    \node[anchor=south, rotate=90, text=reportprimary, inner sep=0pt]
+      at ([xshift=-4mm]numbox.west) {%
+        \resizebox{2.5cm}{!}{\rmfamily\bfseries C\,H\,A\,P\,I\,T\,R\,E}%
+      };
+  \end{tikzpicture}%
+}
+
+\titleformat{\chapter}[display]
+  {\normalfont\filleft} % Alignement de tout le bloc et du texte à droite
+  {\ChapterNumberBlock} % Bloc de numéro
+  {12pt}                % Espace vertical (saut de ligne) entre le bloc et le titre
+  {\Huge\bfseries\color{reportprimary}} % Style du texte du titre
+\titlespacing*{\chapter}{0pt}{0pt}{30pt}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{reportprimary}}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}
+  {\thesubsection}{1em}{}
+
+% --- En-tete / pied de page, avec motifs ornementaux legers ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{{\color{reportprimary}\pgfornament[width=\agtOrnHeaderSize]{\agtOrnHeader}}~\nouppercase{\leftmark}}
+\fancyhead[R]{\rapporttitrecourt~{\color{reportprimary}\pgfornament[width=\agtOrnHeaderSize]{\agtOrnHeader}}}
+\fancyfoot[C]{{\color{reportprimary}\pgfornament[width=\agtOrnFooterSize]{\agtOrnFooter}}~\thepage~{\color{reportprimary}\reflectbox{\pgfornament[width=\agtOrnFooterSize]{\agtOrnFooter}}}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% --- Mini-sommaire de chapitre (style ENSPY) ---
+% Usage : appeler juste apres \chapter{...}\label{...}
+\newcommand{\minisommaire}{%
+  \etocsetnexttocdepth{subsection}%
+  \etocsettocstyle{\section*{Contenu}}{}%
+  \localtableofcontents%
+  \bigskip%
+}
+
+% --- Blocs de code ---
+% LIMITE ANTICIPEE : en pdfLaTeX, JetBrains Mono n'est pas disponible ;
+% \ttfamily (police a chasse fixe par defaut) sert de repli fidele a
+% l'esprit, sans dependance externe. En XeLaTeX/LuaLaTeX, \codefont
+% (defini en 00_preambule) utilise la vraie police si installee.
+\lstdefinestyle{codeagt}{
+  backgroundcolor=\color{reportgraylight},
+  frame=single,
+  rulecolor=\color{reportbordergray},
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  breakatwhitespace=false,
+  showstringspaces=false,
+  numbers=left,
+  numberstyle=\tiny\color{reportgraytext},
+  captionpos=b,
+  tabsize=2
+}
+\lstset{style=codeagt}

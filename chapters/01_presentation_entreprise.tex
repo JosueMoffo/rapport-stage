@@ -1,0 +1,57 @@
+\chapter{Présentation de l'entreprise AGT}
+\label{chap:entreprise}
+
+\agtlettrine{C}e chapitre présente la structure de AGT du stage à
+l'origine de ce rapport. Il décrit d'abord l'activité et l'organisation
+d'AG Technologies, puis l'environnement technique dont disposait
+l'entreprise avant le développement d'AGT Infra, environnement dont les
+limites ont directement motivé le projet détaillé dans les chapitres
+suivants.
+\minisommaire
+
+\section{AG Technologies : activité et organisation}
+
+Basée à Yaoundé, au Cameroun, AG Technologies est une entreprise
+spécialisée dans la conception de solutions digitales, avec un
+positionnement marqué sur les plateformes SaaS (Software as a Service),
+l'intelligence artificielle et l'accompagnement à la transformation
+numérique des entreprises africaines. Son offre se structure autour de
+trois axes complémentaires : la conception de solutions digitales sur
+mesure adaptées aux besoins spécifiques de chaque client, la prestation de
+services techniques incluant le consulting stratégique et l'intégration de
+systèmes complexes, et le développement de plateformes SaaS regroupant
+applications métiers, outils cloud et solutions d'automatisation.
+
+Sur le plan technique, l'entreprise couvre un périmètre large : développement
+web et mobile (React, Next.js, Flutter et développement natif), solutions
+cloud et SaaS (AWS, Azure, architectures scalables, pratiques DevOps),
+intelligence artificielle (modèles de langage, vision par ordinateur,
+traitement du langage naturel, apprentissage automatique), automatisation
+de processus (agents conversationnels, agents vocaux, orchestration de
+flux de travail) ainsi que conception d'API et de systèmes distribués
+(microservices, REST, GraphQL, gRPC). Selon les éléments communiqués par
+l'entreprise elle-même, cette activité s'est traduite par plus de 150
+projets livrés et plus de 80 clients accompagnés, avec une présence
+touchant plusieurs pays du continent.
+
+C'est au sein de cette structure, et plus précisément de son équipe
+technique, que s'inscrit le stage à l'origine de ce rapport.
+
+\section{Environnement technique avant AGT Infra}
+
+Avant le développement d'AGT Infra, AG Technologies exploitait un parc de
+plusieurs serveurs sans outil centralisé de supervision ou de gestion. Une
+partie de ces ressources reposait notamment sur des VPS (Virtual Private
+Server) mutualisés, hébergeant plusieurs applications de l'entreprise tels que : AGT-BOT,
+team-tool et AGT TaskFlow. La cohabitation de plusieurs applications imposait une vigilance particulière lors de toute
+intervention, un incident sur l'une des applications pouvant affecter les
+autres.
+
+La gestion de ce parc reposait sur des connexions SSH manuelles, effectuées
+au cas par cas selon les besoins : déploiement d'une mise à jour,
+vérification de l'état d'un service, consultation de journaux applicatifs.
+Cette approche ne permettait ni vue d'ensemble sur l'état du parc, ni
+contrôle d'accès différencié selon les personnes intervenant sur les
+serveurs, ni traçabilité centralisée des actions effectuées. C'est ce
+constat, développé au chapitre suivant, qui a motivé la définition du
+périmètre fonctionnel d'AGT Infra.

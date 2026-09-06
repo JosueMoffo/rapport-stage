@@ -1,0 +1,110 @@
+% ============================================================
+% config/00_preambule.tex
+% Packages et configuration générale
+% ============================================================
+
+\usepackage[french]{babel}
+\usepackage{iftex}
+
+% --- Police : pdfLaTeX (portable) vs XeLaTeX/LuaLaTeX (Times réel) ---
+% LIMITE ANTICIPEE : sur Overleaf ou une machine sans les polices
+% Microsoft installées, fontspec + "Times New Roman" échoue à la
+% compilation. Le mode pdfLaTeX + mathptmx (ci-dessous) est le choix
+% par défaut car il fonctionne partout sans dépendance externe.
+\newif\ifusetruetnr
+\usetruetnrfalse % passer a \usetruetnrtrue si Times New Roman est
+                  % installee ET que vous compilez en XeLaTeX/LuaLaTeX
+
+\newif\ifusexetexorluatex
+\ifxetex
+  \usexetexorluatextrue
+\else
+  \ifluatex
+    \usexetexorluatextrue
+  \else
+    \usexetexorluatexfalse
+  \fi
+\fi
+
+\ifusexetexorluatex
+  \usepackage{fontspec}
+  \ifusetruetnr
+    \setmainfont{Times New Roman}
+  \else
+    \setmainfont{Liberation Serif} % clone metrique libre, tres proche
+  \fi
+  \newfontfamily\codefont{JetBrains Mono}[Scale=0.9]
+\else
+  \usepackage{mathptmx} % clone metrique de Times (Nimbus Roman)
+  \usepackage[T1]{fontenc}
+\fi
+
+% --- Mise en page ---
+% headheight/footskip augmentes pour laisser la place aux motifs
+% ornementaux ajoutes en en-tete/pied de page (config/04_ornements.tex).
+\usepackage[a4paper, margin=2.5cm, headheight=20pt, footskip=36pt]{geometry}
+\linespread{1.5}
+\usepackage{setspace}
+
+% --- Packages requis par les fichiers config/ (DOIVENT etre charges
+% AVANT les \input ci-dessous) ---
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{placeins} % \FloatBarrier : empeche une figure de deriver
+                       % dans le mauvais chapitre (limite classique de report)
+\usepackage{caption}
+\captionsetup{font=small, labelfont=bf}
+
+% --- Habillage visuel (style ENSPY / Legrand Orange Book) ---
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{chains} % necessaire pour la bordure de page de garde (config/04_ornements.tex)
+\usepackage{pgfornament} % motifs ornementaux vectoriels (page de garde, en-tetes)
+\usepackage{lettrine}    % lettrine (grande premiere lettre de chapitre)
+
+% --- Modules centralises (couleurs / ornements / styles / metadonnees) ---
+% ORDRE IMPORTANT : 04_ornements avant 02_styles, qui utilise les
+% commandes d'ornement dans la definition des en-tetes/pieds de page.
+\input{config/01_couleurs}
+\input{config/04_ornements}
+\input{config/02_styles}
+\input{config/03_metadonnees}
+
+% --- Bibliographie ---
+\usepackage[backend=biber, style=ieee, sorting=none]{biblatex}
+\addbibresource{biblio.bib}
+
+% --- Glossaire / acronymes ---
+% LIMITE ANTICIPEE : necessite une passe "makeglossaries" en plus de
+% pdflatex/biber. latexmk gere cela automatiquement (voir main.tex).
+\usepackage[acronym, toc]{glossaries}
+\makeglossaries
+
+% --- Liens cliquables ---
+% Bascule impression : les liens colores genent souvent a l'impression.
+\newif\ifmodeimpression
+\modeimpressionfalse % passer a true pour generer une version "a imprimer"
+
+\usepackage{hyperref}
+\ifmodeimpression
+  \hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+\else
+  \hypersetup{colorlinks=true, linkcolor=reportprimary, citecolor=reportprimary, urlcolor=reportprimary}
+\fi
+
+% --- Mini-sommaire par chapitre (style ENSPY) ---
+% LIMITE ANTICIPEE : etoc doit etre charge apres hyperref pour que les
+% liens du mini-sommaire fonctionnent correctement.
+\usepackage{etoc}
+
+% --- Veuves / orphelines ---
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000

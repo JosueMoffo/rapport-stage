@@ -1,0 +1,2265 @@
+============================================================
+SCAN DE STRUCTURE - RAPPORT DE STAGE AGT INFRA
+Genere le : 2026-09-06 14:07:50
+Racine scannee : /media/josue-moffo/Secondaire/School/El_M/STAGE/AG-technologies/Theme/AGT-Infra/rapport/rapport-stage
+============================================================
+
+------------------------------------------------------------
+1. ARBORESCENCE DU PROJET
+------------------------------------------------------------
+.
+├── annexes
+│   └── annexe_a.tex
+├── assets
+│   ├── diagrams
+│   │   ├── 03-diagramme_architecture-globale.png
+│   │   ├── 03-diagramme_cas_utilisation_RBAC.png
+│   │   ├── 03-diagramme_cas_utilisation_SERVEUR-CONTENEUR.png
+│   │   ├── 03-diagramme_classe_acces.png
+│   │   ├── 03-diagramme_classe_srv_cnt.png
+│   │   ├── 03-diagramme_contexte.png
+│   │   ├── 03-diagramme_ET_publication.png
+│   │   ├── 03-diagramme_ET_serveur.png
+│   │   ├── 03-diagramme_packages.png
+│   │   ├── 03-diagramme_seq_connexion_serveur.png
+│   │   ├── 03-diagramme_seq_deploiement.png
+│   │   └── 03-diagramme_seq_resolution_permission.png
+│   ├── icons
+│   │   ├── 04-icone_docker.png
+│   │   ├── 04-icone_fastapi.png
+│   │   ├── 04-icone_github.png
+│   │   ├── 04-icone_git.png
+│   │   ├── 04-icone_netdata.png
+│   │   ├── 04-icone_postgresql.png
+│   │   ├── 04-icone_react.png
+│   │   ├── 04-icone_ssh.png
+│   │   └── 04-icone_vite.png
+│   ├── logos
+│   ├── screenshots
+│   └── sources
+│       └── Diagrammes-agt-infra.drawio
+├── chapters
+│   ├── 00_introduction.tex
+│   ├── 01_presentation_entreprise.tex
+│   ├── 02_etat_art.tex
+│   ├── 03_analyse_conception.tex
+│   ├── 04_implementation.tex
+│   ├── 05_resultats_bilan.tex
+│   └── 06_conclusion.tex
+├── config
+│   ├── 00_preambule.tex
+│   ├── 01_couleurs.tex
+│   ├── 02_styles.tex
+│   ├── 03_metadonnees.tex
+│   └── 04_ornements.tex
+├── front
+│   ├── liste_abreviations.tex
+│   ├── page_garde.tex
+│   └── remerciements.tex
+├── biblio.bib
+├── .gitignore
+├── glossaire.tex
+├── main.pdf
+├── main.tex
+├── README.md
+├── scan_structure_rapport.sh
+├── scan_structure_rapport.txt
+└── TODO.md
+
+11 directories, 47 files
+
+------------------------------------------------------------
+2. IMAGES DETECTEES (emplacement uniquement)
+------------------------------------------------------------
+  - assets/diagrams/03-diagramme_seq_connexion_serveur.png (taille : 404K)
+  - assets/diagrams/03-diagramme_cas_utilisation_RBAC.png (taille : 764K)
+  - assets/diagrams/03-diagramme_classe_acces.png (taille : 952K)
+  - assets/diagrams/03-diagramme_architecture-globale.png (taille : 780K)
+  - assets/diagrams/03-diagramme_ET_publication.png (taille : 492K)
+  - assets/diagrams/03-diagramme_seq_resolution_permission.png (taille : 672K)
+  - assets/diagrams/03-diagramme_classe_srv_cnt.png (taille : 892K)
+  - assets/diagrams/03-diagramme_ET_serveur.png (taille : 472K)
+  - assets/diagrams/03-diagramme_cas_utilisation_SERVEUR-CONTENEUR.png (taille : 1,5M)
+  - assets/diagrams/03-diagramme_seq_deploiement.png (taille : 568K)
+  - assets/diagrams/03-diagramme_packages.png (taille : 944K)
+  - assets/diagrams/03-diagramme_contexte.png (taille : 656K)
+  - assets/icons/04-icone_git.png (taille : 8,0K)
+  - assets/icons/04-icone_postgresql.png (taille : 24K)
+  - assets/icons/04-icone_vite.png (taille : 32K)
+  - assets/icons/04-icone_react.png (taille : 20K)
+  - assets/icons/04-icone_ssh.png (taille : 8,0K)
+  - assets/icons/04-icone_github.png (taille : 20K)
+  - assets/icons/04-icone_docker.png (taille : 24K)
+  - assets/icons/04-icone_fastapi.png (taille : 8,0K)
+  - assets/icons/04-icone_netdata.png (taille : 228K)
+
+------------------------------------------------------------
+3. CONTENU DES FICHIERS SOURCE
+------------------------------------------------------------
+
+=== FICHIER : annexes/annexe_a.tex ===
+\chapter{Annexe A : Extraits de code complémentaires}
+\label{annexe:code}
+\minisommaire
+% TODO : extraits longs, diagrammes complets, glossaire technique détaillé=== FIN FICHIER : annexes/annexe_a.tex ===
+
+=== FICHIER : biblio.bib ===
+@online{fastapi_doc,
+  title = {FastAPI Documentation},
+  url = {https://fastapi.tiangolo.com/},
+  urldate = {2026-09-03}
+}
+
+@online{sqlalchemy_doc,
+  title = {SQLAlchemy 2.0 Documentation},
+  url = {https://docs.sqlalchemy.org/en/20/},
+  urldate = {2026-09-03}
+}
+
+@online{netdata_doc,
+  title = {Netdata Documentation},
+  url = {https://learn.netdata.cloud/},
+  urldate = {2026-09-03}
+}
+
+@online{portainer_rbac_2026,
+  title = {How to Understand Portainer RBAC Roles and Permissions},
+  url = {https://oneuptime.com/blog/post/2026-03-20-portainer-rbac-roles-permissions/view},
+  urldate = {2026-09-03}
+}
+
+@online{portainer_security_2026,
+  title = {Secure Portainer in Production: Docker Socket, RBAC, TLS, and Networks},
+  url = {https://oneuptime.com/blog/post/2026-08-02-secure-portainer-production/view},
+  urldate = {2026-09-03}
+}
+
+@online{portainer_setup_2026,
+  title = {Portainer Setup: Docker \& Kubernetes in 13 Steps},
+  url = {https://tech-insider.org/ie/portainer-setup-2026/},
+  urldate = {2026-09-03}
+}
+
+@online{rancher_zesty,
+  title = {What Is Rancher Kubernetes?},
+  url = {https://zesty.co/finops-glossary/rancher-kubernetes/},
+  urldate = {2026-09-03}
+}
+
+@online{rancher_suse_rbac,
+  title = {Fewer Bindings, More Power: Rancher's RBAC Boost for Enhanced Performance and Scalability},
+  url = {https://www.suse.com/c/rancher_blog/fewer-bindings-more-power-ranchers-rbac-boost-for-enhanced-performance-and-scalability/},
+  urldate = {2026-09-03}
+}
+
+@online{proxmox_petronella,
+  title = {Proxmox vs Docker in 2026: When to Use Each},
+  url = {https://petronellatech.com/blog/proxmox-vs-docker-when-to-use-each-2026/},
+  urldate = {2026-09-03}
+}
+
+@online{proxmox_mrplanb,
+  title = {Proxmox LXC vs VM vs Docker in 2026: Which to Use for What},
+  url = {https://www.mrplanb.com/blog/docker-lxc-vs-vms-proxmox-debate-2026},
+  urldate = {2026-09-03}
+}
+
+@online{proxmox_techfuel,
+  title = {Proxmox vs Docker: They're Not Rivals, What to Actually Run Where},
+  url = {https://techfuelhq.com/articles/proxmox-vs-docker-2026/},
+  urldate = {2026-09-03}
+}
+
+@online{cockpit_rhel,
+  title = {How to Use the RHEL Web Console (Cockpit) for Day-to-Day System Administration},
+  url = {https://oneuptime.com/blog/post/2026-03-04-rhel-9-cockpit-day-to-day-administration/view},
+  urldate = {2026-09-03}
+}
+
+@online{cockpit_redhat,
+  title = {An introduction to Cockpit, a browser-based administration tool for Linux},
+  url = {https://www.redhat.com/en/blog/intro-cockpit},
+  urldate = {2026-09-03}
+}
+
+@online{semaphore_awx_2026,
+  title = {Ansible AWX vs. Semaphore UI: The Honest Open-Source Comparison},
+  url = {https://semaphoreui.com/blog/awx-vs-semaphore},
+  urldate = {2026-09-03}
+}
+
+@online{rogerperkin_awx,
+  title = {AWX vs Semaphore UI},
+  url = {https://www.rogerperkin.co.uk/awx/awx-vs-semaphore/},
+  urldate = {2026-09-03}
+}
+
+@online{semaphore_vs_awx,
+  title = {Ansible UI: Semaphore UI vs AWX},
+  url = {https://semaphoreui.com/vs/awx},
+  urldate = {2026-09-03}
+}
+
+@online{coolify_github,
+  title = {Coolify: open-source self-hostable PaaS alternative},
+  url = {https://github.com/api-evangelist/coolify},
+  urldate = {2026-09-03}
+}
+
+@online{coolify_admin_it,
+  title = {Self-Hosted PaaS with Coolify},
+  url = {https://www.admin-it.io/self-hosted-paas-with-coolify/},
+  urldate = {2026-09-03}
+}
+
+@online{coolify_cve_2026,
+  title = {Coolify CVE Overview 2025/2026: Critical Vulnerabilities and Urgent Update Required},
+  url = {https://wz-it.com/en/blog/coolify-cve-security-vulnerabilities-update-2025-2026/},
+  urldate = {2026-09-03}
+}=== FIN FICHIER : biblio.bib ===
+
+=== FICHIER : chapters/00_introduction.tex ===
+\chapter*{Introduction générale}
+\addcontentsline{toc}{chapter}{Introduction générale}
+
+Les entreprises reposent aujourd'hui de plus en plus sur des infrastructures
+numériques pour assurer la continuité de leurs services. Au delà de la
+simple mise en ligne d'une application, il s'agit de pouvoir la déployer,
+la surveiller, en contrôler l'accès et réagir rapidement à un incident,
+sans dépendre d'interventions manuelles dispersées sur chaque serveur.
+C'est dans cette optique qu'un stage a été effectué au sein d'AG
+Technologies, entreprise camerounaise spécialisée dans la conception de
+solutions digitales (présentée en détail au chapitre~\ref{chap:entreprise}),
+du 06 juillet 2026 au 05 août 2026. La mission confiée portait initialement
+sur la prise en main des outils internes de l'entreprise et l'amélioration
+de projets logiciels déjà existants, distincts du projet finalement au
+coeur de ce rapport.
+
+\section*{Contexte et problématique}
+
+AG Technologies exploite un parc de serveurs physiques hétérogènes
+hébergeant des applications critiques pour son activité, parmi lesquelles
+AGT-BOT, AGT ERP et MboaPay. Avant le développement du projet présenté
+dans ce rapport, ce parc était piloté de façon manuelle et dispersée
+(section~\ref{chap:entreprise} du chapitre suivant) : brancher un serveur,
+y lancer des conteneurs, surveiller sa charge, déployer une application,
+l'exposer publiquement, gérer les accès des personnes intervenant dessus,
+et ajuster ses ressources en cas de montée en charge constituaient autant
+d'opérations menées séparément, sans point de contrôle unique ni
+traçabilité homogène des actions effectuées.
+
+Cette dispersion posait un problème de fond : plus le nombre de serveurs
+et d'applications augmentait, plus le risque d'erreur, d'oubli ou d'accès
+non maîtrisé augmentait avec lui, sans qu'aucun outil interne ne permette
+d'avoir une vue d'ensemble ni un contrôle centralisé. C'est ce constat qui
+a conduit à la définition d'un projet interne, nommé AGT Infra, présenté
+en détail dans la suite de ce rapport.
+
+\section*{Objectifs du projet}
+
+L'objectif général du projet est de construire une interface interne
+unique capable de piloter l'essentiel du parc de serveurs depuis un seul
+point d'entrée, sans réimplémenter les outils déjà éprouvés sur lesquels
+elle s'appuie (Docker, SSH, Nginx, Certbot, GitHub) : AGT Infra se
+positionne comme un chef d'orchestre de ces briques, pas comme un
+remplacement. Cet objectif général se décline en plusieurs objectifs
+spécifiques :
+
+\begin{itemize}
+  \item Centraliser la gestion des serveurs physiques et des conteneurs
+        Docker déjà en place, avec un inventaire unique et une connectivité
+        exclusivement fondée sur SSH.
+  \item Automatiser le déploiement continu des applications à partir de
+        dépôts Git, déclenché par des évènements applicatifs (webhooks)
+        vérifiés.
+  \item Permettre l'exposition sécurisée, sous nom de domaine et en HTTPS,
+        des applications déjà déployées.
+  \item Superviser l'état des serveurs, à la demande comme en continu, et
+        déclencher des alertes en cas de dépassement de seuils.
+  \item Mettre en place un contrôle d'accès dynamique, fondé sur des rôles
+        et des permissions pilotés en base de données plutôt que figés
+        dans le code.
+  \item Tracer systématiquement toute action sensible dans un journal
+        d'audit horodaté et attribué.
+  \item Fournir une console web intégrée à l'interface, permettant
+        d'intervenir directement sur un serveur ou un conteneur sans ouvrir
+        de session SSH séparée.
+\end{itemize}
+
+Certains besoins identifiés dès la définition du projet, comme les
+sauvegardes automatiques des bases de données ou la montée en charge
+automatique, restent hors du périmètre effectivement réalisé à ce jour ;
+leur état d'avancement est précisé au fil des chapitres concernés. La
+gestion des machines virtuelles et de l'hyperviseur associé n'entre quant
+à elle pas dans le périmètre du projet, qui se concentre exclusivement sur
+le pilotage de serveurs physiques et de conteneurs Docker déjà en place.
+
+\section*{Structure du rapport}
+
+Le présent rapport est organisé de la façon suivante :
+
+\begin{itemize}
+  \item \textbf{Chapitre~\ref{chap:entreprise} : Présentation de
+        l'entreprise AGT} : activité et organisation d'AG Technologies,
+        puis environnement technique dont elle disposait avant le
+        développement d'AGT Infra.
+  \item \textbf{Chapitre~\ref{chap:etat-art} : État de l'art} : panorama
+        des solutions existantes du marché et justification du choix d'un
+        développement interne.
+  \item \textbf{Chapitre~\ref{chap:etude-technique} : Analyse et
+        conception} : analyse des besoins (acteurs, exigences,
+        diagramme de cas d'utilisation), architecture générale de
+        l'outil, modélisation de ses données et comportements clés.
+  \item \textbf{Chapitre~\ref{chap:realisation} : Implémentation} :
+        environnement et outils de développement, méthodologie de
+        travail suivie, réalisation du projet module par module,
+        difficultés rencontrées et déploiement.
+  \item \textbf{Chapitre~\ref{chap:resultats} : Résultats et bilan} :
+        résultats obtenus, workflows et captures d'écran de
+        l'application, tests effectués, limites actuelles et
+        perspectives d'évolution du projet.
+  \item \textbf{Conclusion générale} : bilan des compétences techniques
+        et humaines acquises durant le stage, et apport de cette
+        expérience.
+\end{itemize}=== FIN FICHIER : chapters/00_introduction.tex ===
+
+=== FICHIER : chapters/01_presentation_entreprise.tex ===
+\chapter{Présentation de l'entreprise AGT}
+\label{chap:entreprise}
+
+\agtlettrine{C}e chapitre présente la structure de AGT du stage à
+l'origine de ce rapport. Il décrit d'abord l'activité et l'organisation
+d'AG Technologies, puis l'environnement technique dont disposait
+l'entreprise avant le développement d'AGT Infra, environnement dont les
+limites ont directement motivé le projet détaillé dans les chapitres
+suivants.
+\minisommaire
+
+\section{AG Technologies : activité et organisation}
+
+Basée à Yaoundé, au Cameroun, AG Technologies est une entreprise
+spécialisée dans la conception de solutions digitales, avec un
+positionnement marqué sur les plateformes SaaS (Software as a Service),
+l'intelligence artificielle et l'accompagnement à la transformation
+numérique des entreprises africaines. Son offre se structure autour de
+trois axes complémentaires : la conception de solutions digitales sur
+mesure adaptées aux besoins spécifiques de chaque client, la prestation de
+services techniques incluant le consulting stratégique et l'intégration de
+systèmes complexes, et le développement de plateformes SaaS regroupant
+applications métiers, outils cloud et solutions d'automatisation.
+
+Sur le plan technique, l'entreprise couvre un périmètre large : développement
+web et mobile (React, Next.js, Flutter et développement natif), solutions
+cloud et SaaS (AWS, Azure, architectures scalables, pratiques DevOps),
+intelligence artificielle (modèles de langage, vision par ordinateur,
+traitement du langage naturel, apprentissage automatique), automatisation
+de processus (agents conversationnels, agents vocaux, orchestration de
+flux de travail) ainsi que conception d'API et de systèmes distribués
+(microservices, REST, GraphQL, gRPC). Selon les éléments communiqués par
+l'entreprise elle-même, cette activité s'est traduite par plus de 150
+projets livrés et plus de 80 clients accompagnés, avec une présence
+touchant plusieurs pays du continent.
+
+C'est au sein de cette structure, et plus précisément de son équipe
+technique, que s'inscrit le stage à l'origine de ce rapport.
+
+\section{Environnement technique avant AGT Infra}
+
+Avant le développement d'AGT Infra, AG Technologies exploitait un parc de
+plusieurs serveurs sans outil centralisé de supervision ou de gestion. Une
+partie de ces ressources reposait notamment sur des VPS (Virtual Private
+Server) mutualisés, hébergeant plusieurs applications de l'entreprise tels que : AGT-BOT,
+team-tool et AGT TaskFlow. La cohabitation de plusieurs applications imposait une vigilance particulière lors de toute
+intervention, un incident sur l'une des applications pouvant affecter les
+autres.
+
+La gestion de ce parc reposait sur des connexions SSH manuelles, effectuées
+au cas par cas selon les besoins : déploiement d'une mise à jour,
+vérification de l'état d'un service, consultation de journaux applicatifs.
+Cette approche ne permettait ni vue d'ensemble sur l'état du parc, ni
+contrôle d'accès différencié selon les personnes intervenant sur les
+serveurs, ni traçabilité centralisée des actions effectuées. C'est ce
+constat, développé au chapitre suivant, qui a motivé la définition du
+périmètre fonctionnel d'AGT Infra.=== FIN FICHIER : chapters/01_presentation_entreprise.tex ===
+
+=== FICHIER : chapters/02_etat_art.tex ===
+% ============================================================
+% chapters/02_etat_art.tex //  : solutions existantes et positionnement d'AGT Infra
+% ============================================================
+\chapter{État de l'art}
+\label{chap:etat-art}
+
+
+
+\agtlettrine{A}vant de détailler la conception d'AGT Infra, il est légitime de se demander
+pourquoi ce projet n'a pas simplement reposé sur un outil déjà existant sur
+le marché. Ce chapitre répond à cette question de manière factuelle : il
+présente les principales solutions utilisées aujourd'hui pour gérer des
+serveurs et des conteneurs Docker, puis explique en quoi leur périmètre ne
+correspondait pas exactement au besoin d'AG Technologies. L'objectif n'est
+pas de dénigrer ces outils, largement utilisés et éprouvés en production,
+mais de justifier un choix d'ingénierie à partir de critères objectifs.
+\minisommaire
+\section{Critères de comparaison retenus}
+
+Ces critères ont été définis à partir du contexte réel d'AG Technologies
+(chapitre \ref{chap:entreprise}), avant toute comparaison, afin d'éviter de
+choisir des critères qui favoriseraient artificiellement AGT Infra.
+
+\begin{itemize}
+  \item \textbf{Gestion multi-serveurs sans agent lourd} : capacité à piloter
+  plusieurs serveurs physiques ou VPS uniquement via SSH, sans installer de
+  démon ou d'agent supplémentaire exposé sur le réseau.
+  \item \textbf{Orchestration de conteneurs Docker existants} : capacité à
+  gérer des conteneurs Docker déjà en place, sans imposer une nouvelle couche
+  de virtualisation ou d'exécution.
+  \item \textbf{Contrôle d'accès granulaire et évolutif} : possibilité de
+  définir des rôles et des permissions fins (par ressource, par action), et
+  de les modifier sans redéployer l'outil.
+  \item \textbf{Supervision temps réel intégrée} : suivi des métriques
+  système (CPU, RAM, disque) avec des seuils d'alerte personnalisables.
+  \item \textbf{Console web intégrée} : accès direct à un terminal serveur
+  depuis l'interface, sans ouvrir une session SSH séparée.
+  \item \textbf{Coût} : licence, abonnement, ou infrastructure additionnelle
+  nécessaire pour obtenir les fonctionnalités recherchées.
+  \item \textbf{Maturité et activité du projet} : fréquence des mises à jour,
+  état réel de la maintenance.
+  \item \textbf{Cohabitation sur une infrastructure mutualisée} : capacité à
+  cohabiter proprement avec d'autres applications sur un même serveur, sans
+  nécessiter un cluster dédié.
+\end{itemize}
+
+\section{Panorama des solutions existantes}
+
+\subsection{Portainer}
+
+Portainer est une interface graphique de gestion Docker très répandue,
+disponible en version communautaire gratuite (Community Edition) couvrant
+Docker, Swarm, Kubernetes et Azure Container Instances depuis un même
+tableau de bord \cite{portainer_setup_2026}. Cette capacité à piloter
+plusieurs environnements Docker depuis un point unique est justement la
+raison principale pour laquelle de nombreuses équipes l'adoptent
+\cite{portainer_setup_2026}. En revanche, le contrôle d'accès fin (rôles
+par environnement comme administrateur, opérateur, ou lecteur seul) fait
+partie de l'édition payante Business Edition, pas de la version gratuite
+\cite{portainer_rbac_2026, portainer_security_2026}. Portainer reste par
+ailleurs une cible de choix pour les attaquants puisqu'il pilote directement
+Docker : une alerte de sécurité belge a signalé en 2026 des failles
+critiques touchant plusieurs versions du produit, rappelant l'importance
+de le maintenir à jour et de ne jamais l'exposer sans protection
+supplémentaire \cite{portainer_setup_2026}.
+
+\subsection{Rancher}
+
+Rancher est conçu pour administrer plusieurs clusters Kubernetes depuis une
+seule interface, avec un RBAC fin appliqué à la fois au niveau du cluster
+et au niveau du projet (équivalent d'un espace de noms Kubernetes)
+\cite{rancher_zesty}. Son modèle de permissions est puissant mais complexe :
+SUSE, l'éditeur du produit, a dû retravailler en profondeur le moteur RBAC
+de Rancher en 2025 pour améliorer ses performances face à la multiplication
+des liaisons de rôles dans les grands parcs de clusters
+\cite{rancher_suse_rbac}. Cette complexité est justifiée quand l'entreprise
+gère réellement des dizaines de clusters Kubernetes, mais représente un
+investissement disproportionné pour un parc de VPS gérés directement via
+Docker, sans orchestrateur Kubernetes sous-jacent.
+
+\subsection{Proxmox VE}
+
+Proxmox VE est avant tout un hyperviseur : il gère des machines virtuelles
+et des conteneurs système LXC sur du matériel physique
+\cite{proxmox_petronella}. Ce n'est qu'en 2026, avec les versions 8.3 et 9,
+que Proxmox a commencé à expérimenter l'exécution d'images au format OCI
+(le format utilisé par Docker) directement dans ses conteneurs LXC, sans
+passer par un démon Docker complet \cite{proxmox_techfuel}. Cette fonction
+reste toutefois qualifiée de version d'évaluation technologique par
+l'éditeur lui-même : il n'existe encore aucun équivalent de Docker Compose
+ni d'écosystème d'orchestration autour de cette approche
+\cite{proxmox_techfuel, proxmox_mrplanb}. Proxmox répond donc à un besoin
+de virtualisation d'infrastructure, différent du besoin d'AGT Infra qui est
+de piloter des conteneurs Docker déjà déployés sur des serveurs existants.
+
+\subsection{Cockpit}
+
+Cockpit est une console d'administration web légère, intégrée par défaut à
+plusieurs distributions Linux. Contrairement à une idée reçue, Cockpit sait
+gérer plusieurs serveurs depuis un même tableau de bord : il suffit
+d'ajouter un serveur distant, et la connexion s'établit ensuite via SSH
+\cite{cockpit_redhat, cockpit_rhel}. Sa limite pour le contexte d'AGT Infra
+se situe ailleurs : le contrôle d'accès repose entièrement sur les comptes
+système du serveur (utilisateurs Linux, droits sudo), et non sur un modèle
+de rôles et de permissions propre à l'application. Il n'existe donc pas de
+notion de permission granulaire par ressource (par exemple, autoriser un
+utilisateur à consulter la supervision d'un serveur sans lui donner accès
+à sa console web), ni de pipeline de déploiement intégré.
+
+\subsection{Ansible AWX et Semaphore}
+
+AWX et Semaphore sont des interfaces web pour exécuter des playbooks
+Ansible (des scripts d'automatisation de configuration), pas des outils de
+supervision temps réel. AWX propose un RBAC très détaillé, avec des
+permissions par objet (inventaire, modèle de tâche, identifiants) et une
+synchronisation possible avec un annuaire d'entreprise
+\cite{semaphore_awx_2026}. Ce niveau de détail a toutefois un coût : le
+développement d'AWX est à l'arrêt depuis juillet 2024, l'équipe ayant
+reconnu que l'architecture actuelle du projet limite sa capacité à évoluer,
+et qu'une refonte est en cours sans calendrier annoncé
+\cite{semaphore_awx_2026, rogerperkin_awx}. Semaphore, plus récent et plus
+activement maintenu, propose un modèle de rôles plus simple, limité à
+quatre rôles par projet (Owner, Manager, Task Runner, Guest), les
+permissions personnalisées plus fines étant réservées à une offre
+Entreprise payante \cite{semaphore_vs_awx, rogerperkin_awx}. Dans les deux
+cas, ces outils automatisent des tâches ponctuelles, ils ne fournissent pas
+de tableau de bord de supervision continue ni de console web intégrée.
+
+\subsection{Coolify}
+
+Coolify est une plateforme auto-hébergée de type PaaS (Platform as a
+Service) : elle automatise le déploiement d'applications à partir d'un
+dépôt Git, avec certificats SSL et sauvegardes programmées inclus
+\cite{coolify_github}. Son modèle de permissions est volontairement simple,
+limité à deux rôles (Administrateur ou Membre), et est explicitement
+documenté comme n'étant pas adapté à une logique stricte de moindre
+privilège : il n'existe pas de permission par service ou par action
+\cite{coolify_admin_it}. Coolify effectue par nature des opérations
+privilégiées sur le serveur hôte (déploiement, gestion Docker), ce qui en
+fait une cible sensible : plusieurs failles critiques (score de gravité
+maximal) ont été corrigées début 2026, liées à un défaut d'assainissement
+des commandes système générées automatiquement
+\cite{coolify_cve_2026}. Ce point rejoint une décision déjà actée dans
+AGT Infra (règle numéro 6) : le backend doit rester l'unique garde-fou de
+sécurité, précisément pour éviter ce type de surface d'attaque.
+
+\section{Tableau comparatif synthétique}
+
+% Colonnes a largeur fixe (p{}) plutot que tabularx : garantit qu'aucun
+% mot ne peut deborder ou chevaucher la colonne voisine, meme sans point
+% de cesure disponible (probleme rencontre avec des tokens comme
+% "Gratuit/payant" en colonnes trop etroites).
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{p{3.4cm}*{7}{>{\centering\arraybackslash}p{1.3cm}}}
+\toprule
+\textbf{Critère} & \textbf{AGT} & \textbf{Portai.} & \textbf{Ranch.} & \textbf{Proxm.} & \textbf{Cockpit} & \textbf{AWX/Sem.} & \textbf{Coolify} \\
+\midrule
+Multi-serveurs (SSH seul)        & O & O   & N   & N & O & P   & N \\
+Orchestration Docker existant    & O & O   & N   & N & P & N   & O \\
+RBAC/IBAC fin et dynamique       & O & € & O   & N & N & P/€ & N \\
+Supervision temps réel           & O & N   & P   & P & P & N   & N \\
+Console web intégrée             & O & O   & O   & O & O & N   & N \\
+Coût                             & Interne & 0/€ & 0/€ & 0 & 0 & 0/€ & 0/€ \\
+Développement actif              & O & O   & O   & O & O & V   & O \\
+Cohabitation VPS mutualisé       & O & P   & N   & N & P & P   & P \\
+\bottomrule
+\end{tabular}
+\caption{Comparaison synthétique des solutions existantes face aux besoins d'AG Technologies}
+\label{tab:comparatif-etat-art}
+\end{table}
+
+\begin{flushleft}
+\footnotesize
+\textbf{Légende} : O = Oui, N = Non, P = Partiel, V = Variable selon le
+sous-projet (Semaphore actif, AWX en pause), 0 = Gratuit ou open-source,
+€ = fonctionnalité payante requise pour couvrir ce critère.
+\end{flushleft}
+
+\section{Synthèse et justification du développement interne}
+
+Cette comparaison ne conduit pas à la conclusion que les solutions
+existantes seraient de mauvaise qualité, bien au contraire : Portainer,
+Rancher, Proxmox, Cockpit, AWX/Semaphore et Coolify sont des projets
+matures, largement adoptés, et bénéficient d'années de tests en production
+que ne possède évidemment pas un outil interne récemment développé. Construire un outil en
+interne signifie aussi en assumer seul la maintenance et la sécurité dans
+la durée, une responsabilité qu'un outil du marché, déjà éprouvé, aurait
+partiellement absorbée.
+
+Ce que révèle néanmoins le tableau comparatif, c'est qu'aucune de ces
+solutions ne réunit simultanément l'ensemble des critères retenus au
+paragraphe 3.2. Chaque outil couvre bien une partie du besoin, mais avec un
+angle différent : Portainer et Coolify ciblent la gestion ou le déploiement
+de conteneurs sans contrôle d'accès fin gratuit ; Rancher offre un RBAC
+puissant mais conçu pour Kubernetes, disproportionné pour un parc de VPS
+sous Docker simple ; Proxmox reste avant tout un hyperviseur de machines
+virtuelles ; Cockpit couvre bien plusieurs serveurs mais sans notion
+applicative de rôles ; AWX et Semaphore automatisent des tâches
+ponctuelles sans assurer de supervision continue.
+
+Le besoin d'AG Technologies combine plusieurs contraintes en même temps :
+un VPS partagé entre plusieurs applications internes (donc pas de cluster
+dédié), un contrôle d'accès qui doit pouvoir évoluer sans redéploiement
+(module RBAC/IBAC dynamique), une supervision continue avec des seuils
+personnalisables, et une console web intégrée, le tout en gardant une
+maîtrise complète du code dans un contexte où l'outil gère des accès
+privilégiés à des serveurs de production. C'est cette combinaison précise
+de contraintes, plus que l'absence d'alternative pour chaque besoin pris
+isolément, qui justifie le développement d'AGT Infra en interne.=== FIN FICHIER : chapters/02_etat_art.tex ===
+
+=== FICHIER : chapters/03_analyse_conception.tex ===
+\chapter{Analyse et Conception}
+\label{chap:etude-technique}
+
+\agtlettrine{C}e chapitre pose les bases de la conception d'AGT Infra, une
+fois son positionnement justifié au chapitre précédent. Il s'ouvre sur une
+analyse des besoins qui formalise le contexte du système, ses acteurs et
+ses exigences, avant de détailler l'architecture générale retenue, la
+modélisation des données et les comportements clés de l'outil.
+\minisommaire
+
+\section{Analyse des besoins}
+
+Avant de détailler l'architecture retenue pour AGT Infra, il est nécessaire
+de formaliser ce que le système doit accomplir : qui l'utilise, dans quel
+cadre il agit, et quelles exigences concrètes ont guidé sa conception.
+Cette section propose une synthèse organisée de cette analyse : le
+contexte global du système, ses acteurs, une vue d'ensemble des exigences
+par domaine, puis deux diagrammes de cas d'utilisation illustrant les
+domaines les plus représentatifs des interactions entre acteurs et
+système.
+
+\subsection{Contexte du système}
+
+AGT Infra se positionne comme un chef d'orchestre plutôt que comme un
+moteur : il pilote des briques déjà existantes et éprouvées (Docker, SSH,
+GitHub, un agent de certification HTTPS et un agent de supervision
+continue) sans jamais les réimplémenter. Le diagramme de contexte de la
+figure~\ref{fig:diagramme-contexte} représente cette frontière du système :
+à gauche, les deux catégories d'acteurs humains qui interagissent
+directement avec l'outil ; à droite, les systèmes externes qu'il orchestre
+au travers de leurs interfaces respectives.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{assets/diagrams/03-diagramme_contexte.png}
+  \caption{Diagramme de contexte d'AGT Infra}
+  \label{fig:diagramme-contexte}
+\end{figure}
+
+Le périmètre fonctionnel réel se décompose en trois catégories.
+
+\medskip
+\noindent\textbf{Périmètre inclus} :
+\begin{itemize}
+  \item La gestion centralisée des serveurs physiques et des conteneurs
+        Docker, avec une connectivité exclusivement fondée
+        sur SSH.
+  \item Le déploiement continu, la publication applicative sécurisée et
+        la supervision des serveurs, à la demande comme en continu.
+  \item Le contrôle d'accès dynamique et la traçabilité systématique de
+        toute action sensible.
+  \item La sauvegarde automatique de bases de données des application et
+        volumes des conteneurs.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Périmètre exclu} :
+\begin{itemize}
+  \item La gestion des machines virtuelles et de l'hyperviseur associé.
+  \item La montée en charge automatique et toute action corrective
+        automatique d'un futur moteur de sécurité.
+  \item La création automatique d'enregistrements DNS pour la publication
+        applicative, qui reste une opération manuelle de l'utilisateur.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Contraintes transverses} :
+\begin{itemize}
+  \item La configurabilité indépendante de chaque mécanisme (déploiement,
+        publication, supervision), activable ou désactivable sans effet
+        de bord sur les autres.
+  \item Le non-blocage de l'existant : l'adoption de l'outil reste
+        progressive et n'empêche jamais un accès direct par SSH.
+  \item L'absence de toute tâche de fond côté backend : toute collecte ou
+        exécution part d'une action explicite.
+\end{itemize}
+
+\subsection{Acteurs}
+
+Le système de rôles d'AGT Infra n'est pas figé : un seul rôle reste
+immuable, tout le reste se compose librement.
+
+\begin{itemize}
+  \item \textbf{SUPER\_ADMIN} : rôle unique, présent dès l'installation,
+        disposant d'un accès total, non révocable et jamais soumis à un
+        refus explicite. Seul habilité à créer, modifier ou supprimer un
+        rôle, à le composer à partir d'un catalogue de permissions, et à
+        accorder ou refuser une permission directe à une personne
+        précise.
+  \item \textbf{Utilisateur} : toute autre personne, affectée à un rôle
+        composé par un SUPER\_ADMIN. Son périmètre d'action dépend
+        entièrement des permissions accordées à ce rôle et de la portée
+        avec laquelle il lui a été attribué, globale ou restreinte à une
+        ressource précise.
+\end{itemize}
+
+Ce modèle de contrôle d'accès dynamique sera détaillé plus loin dans ce
+chapitre, lors de la modélisation des données.
+
+\subsection{Synthèse des exigences par domaine}
+
+Le tableau~\ref{tab:synthese-exigences} récapitule, domaine par domaine, ce
+que couvre AGT Infra.
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{p{4.2cm}p{9.2cm}}
+\toprule
+\textbf{Domaine} & \textbf{Ce que couvre ce domaine} \\
+\midrule
+Serveurs physiques et connectivité SSH & Branchement, inventaire et
+  authentification des serveurs par clé SSH dédiée, générée
+  individuellement. \\
+Conteneurs Docker et registres privés & Cycle de vie complet des
+  conteneurs, avec possibilité de les créer depuis un registre privé isolé
+  par utilisateur.\\
+Environnements & Rattachement de chaque conteneur à un environnement
+  préconfiguré (développement, test, production). \\
+Console web & Session interactive sur un serveur ou un conteneur, avec
+  enregistrement intégral du flux et relecture ultérieure. \\
+Diagnostic à la demande et alertes & Collecte ponctuelle des métriques
+  (CPU, RAM, disque) et déclenchement d'alertes en cas de dépassement de
+  seuil. \\
+Supervision continue & Surveillance autonome et permanente d'un serveur
+  par un agent dédié, avec seuils et canaux de notification
+  personnalisables. \\
+Déploiement continu & Orchestration du déploiement d'une application à
+  partir d'un dépôt Git, déclenché par un évènement vérifié. \\
+Publication applicative & Exposition HTTPS d'une application déjà
+  déployée, sous un nom de domaine. \\
+Sauvegardes & Sauvegarde automatique, restaurable et vérifiée, des bases
+  de données. \\
+Montée en charge & Ajustement, dans un premier temps manuel, des
+  ressources allouées à un conteneur. \\
+Contrôle d'accès & Gestion des rôles et des permissions,
+  pilotée en base de données plutôt que figée dans le code. \\
+Sécurité & Vérification automatisée de règles de sécurité, limitée à
+  l'audit et à la recommandation. \\
+Journal d'audit & Traçabilité systématique de toute action sensible. \\
+Documentation intégrée & Documentation d'exploitation consultable
+  directement dans l'interface. \\
+\bottomrule
+\end{tabular}
+\caption{Synthèse des exigences fonctionnelles par domaine}
+\label{tab:synthese-exigences}
+\end{table}
+
+Ces exigences fonctionnelles sont complétées par des exigences non
+fonctionnelles, transverses à l'ensemble des domaines. Elles se répartissent
+en trois catégories.
+
+\medskip
+\noindent\textbf{Exigences vis-à-vis des utilisateurs} :
+\begin{itemize}
+  \item Aucun secret (clé SSH secrète, jeton, mot de passe) n'est jamais exposé en
+        clair, y compris pour le rôle le plus privilégié.
+  \item Chaque utilisateur reste isolé des secrets appartenant à un autre
+        périmètre que le sien.
+  \item Le déploiement, la publication et la supervision s'activent ou se
+        désactivent indépendamment, sans effet de bord sur les autres.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Exigences organisationnelles (fonctionnement interne de
+l'outil)} :
+\begin{itemize}
+  \item L'arrêt ou la panne d'un conteneur n'affecte jamais les autres
+        conteneurs du même hôte.
+  \item L'adoption de l'outil reste progressive : un accès direct demeure toujours possible en parallèle.
+  \item Aucune tâche ne s'exécute de façon autonome côté serveur ; toute
+        collecte ou exécution part d'une action explicite.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Exigences vis-à-vis des systèmes externes} :
+\begin{itemize}
+  \item AGT Infra pilote des briques déjà éprouvées (Docker, SSH, Nginx,
+        Certbot, GitHub) sans jamais les réimplémenter.
+  \item La fiabilité d'une sauvegarde dépend d'une restauration
+        effectivement vérifiée sur une cible de test.
+\end{itemize}
+
+\subsection{Diagramme de cas d'utilisation}
+
+Plutôt qu'un diagramme unique regroupant les cas d'utilisation des
+quatorze domaines, ce qui nuirait à sa lisibilité, deux diagrammes
+illustrent ici les domaines concentrant le plus d'interactions entre
+acteurs et système. \\
+Le premier diagramme (figure~\ref{fig:cas-utilisation-rbac}) porte sur le
+domaine du contrôle d'accès.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{assets/diagrams/03-diagramme_cas_utilisation_RBAC.png}
+  \caption{Diagramme de cas d'utilisation, domaine Contrôle d'accès}
+  \label{fig:cas-utilisation-rbac}
+\end{figure}
+
+Le second diagramme (figure~\ref{fig:cas-utilisation-serveurs}) porte sur
+le domaine des serveurs et conteneurs. Il illustre la dépendance du
+système envers les briques externes qu'il orchestre.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{assets/diagrams/03-diagramme_cas_utilisation_SERVEUR-CONTENEUR.png}
+  \caption{Diagramme de cas d'utilisation, domaine Serveurs et conteneurs}
+  \label{fig:cas-utilisation-serveurs}
+\end{figure}
+
+\subsection{Quelques cas d'utilisation détaillés}
+
+Les deux cas d'utilisation suivants,sont détaillés pour donner un exemple concret de scénario
+nominal et de scénarios alternatifs.
+
+\paragraph{Créer et affecter un rôle}
+\begin{itemize}
+  \item \textbf{Acteur principal} : le SUPER\_ADMIN.
+  \item \textbf{Acteurs secondaires} : aucun système externe, l'opération
+        reste interne à AGT Infra.
+  \item \textbf{Objectif} : le SUPER\_ADMIN veut composer un rôle à partir
+        d'un sous-ensemble de permissions, puis l'affecter à une personne,
+        afin de lui donner un périmètre d'action précis sans lui accorder
+        un accès total.
+  \item \textbf{Préconditions} :
+        \begin{itemize}
+          \item Le SUPER\_ADMIN est authentifié.
+          \item La personne à qui le rôle sera affecté possède déjà un
+                compte sur AGT Infra.
+        \end{itemize}
+  \item \textbf{Postconditions} : la personne dispose du nouveau rôle, et
+        son périmètre d'action reflète immédiatement les permissions qui
+        lui ont été accordées.
+  \item \textbf{Scénario nominal} :
+        \begin{enumerate}
+          \item Le SUPER\_ADMIN ouvre l'écran de gestion des rôles.
+          \item Il sélectionne, dans le catalogue de permissions, celles
+                qu'il souhaite regrouper dans un nouveau rôle.
+          \item Il nomme ce rôle et confirme sa création.
+          \item Il affecte ce rôle à la personne concernée, en précisant
+                une portée globale ou restreinte à une ressource précise.
+        \end{enumerate}
+  \item \textbf{Scénarios alternatifs} :
+        \begin{itemize}
+          \item Le SUPER\_ADMIN tente de retirer un droit au rôle
+                SUPER\_ADMIN lui-même : l'opération est refusée, ce rôle
+                restant immuable.
+          \item Une permission accordée au rôle est par ailleurs
+                explicitement refusée à cette personne à titre individuel :
+                le refus prévaut, et l'action reste bloquée pour elle
+                malgré le rôle qui l'autoriserait.
+        \end{itemize}
+\end{itemize}
+
+\paragraph{Déployer une application}
+\begin{itemize}
+  \item \textbf{Acteur principal} : l'Utilisateur.
+  \item \textbf{Acteurs secondaires} : GitHub, à l'origine de l'évènement
+        déclencheur ; l'API SSH (Paramiko), sollicitée pour exécuter le
+        déploiement sur le serveur cible ; Docker, sollicité pour la
+        construction et le démarrage du conteneur.
+  \item \textbf{Objectif} : déployer une nouvelle version d'une
+        application, depuis la modification du code jusqu'à son exécution
+        effective sur le serveur cible, avec un suivi en direct de chaque
+        étape.
+  \item \textbf{Préconditions} :
+        \begin{itemize}
+          \item Une configuration de déploiement existe déjà pour ce
+                dépôt (branche, environnement, serveur cible, secret de
+                webhook).
+          \item Le déploiement automatique est activé pour cette configuration.
+        \end{itemize}
+  \item \textbf{Postconditions} : l'application est opérationnelle sur le
+        serveur cible, et l'intégralité du déroulement du déploiement
+        reste consultable dans l'historique.
+  \item \textbf{Scénario nominal} :
+        \begin{enumerate}
+          \item Une modification poussée sur le dépôt GitHub configuré déclenche
+                un évènement webhook vers AGT Infra.
+          \item AGT Infra vérifie l'authenticité de cet évènement par
+                validation de sa signature.
+          \item La configuration de déploiement correspondante est
+                identifiée et chargée.
+          \item Un job de déploiement démarre son exécution sur le
+                serveur cible via SSH, selon une séquence de huit étapes :
+                connexion SSH, vérifications préalables, synchronisation
+                du dépôt Git, génération des variables d'environnement de l'application,
+                construction de l'image Docker, démarrage du conteneur,
+                vérification de bon fonctionnement, puis nettoyage des
+                ressources temporaires.
+          \item Chaque étape écrit sa progression dans un journal au fil
+                de l'eau, diffusé en temps réel sur un canal dédié.
+          \item L'Utilisateur suit le déploiement en direct depuis la
+                console de déploiement de l'interface AGT Infra.
+        \end{enumerate}
+  \item \textbf{Scénarios alternatifs} :
+        \begin{itemize}
+          \item La signature de l'évènement webhook ne peut pas être
+                validée : l'évènement est rejeté et journalisé, sans
+                aucune exécution.
+          \item Une étape de la séquence échoue, par exemple la
+                vérification de bon fonctionnement du conteneur : le
+                déploiement est interrompu, marqué comme échoué, et les
+                étapes suivantes ne sont pas exécutées.
+          \item Le déploiement automatique est désactivé pour cette configuration :
+                l'évènement est reçu et journalisé, mais n'entraîne aucune
+                exécution.
+        \end{itemize}
+\end{itemize}
+
+
+
+
+
+\section{Architecture générale}
+
+L'analyse des besoins ayant établi ce que le système doit accomplir,
+cette section décrit comment il est structuré pour y répondre : ses
+grandes parties, leurs responsabilités respectives, et la façon dont
+elles communiquent entre elles.
+
+\subsection{Architecture logique}
+
+Le diagramme de la figure~\ref{fig:architecture-globale} distingue
+nettement deux ensembles : à gauche, les composants internes à AGT
+Infra ; à droite, les systèmes externes qu'il orchestre sans jamais les
+réimplémenter, conformément au principe de chef d'orchestre déjà énoncé
+dans l'introduction de ce rapport.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{assets/diagrams/03-diagramme_architecture-globale.png}
+  \caption{Architecture générale d'AGT Infra}
+  \label{fig:architecture-globale}
+\end{figure}
+
+L'Utilisateur n'accède jamais directement à une ressource sensible :
+toute action passe par l'interface web, qui communique avec l'API
+backend en HTTPS et via un canal WebSocket dédié pour les flux temps
+réel (journaux de déploiement, console web). Seule l'API backend décide
+si une action est autorisée, selon le modèle RBAC/IBAC ; ni l'interface
+web ni l'adaptateur SSH ne portent cette logique, le premier se limitant
+à l'affichage, le second à l'exécution des commandes déléguées.
+
+Toute opération sur un serveur distant transite par ce même adaptateur
+SSH, qu'il s'agisse d'une commande Docker, d'une configuration Nginx/
+Certbot, ou d'un canal WebSocket vers l'agent de supervision. Seule
+exception : l'agent Netdata notifie l'API backend directement par
+webhook en cas de dépassement de seuil, ce qui permet à une alerte de se
+déclencher même sans consultation en cours.
+
+La persistance suit deux logiques distinctes : la base de données
+relationnelle porte les données structurées du système (utilisateurs,
+rôles, permissions, serveurs, conteneurs, publications), tandis que les
+journaux de déploiement et les sessions de console web sont écrits
+directement sur disque au fil de l'exécution, la base n'en conservant
+qu'une synthèse consultable.
+
+\subsection{Diagramme de package}
+
+Le diagramme de package de la figure~\ref{fig:diagramme-package} détaille
+l'organisation interne d'AGT Infra en grands domaines fonctionnels, sans
+descendre au niveau des classes. Chaque flèche en pointillé, annotée
+\textit{Use}, indique qu'un package dépend d'un autre pour fonctionner.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{assets/diagrams/03-diagramme_packages.png}
+  \caption{Diagramme de package d'AGT Infra}
+  \label{fig:diagramme-package}
+\end{figure}
+
+Le package Contrôle d'accès occupe une position particulière : il n'est
+utilisé que par le package Serveurs physiques, mais toute action menée
+depuis n'importe quel autre package du système passe en réalité par une
+vérification de permission avant de s'exécuter, cette dépendance
+transverse n'étant pas répétée sur chaque package pour ne pas surcharger
+le diagramme. Les packages Serveurs physiques, Application et Conteneurs
+s'enchaînent ensuite de façon hiérarchique, chacun reposant sur le
+précédent, jusqu'aux packages Supervision et Console web, qui dépendent
+tous deux du package Conteneurs pour cibler la ressource sur laquelle ils
+opèrent.
+
+Sur la droite du diagramme apparaissent les interfaces externes
+sollicitées par ces packages : l'API Docker pour la gestion des
+conteneurs, l'API SSH (Paramiko) pour toute connexion distante, l'API
+GitHub pour la réception des évènements de déploiement, et l'agent de
+supervision Netdata pour la collecte continue des métriques.
+
+\section{Modélisation des données}
+
+Cette section modélise les entités qui portent, au niveau des données,
+les décisions déjà présentées : le contrôle d'accès d'une part, la
+gestion des serveurs et des conteneurs d'autre part. Comme pour les cas
+d'utilisation, deux diagrammes de classes illustrent ces domaines,
+plutôt qu'un schéma unique regroupant l'ensemble du système.
+
+\subsection{Modèle du contrôle d'accès (RBAC/IBAC)}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{assets/diagrams/03-diagramme_classe_acces.png}
+  \caption{Diagramme de classes, domaine Contrôle d'accès}
+  \label{fig:diagramme-classe-acces}
+\end{figure}
+
+Un Utilisateur possède plusieurs Rôles, chacun regroupant un ensemble de
+Permission choisies dans un catalogue commun. Chaque Permission porte une
+portée (scope), globale ou restreinte à un serveur, un conteneur ou un
+registre, conformément au modèle déjà évoqué dans l'analyse des besoins.
+
+Une PermissionDirecte accorde ou refuse une Permission précise à un
+Utilisateur précis, indépendamment de ses rôles, avec son propre motif et
+son propre statut (\textit{allow} ou \textit{deny}). C'est cette classe
+qui porte, au niveau des données, le principe de refus explicite toujours
+prioritaire déjà énoncé plus haut.
+
+Chaque Utilisateur possède également ses propres Secret, dont la valeur
+reste masquée, et peut être l'auteur de plusieurs EntréeAudit, chacune
+traçant une action précise : sa cible, son résultat et son périmètre.
+
+\subsection{Modèle des serveurs et des conteneurs}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{assets/diagrams/03-diagramme_classe_srv_cnt.png}
+  \caption{Diagramme de classes, domaine Serveurs et conteneurs}
+  \label{fig:diagramme-classe-srv-cnt}
+\end{figure}
+
+Un Serveur héberge plusieurs Conteneurs, chacun pouvant être associé à une
+Application qui y est déployée, cette association restant facultative.
+Serveurs et conteneurs peuvent l'un comme l'autre déclencher plusieurs
+Alerte et faire l'objet de plusieurs entrées Audit.
+
+Une Configuration de Supervision, rattachée à un serveur, définit les
+seuils et le point de notification utilisés pour surveiller un ensemble
+de Metrique propres à ce serveur.
+
+La section suivante s'appuie sur ce modèle pour détailler deux
+comportements clés du système : le cycle de vie d'une publication, et
+l'algorithme de résolution d'une permission.
+
+\section{Comportements clés}
+
+Cette dernière section de l'analyse et de la conception détaille cinq
+comportements du système, choisis parce qu'ils illustrent chacun une
+règle de gestion déjà énoncée dans ce chapitre plutôt que par
+exhaustivité. Deux diagrammes d'état-transition montrent le cycle de vie
+d'une publication et celui de la connectivité d'un serveur ; trois
+diagrammes de séquence détaillent des échanges entre systèmes déjà
+introduits en tant que cas d'utilisation.
+
+\subsection{Cycle de vie d'une publication applicative}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{assets/diagrams/03-diagramme_ET_publication.png}
+  \caption{État-transition d'une publication applicative}
+  \label{fig:etat-publication}
+\end{figure}
+
+Une publication traverse six états. Le point à retenir se situe dans les
+deux états d'échec :
+
+\begin{itemize}
+  \item \texttt{echouée} peut être relancée manuellement, ce qui la
+        ramène en \texttt{en\_cours}.
+  \item \texttt{desynchronisée}, en revanche, ne revient jamais
+        automatiquement à \texttt{active} : une incohérence détectée
+        (port ou conteneur modifié) reste signalée jusqu'à intervention
+        volontaire de l'utilisateur.
+\end{itemize}
+
+Cette absence de correction automatique est un choix délibéré, déjà
+justifié dans le cahier des charges : une publication corrigée seule
+masquerait un changement de configuration que l'utilisateur doit
+explicitement valider.
+
+\subsection{Cycle de vie de la connectivité d'un serveur}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{assets/diagrams/03-diagramme_ET_serveur.png}
+  \caption{État-transition de la connectivité d'un serveur physique}
+  \label{fig:etat-serveur}
+\end{figure}
+
+Ce second état-transition complète le précédent sur un point différent :
+il ne modélise pas un flux métier, mais la disponibilité technique d'un
+serveur. Trois états actifs se distinguent :
+
+\begin{itemize}
+  \item \texttt{Connecté} : état nominal, atteint après une connexion SSH
+        réussie.
+  \item \texttt{Inaccéssible} : atteint après une perte de connexion,
+        avec une tentative de reconnexion possible sans repasser par un
+        branchement complet.
+  \item \texttt{Non\_connecté} : état initial, ou état de repli si les
+        identifiants fournis sont invalides.
+\end{itemize}
+
+Un serveur inaccessible n'est donc pas retiré de l'inventaire : il reste
+identifié comme tel, en attente d'une reconnexion, ce qui distingue une
+panne réseau temporaire d'un débranchement volontaire.
+
+\subsection{Résolution d'une permission}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{assets/diagrams/03-diagramme_seq_resolution_permission.png}
+  \caption{Séquence de résolution d'une permission}
+  \label{fig:sequence-permission}
+\end{figure}
+
+Cette séquence détaille, étape par étape, l'algorithme déjà décrit en
+section~\ref{chap:etude-technique} de ce chapitre. Le point structurant
+apparaît dans l'ordre des branches du fragment \textit{alt} : une
+permission directe de refus est vérifiée avant toute permission
+d'autorisation, qu'elle soit directe ou issue d'un rôle. Cet ordre
+garantit qu'aucune combinaison de rôles, même la plus permissive, ne peut
+contourner un refus explicite.
+
+\subsection{Connexion d'un nouveau serveur}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{assets/diagrams/03-diagramme_seq_connexion_serveur.png}
+  \caption{Séquence de connexion d'un nouveau serveur}
+  \label{fig:sequence-connexion-serveur}
+\end{figure}
+
+Deux points de cette séquence méritent d'être soulignés :
+
+\begin{itemize}
+  \item La connexion est d'abord testée avant tout enregistrement en
+        base : un serveur n'entre dans l'inventaire que si la connexion a
+        réellement réussi.
+  \item Le fragment optionnel de génération de clé dédiée montre une
+        règle de sécurité déjà énoncée : une clé publique affichée sans
+        installation dans le délai imparti est automatiquement invalidée
+        et supprimée, sans intervention manuelle.
+\end{itemize}
+
+\subsection{Déploiement d'une application}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{assets/diagrams/03-diagramme_seq_deploiement.png}
+  \caption{Séquence de déploiement d'une application}
+  \label{fig:sequence-deploiement}
+\end{figure}
+
+Cette séquence complète le cas d'utilisation détaillé en
+section~\ref{chap:etude-technique} par l'ordre technique exact des
+échanges. Trois points ressortent :
+
+\begin{itemize}
+  \item Le déclenchement automatique (webhook GitHub) et le déclenchement
+        manuel convergent vers le même traitement dès que la
+        configuration est validée : aucune différence de comportement
+        n'existe entre les deux origines à partir de cette étape.
+  \item Chaque étape de la séquence de déploiement transmet son résultat
+        au fil de l'eau, diffusé en direct à l'utilisateur avant même la
+        fin complète du déploiement.
+  \item L'archivage suit une double écriture : le détail complet est
+        sauvegardé dans un fichier, tandis qu'une synthèse est
+        systématiquement écrite en base de données, y compris en cas
+        d'échec.
+\end{itemize}=== FIN FICHIER : chapters/03_analyse_conception.tex ===
+
+=== FICHIER : chapters/04_implementation.tex ===
+\chapter{Implémentation}
+\label{chap:realisation}
+
+\agtlettrine{L}a conception ayant posé l'architecture et les
+comportements attendus du système, ce chapitre décrit sa mise en œuvre
+concrète : l'environnement et les outils retenus, la méthodologie de
+travail suivie, la réalisation module par module, les difficultés
+rencontrées et le déploiement réel de l'outil.
+\minisommaire
+
+\section{Environnement et outils de développement}
+
+Les choix technologiques présentés ici ne précèdent pas la conception,
+ils en découlent : chaque outil retenu répond à une contrainte déjà
+posée au chapitre précédent, plutôt qu'à une préférence de départ.
+
+\subsection{Backend}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{p{1.6cm}p{2.6cm}p{8.6cm}}
+\toprule
+\textbf{Logo} & \textbf{Technologie} & \textbf{Justification} \\
+\midrule
+\includegraphics[height=1cm]{assets/icons/04-icone_fastapi.png} &
+FastAPI &
+Le backend concentre toute vérification RBAC/IBAC à chaque requête et
+diffuse plusieurs flux temps réel (journaux, console web). FastAPI
+propose nativement les deux : une gestion asynchrone des requêtes et un
+support intégré des WebSocket, sans bibliothèque tierce. \\
+\addlinespace
+\includegraphics[height=1cm]{assets/icons/04-icone_postgresql.png} & PostgreSQL et SQLAlchemy 2.0 &
+La base de données relationnelle porte des entités aux relations
+riches (utilisateurs, rôles, permissions, portées). Un ORM mature,
+compatible avec l'écriture asynchrone de FastAPI, évite d'écrire du SQL
+brut pour chaque requête. \\
+\addlinespace
+(logo non disponible) & Alembic &
+Le modèle de données évolue au fil de l'implémentation du projet. Alembic
+permet de versionner chaque évolution du schéma sans perte de données
+sur un environnement déjà en service. \\
+\addlinespace
+(logo non disponible) & Pydantic v2 &
+Chaque requête et chaque réponse de l'API doivent être validées
+strictement, en particulier pour ne jamais exposer un secret en clair.
+Pydantic valide les schémas de données à l'entrée et à la sortie de
+l'API, avec un typage explicite. \\
+\addlinespace
+\includegraphics[height=1cm]{assets/icons/04-icone_ssh.png} &
+Paramiko &
+Toute opération sur un serveur distant passe par un unique adaptateur
+SSH, sans agent installé sur les cibles. Paramiko implémente le
+protocole SSH directement en Python, sans dépendre d'un client SSH
+externe installé sur la machine hôte. \\
+\bottomrule
+\end{tabular}
+\caption{Technologies backend et justification par contrainte de conception}
+\end{table}
+
+\subsection{Frontend}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{p{1.6cm}p{2.6cm}p{8.6cm}}
+\toprule
+\textbf{Logo} & \textbf{Technologie} & \textbf{Justification} \\
+\midrule
+\includegraphics[height=1cm]{assets/icons/04-icone_react.png} &
+React &
+L'interface web ne porte aucune logique d'autorisation, mais doit
+adapter dynamiquement l'affichage selon les permissions reçues de l'API.
+Un modèle par composants facilite ce masquage conditionnel, écran par
+écran. \\
+\addlinespace
+(logo non disponnible) & TypeScript &
+L'interface consomme des contrats de données définis côté backend. Le typage statique évite
+une classe entière d'erreurs d'intégration entre les deux couches. \\
+\addlinespace
+\includegraphics[height=1cm]{assets/icons/04-icone_vite.png} &
+Vite &
+Le développement de l'interface s'est fait par itérations rapprochées,
+module par module, tout au long des sessions d'implémentation. Vite réduit le
+temps de rechargement à chaque modification, ce qui a compté sur un
+développement aussi séquentiel. \\
+\addlinespace
+(logo non disponible) & Tailwind CSS &
+L'interface gère simultanément un mode clair et un mode sombre, avec
+une palette sémantique de statuts (succès, erreur, avertissement).
+Tailwind permet de centraliser ces jetons de style sans dupliquer de
+CSS écran par écran. \\
+\bottomrule
+\end{tabular}
+\caption{Technologies frontend et justification par contrainte de conception}
+\end{table}
+
+\subsection{Outils et intégrations transverses}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{p{1.6cm}p{2.6cm}p{8.6cm}}
+\toprule
+\textbf{Logo} & \textbf{Technologie} & \textbf{Justification} \\
+\midrule
+\includegraphics[height=1cm]{assets/icons/04-icone_docker.png} &
+Docker &
+AGT Infra pilote des conteneurs déjà en place chez AG Technologies,
+sans réimplémenter de moteur de conteneurisation. Docker est piloté
+exclusivement en ligne de commande via SSH, jamais par son API TCP, ce
+qui évite d'exposer un port supplémentaire sur chaque serveur. \\
+\addlinespace
+\includegraphics[height=1cm]{assets/icons/04-icone_git.png}
+\includegraphics[height=1cm]{assets/icons/04-icone_github.png} &
+Git / GitHub &
+Le déploiement continu se déclenche par un évènement webhook signé,
+émis par le dépôt du projet à déployer. GitHub héberge ces dépôts et
+fournit ce mécanisme de webhook nativement. \\
+\addlinespace
+(logo non fourni) & Nginx / Certbot &
+La publication applicative expose une application déjà déployée, sous
+HTTPS, sans que l'outil ne réimplémente de serveur web ni d'autorité de
+certification. Nginx et Certbot, pilotés par SSH comme le reste,
+couvrent ce besoin sans nouvelle dépendance sur les serveurs cibles. \\
+\addlinespace
+\includegraphics[height=1cm]{assets/icons/04-icone_netdata.png} &
+Netdata &
+La supervision continue repose sur un agent autonome, installé une
+seule fois manuellement, capable de notifier l'API backend par webhook
+en cas de dépassement de seuil, indépendamment de toute consultation en
+cours. \\
+\bottomrule
+\end{tabular}
+\caption{Outils et intégrations transverses}
+\end{table}
+
+
+
+
+\section{Méthodologie de travail}
+
+La réalisation du projet s'est étalée sur plusieurs sessions successives, chacune portant sur
+un domaine fonctionnel précis. Cet étalement a rendu nécessaire une
+méthodologie de travail rigoureuse, tant pour garantir la qualité de
+chaque livraison que pour assurer la continuité.
+
+\subsection{Cycle de développement}
+
+Chaque évolution du projet, qu'il s'agisse d'un nouveau module ou d'une
+correction, a suivi un cycle en quatre étapes, appliqué sans exception :
+
+\begin{enumerate}
+  \item \textbf{Audit} : avant toute modification, un état des lieux du
+        code existant concerné est établi, afin d'en comprendre la structure et les relations avant d'y intervenir.
+  \item \textbf{Plan et/ou maquette UI} : un plan de travail est défini, précisant les
+        changements à apporter et leur impact attendu sur le reste du
+        système, avant toute écriture de code.
+  \item \textbf{Implémentation} : le plan une fois arrêté, les
+        changements sont mis en œuvre.
+  \item \textbf{Test} : chaque changement est ensuite vérifié, afin de
+        s'assurer qu'il fonctionne comme attendu et qu'aucune
+        fonctionnalité existante n'a été affectée.
+\end{enumerate}
+
+Ce cycle a permis d'éviter un écueil fréquent dans un projet de cette
+ampleur : coder avant d'avoir complètement cerné l'impact d'un
+changement sur des modules déjà en place, en particulier pour le
+contrôle d'accès, dont une régression aurait pu affecter l'ensemble du
+système.
+
+\subsection{Traçabilité des décisions}
+
+Toute décision d'architecture prise pendant le projet est numérotée, 
+de même que tout bogue identifié. Cette numérotation continue permet de retrouver, à tout
+moment, la justification d'un choix technique précis sans avoir à
+reconstituer son historique de mémoire.
+
+\subsection{Continuité}
+
+Le projet s'étalant sur plusieurs sessions d 'implémntation, sa continuité repose sur un
+petit ensemble de documents tenus à jour :
+
+\begin{itemize}
+  \item Un journal de session, décrivant ce qui a été réalisé et ce qui
+        reste en suspens.
+  \item Une liste de tâches, corrigée à la fin de chaque session plutôt
+        que laissée à reconstituer au début de la suivante.
+  \item Un index recensant, session après session, ce qui a été livré.
+\end{itemize}
+
+Cette organisation a permis de reprendre chaque session de travail sans
+perte d'information et devoir refaire un audit complet, malgré l'étalement du projet sur plusieurs semaines
+et l'intervention de plusieurs domaines fonctionnels en parallèle.
+
+\bigskip
+\noindent\textit{Note : une partie de ce cycle de développement,
+notamment la relecture de code existant, a été accélérée par l'usage d'un assistant d'intelligence
+artificielle, sous la supervision et la validation systématique de
+l'auteur à chaque étape.}
+
+
+
+
+\section{Réalisations par module}
+% TODO : gestion serveurs/conteneurs, deploiement continu, publication
+% applicative, supervision, RBAC/IBAC dynamique
+
+\section{Difficultés rencontrées et solutions apportées}
+% TODO
+
+\section{Déploiement}
+% TODO : diagramme de deploiement, infrastructure physique reelle=== FIN FICHIER : chapters/04_implementation.tex ===
+
+=== FICHIER : chapters/05_resultats_bilan.tex ===
+\chapter{Résultats et bilan}
+\label{chap:resultats}
+\minisommaire
+
+\section{Resultats obtenus}
+=== FIN FICHIER : chapters/05_resultats_bilan.tex ===
+
+=== FICHIER : chapters/06_conclusion.tex ===
+\chapter*{Conclusion générale}
+\addcontentsline{toc}{chapter}{Conclusion générale}
+
+% TODO :
+% - Bilan personnel (compétences techniques et humaines)
+% - Apport du stage pour votre projet professionnel=== FIN FICHIER : chapters/06_conclusion.tex ===
+
+=== FICHIER : config/00_preambule.tex ===
+% ============================================================
+% config/00_preambule.tex
+% Packages et configuration générale
+% ============================================================
+
+\usepackage[french]{babel}
+\usepackage{iftex}
+
+% --- Police : pdfLaTeX (portable) vs XeLaTeX/LuaLaTeX (Times réel) ---
+% LIMITE ANTICIPEE : sur Overleaf ou une machine sans les polices
+% Microsoft installées, fontspec + "Times New Roman" échoue à la
+% compilation. Le mode pdfLaTeX + mathptmx (ci-dessous) est le choix
+% par défaut car il fonctionne partout sans dépendance externe.
+\newif\ifusetruetnr
+\usetruetnrfalse % passer a \usetruetnrtrue si Times New Roman est
+                  % installee ET que vous compilez en XeLaTeX/LuaLaTeX
+
+\newif\ifusexetexorluatex
+\ifxetex
+  \usexetexorluatextrue
+\else
+  \ifluatex
+    \usexetexorluatextrue
+  \else
+    \usexetexorluatexfalse
+  \fi
+\fi
+
+\ifusexetexorluatex
+  \usepackage{fontspec}
+  \ifusetruetnr
+    \setmainfont{Times New Roman}
+  \else
+    \setmainfont{Liberation Serif} % clone metrique libre, tres proche
+  \fi
+  \newfontfamily\codefont{JetBrains Mono}[Scale=0.9]
+\else
+  \usepackage{mathptmx} % clone metrique de Times (Nimbus Roman)
+  \usepackage[T1]{fontenc}
+\fi
+
+% --- Mise en page ---
+% headheight/footskip augmentes pour laisser la place aux motifs
+% ornementaux ajoutes en en-tete/pied de page (config/04_ornements.tex).
+\usepackage[a4paper, margin=2.5cm, headheight=20pt, footskip=36pt]{geometry}
+\linespread{1.5}
+\usepackage{setspace}
+
+% --- Packages requis par les fichiers config/ (DOIVENT etre charges
+% AVANT les \input ci-dessous) ---
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{placeins} % \FloatBarrier : empeche une figure de deriver
+                       % dans le mauvais chapitre (limite classique de report)
+\usepackage{caption}
+\captionsetup{font=small, labelfont=bf}
+
+% --- Habillage visuel (style ENSPY / Legrand Orange Book) ---
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{chains} % necessaire pour la bordure de page de garde (config/04_ornements.tex)
+\usepackage{pgfornament} % motifs ornementaux vectoriels (page de garde, en-tetes)
+\usepackage{lettrine}    % lettrine (grande premiere lettre de chapitre)
+
+% --- Modules centralises (couleurs / ornements / styles / metadonnees) ---
+% ORDRE IMPORTANT : 04_ornements avant 02_styles, qui utilise les
+% commandes d'ornement dans la definition des en-tetes/pieds de page.
+\input{config/01_couleurs}
+\input{config/04_ornements}
+\input{config/02_styles}
+\input{config/03_metadonnees}
+
+% --- Bibliographie ---
+\usepackage[backend=biber, style=ieee, sorting=none]{biblatex}
+\addbibresource{biblio.bib}
+
+% --- Glossaire / acronymes ---
+% LIMITE ANTICIPEE : necessite une passe "makeglossaries" en plus de
+% pdflatex/biber. latexmk gere cela automatiquement (voir main.tex).
+\usepackage[acronym, toc]{glossaries}
+\makeglossaries
+
+% --- Liens cliquables ---
+% Bascule impression : les liens colores genent souvent a l'impression.
+\newif\ifmodeimpression
+\modeimpressionfalse % passer a true pour generer une version "a imprimer"
+
+\usepackage{hyperref}
+\ifmodeimpression
+  \hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+\else
+  \hypersetup{colorlinks=true, linkcolor=reportprimary, citecolor=reportprimary, urlcolor=reportprimary}
+\fi
+
+% --- Mini-sommaire par chapitre (style ENSPY) ---
+% LIMITE ANTICIPEE : etoc doit etre charge apres hyperref pour que les
+% liens du mini-sommaire fonctionnent correctement.
+\usepackage{etoc}
+
+% --- Veuves / orphelines ---
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000=== FIN FICHIER : config/00_preambule.tex ===
+
+=== FICHIER : config/01_couleurs.tex ===
+% ============================================================
+% config/01_couleurs.tex
+% Palette du rapport - POINT UNIQUE DE MODIFICATION
+% Inspiree de l'identite visuelle AGT Infra (orange primary),
+% adaptee a un document academique imprimable.
+% Pour changer la couleur de TOUS les titres/liens d'un coup :
+% ne modifier QUE reportprimary ci-dessous.
+% NOTE : le package xcolor est charge dans config/00_preambule.tex,
+% avant cet \input : ne pas le recharger ici.
+% ============================================================
+
+\definecolor{reportprimary}{HTML}{C2410C}   % orange soutenu (titres, liens)
+\definecolor{reportsuccess}{HTML}{059669}   % vert - a reserver aux resultats valides
+\definecolor{reporterror}{HTML}{E11D48}     % rouge - a reserver aux limites/problemes
+\definecolor{reportwarning}{HTML}{D97706}   % ambre - a reserver aux points d'attention
+
+\definecolor{reportgraytext}{HTML}{334155}
+\definecolor{reportgraylight}{HTML}{F1F5F9}
+\definecolor{reportbordergray}{HTML}{CBD5E1}=== FIN FICHIER : config/01_couleurs.tex ===
+
+=== FICHIER : config/02_styles.tex ===
+% ============================================================
+% config/02_styles.tex
+% Styles des titres, en-tetes/pieds de page, blocs de code
+% NOTE : titlesec, fancyhdr, listings, tikz et pgfornament sont
+% charges dans config/00_preambule.tex, avant cet \input.
+% ============================================================
+
+% --- Bloc de chapitre (style Legrand Orange Book) ---
+% CORRECTION : le mot "CHAPITRE" etait auparavant empile A L'INTERIEUR
+% du bloc colore, au-dessus du chiffre, ce qui l'ecrasait. Il est
+% desormais place A L'EXTERIEUR du bloc, en label vertical a gauche,
+% cale sur la meme hauteur que le carre colore (cf. reference visuelle).
+\newcommand{\ChapterNumberBlock}{%
+  \begin{tikzpicture}[remember picture, baseline]
+    % Rectangle vertical
+    \node[fill=reportprimary, minimum width=2.0cm, minimum height=2.5cm, inner sep=0pt] (numbox) {};
+    
+    % Numéro étiré dynamiquement à 2.4cm de hauteur (remplit le bloc)
+    \node[text=white, inner sep=0pt] at (numbox.center) {%
+      \resizebox{!}{2.0cm}{\usefont{OT1}{pbd}{m}{n}\bfseries\thechapter}%
+    };
+
+    % Mot "CHAPITRE" étiré à la hauteur exacte du rectangle (3.0cm)
+    \node[anchor=south, rotate=90, text=reportprimary, inner sep=0pt]
+      at ([xshift=-4mm]numbox.west) {%
+        \resizebox{2.5cm}{!}{\rmfamily\bfseries C\,H\,A\,P\,I\,T\,R\,E}%
+      };
+  \end{tikzpicture}%
+}
+
+\titleformat{\chapter}[display]
+  {\normalfont\filleft} % Alignement de tout le bloc et du texte à droite
+  {\ChapterNumberBlock} % Bloc de numéro
+  {12pt}                % Espace vertical (saut de ligne) entre le bloc et le titre
+  {\Huge\bfseries\color{reportprimary}} % Style du texte du titre
+\titlespacing*{\chapter}{0pt}{0pt}{30pt}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{reportprimary}}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}
+  {\thesubsection}{1em}{}
+
+% --- En-tete / pied de page, avec motifs ornementaux legers ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{{\color{reportprimary}\pgfornament[width=\agtOrnHeaderSize]{\agtOrnHeader}}~\nouppercase{\leftmark}}
+\fancyhead[R]{\rapporttitrecourt~{\color{reportprimary}\pgfornament[width=\agtOrnHeaderSize]{\agtOrnHeader}}}
+\fancyfoot[C]{{\color{reportprimary}\pgfornament[width=\agtOrnFooterSize]{\agtOrnFooter}}~\thepage~{\color{reportprimary}\reflectbox{\pgfornament[width=\agtOrnFooterSize]{\agtOrnFooter}}}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% --- Mini-sommaire de chapitre (style ENSPY) ---
+% Usage : appeler juste apres \chapter{...}\label{...}
+\newcommand{\minisommaire}{%
+  \etocsetnexttocdepth{subsection}%
+  \etocsettocstyle{\section*{Contenu}}{}%
+  \localtableofcontents%
+  \bigskip%
+}
+
+% --- Blocs de code ---
+% LIMITE ANTICIPEE : en pdfLaTeX, JetBrains Mono n'est pas disponible ;
+% \ttfamily (police a chasse fixe par defaut) sert de repli fidele a
+% l'esprit, sans dependance externe. En XeLaTeX/LuaLaTeX, \codefont
+% (defini en 00_preambule) utilise la vraie police si installee.
+\lstdefinestyle{codeagt}{
+  backgroundcolor=\color{reportgraylight},
+  frame=single,
+  rulecolor=\color{reportbordergray},
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  breakatwhitespace=false,
+  showstringspaces=false,
+  numbers=left,
+  numberstyle=\tiny\color{reportgraytext},
+  captionpos=b,
+  tabsize=2
+}
+\lstset{style=codeagt}=== FIN FICHIER : config/02_styles.tex ===
+
+=== FICHIER : config/03_metadonnees.tex ===
+% ============================================================
+% config/03_metadonnees.tex
+% Metadonnees - POINT UNIQUE DE MODIFICATION
+% Toute information reutilisee (page de garde, en-tetes...)
+% doit etre definie ICI, jamais recopiee en dur ailleurs.
+% ============================================================
+
+% Titre complet : utilise uniquement sur la page de garde.
+\newcommand{\rapporttitre}{Conception et implémentation d'AGT Infra : plateforme interne de gestion d'infrastructure et de supervision}
+
+% Titre court : utilise dans l'en-tete de page (evite tout debordement
+% lie a la longueur du titre complet ci-dessus).
+\newcommand{\rapporttitrecourt}{AGT Infra, rapport de stage}
+
+\newcommand{\rapportauteur}{Josué [Nom de famille]}
+\newcommand{\rapportformation}{[Intitulé de la formation / diplôme visé]}
+\newcommand{\rapportecole}{[Nom de l'établissement]}
+\newcommand{\rapportentreprise}{AG Technologies}
+\newcommand{\rapporttuteurentreprise}{[Nom du tuteur en entreprise]}
+\newcommand{\rapporttuteuracademique}{[Nom du tuteur académique]}
+\newcommand{\rapportperiode}{Du 06 juillet 2026 au 05 août 2026}
+\newcommand{\rapportannee}{2025 - 2026}=== FIN FICHIER : config/03_metadonnees.tex ===
+
+=== FICHIER : config/04_ornements.tex ===
+% ============================================================
+% config/04_ornements.tex
+% Motifs ornementaux (pgfornament) - POINT UNIQUE DE MODIFICATION
+% Identifiants issus du catalogue du package pgfornament (voir
+% "texdoc pgfornament" pour la planche complete des motifs disponibles).
+% Changer un identifiant ici suffit a changer le motif partout ou il
+% est utilise (page de garde, en-tetes, pieds de page).
+% ============================================================
+
+% --- Motifs de la bordure de page de garde ---
+\newcommand{\agtOrnCorner}{24}  % motif de coin
+\newcommand{\agtOrnSide}{19}    % motif de bordure repete (haut/bas)
+\newcommand{\agtOrnSize}{10mm}  % taille d'un motif de bordure
+
+% --- Motifs legers d'en-tete / pied de page (chaque page du corps) ---
+\newcommand{\agtOrnHeader}{80}
+\newcommand{\agtOrnFooter}{83}
+\newcommand{\agtOrnHeaderSize}{5mm}
+\newcommand{\agtOrnFooterSize}{4.5mm}
+
+% --- Bordure complete (page de garde uniquement) ---
+% CORRECTION : l'ancienne version (boucle \foreach avec rotation
+% manuelle des noeuds) faussait le calcul des ancres et produisait des
+% blocs pleins noirs au lieu du motif repete. Remplacee par la technique
+% eprouvee du template ENSPY (Yuhala, depot latex-thesis) : une chaine
+% de noeuds TikZ (bibliotheque "chains") qui tourne aux quatre coins,
+% bien plus fiable que des calculs de position manuels.
+% LIMITE ANTICIPEE : le nombre de motifs par cote (17 en haut/bas, 25
+% sur les cotes) est calibre pour une page A4 avec un motif de 10mm ;
+% si la taille du motif (\agtOrnSize) change, ces nombres doivent etre
+% ajustes en consequence pour ne pas deborder ou laisser un espace vide.
+\newcommand{\pageborderornament}{%
+  \begin{tikzpicture}[remember picture, overlay, start chain, node distance=-2mm, color=reportprimary]%
+    \node (agtnw) [shift={(5mm,-5mm)}, anchor=north west, on chain] at (current page.north west) {\pgfornament[width=\agtOrnSize]{\agtOrnCorner}};%
+    \foreach \i in {1,...,16} {\node [on chain] {\pgfornament[width=\agtOrnSize]{\agtOrnSide}};}%
+    \node (agtne) [on chain] {\pgfornament[width=\agtOrnSize]{\agtOrnCorner}};%
+    \foreach \i in {1,...,24} {\node [continue chain=going below, on chain] {\pgfornament[width=\agtOrnSize]{\agtOrnSide}};}%
+    \node (agtse) [on chain] {\pgfornament[width=\agtOrnSize]{\agtOrnCorner}};%
+    \foreach \i in {1,...,16} {\node [continue chain=going left, on chain] {\pgfornament[width=\agtOrnSize]{\agtOrnSide}};}%
+    \node (agtsw) [on chain] {\pgfornament[width=\agtOrnSize]{\agtOrnCorner}};%
+    \foreach \i in {1,...,24} {\node [continue chain=going above, on chain] {\pgfornament[width=\agtOrnSize]{\agtOrnSide}};}%
+  \end{tikzpicture}%
+}
+
+% --- Lettrine coloree (raccourci) ---
+% Usage dans un chapitre : \agtlettrine{P}{our mener a bien...}
+\setcounter{DefaultLines}{3}
+\newcommand{\agtlettrine}[2]{\lettrine[lines=3]{\color{reportprimary}#1}{#2}}=== FIN FICHIER : config/04_ornements.tex ===
+
+=== FICHIER : front/liste_abreviations.tex ===
+% ============================================================
+% front/liste_abreviations.tex
+% Alimentée automatiquement par glossaire.tex (via \newacronym)
+% ============================================================
+\printglossary[type=\acronymtype, title={Liste des abréviations}]=== FIN FICHIER : front/liste_abreviations.tex ===
+
+=== FICHIER : front/page_garde.tex ===
+% ============================================================
+% front/page_garde.tex
+% ============================================================
+\begin{titlepage}
+\pageborderornament
+\centering
+\vspace*{1.5cm}
+% \includegraphics[width=4cm]{assets/logo_ecole.png}
+\vspace{1cm}
+
+{\Large \rapportecole \par}
+{\large \rapportformation \par}
+\vspace{2cm}
+
+{\Huge \bfseries \color{reportprimary} \rapporttitre \par}
+\vspace{1.5cm}
+
+{\large Rapport de stage présenté par \par}
+{\Large \bfseries \rapportauteur \par}
+\vspace{2cm}
+
+% \includegraphics[width=3cm]{assets/logo_entreprise.png}
+{\large Stage effectué au sein de \rapportentreprise \par}
+{\normalsize \rapportperiode \par}
+\vspace{2cm}
+
+\begin{tabular}{ll}
+Tuteur entreprise : & \rapporttuteurentreprise \\
+Tuteur académique : & \rapporttuteuracademique \\
+\end{tabular}
+
+\vfill
+{\large \rapportannee \par}
+\end{titlepage}=== FIN FICHIER : front/page_garde.tex ===
+
+=== FICHIER : front/remerciements.tex ===
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+
+% TODO : tuteur entreprise, tuteur académique, équipe AG Technologies, proches=== FIN FICHIER : front/remerciements.tex ===
+
+=== FICHIER : glossaire.tex ===
+% ============================================================
+% glossaire.tex - Acronymes utilisés dans le rapport
+% Ajouter une ligne ici suffit à mettre à jour la liste automatiquement
+% ============================================================
+\newacronym{api}{API}{Application Programming Interface}
+\newacronym{rbac}{RBAC}{Role-Based Access Control}
+\newacronym{ibac}{IBAC}{Identity-Based Access Control}
+\newacronym{ssh}{SSH}{Secure Shell}
+\newacronym{orm}{ORM}{Object-Relational Mapping}
+\newacronym{ci}{CI/CD}{Intégration continue / Déploiement continu}
+\newacronym{vps}{VPS}{Virtual Private Server}=== FIN FICHIER : glossaire.tex ===
+
+=== FICHIER : main.tex ===
+% ============================================================
+% main.tex - Fichier maître du rapport de stage
+% Compilation recommandée : latexmk -pdf -aux-directory=build main.tex
+% (enchaîne automatiquement pdflatex -> biber -> makeglossaries -> pdflatex)
+% ============================================================
+\documentclass[12pt, a4paper]{report}
+
+\input{config/00_preambule}
+\input{glossaire}
+
+\begin{document}
+
+% ---------- Pages liminaires (numérotation romaine) ----------
+\pagenumbering{roman}
+\input{front/page_garde}
+\input{front/remerciements}
+
+\tableofcontents
+\listoffigures
+\listoftables
+\input{front/liste_abreviations}
+
+% ---------- Corps du rapport (numérotation arabe) ----------
+\clearpage
+\pagenumbering{arabic}
+
+\include{chapters/00_introduction}
+\include{chapters/01_presentation_entreprise}
+\include{chapters/02_etat_art}
+\include{chapters/03_analyse_conception}
+\include{chapters/04_implementation}
+\include{chapters/05_resultats_bilan}
+\include{chapters/06_conclusion}
+
+% ---------- Annexes ----------
+\appendix
+\include{annexes/annexe_a}
+
+% ---------- Bibliographie ----------
+\printbibliography[title={Bibliographie et webographie}]
+
+\end{document}=== FIN FICHIER : main.tex ===
+
+=== FICHIER : README.md ===
+# Rapport de stage - AGT Infra
+
+Rapport de stage rédigé en LaTeX, documentant la conception et le
+développement d'AGT Infra (plateforme interne de gestion d'infrastructure
+et de supervision) au sein d'AG Technologies.
+
+---
+
+## Sommaire
+
+- [Prérequis](#prérequis)
+- [Compilation](#compilation)
+- [Arborescence du projet](#arborescence-du-projet)
+- [Points de personnalisation](#points-de-personnalisation)
+- [Conventions de rédaction](#conventions-de-rédaction)
+- [Limites connues et contournements](#limites-connues-et-contournements)
+- [Workflow de rédaction recommandé](#workflow-de-rédaction-recommandé)
+
+---
+
+## Prérequis
+
+- Une distribution LaTeX complète : [TeX Live](https://www.tug.org/texlive/)
+  (Linux/Windows) ou [MacTeX](https://www.tug.org/mactex/) (macOS).
+- `latexmk` (inclus dans TeX Live/MacTeX).
+- `biber` (moteur bibliographique, inclus dans TeX Live/MacTeX).
+- Alternative sans installation locale : [Overleaf](https://www.overleaf.com/)
+  (voir section Limites connues pour les ajustements nécessaires).
+
+---
+
+## Compilation
+
+Compilation complète (texte + bibliographie + glossaire), PDF généré à la
+racine, fichiers auxiliaires isolés dans `build/` :
+
+```bash
+mkdir -p build
+latexmk -pdf -aux-directory=build main.tex
+```
+
+`latexmk` enchaîne automatiquement les passes nécessaires
+(`pdflatex` -> `biber` -> `makeglossaries` -> `pdflatex` x2).
+
+Nettoyage des fichiers auxiliaires générés :
+
+```bash
+latexmk -c -aux-directory=build
+```
+
+**Sur Overleaf :** importer le dossier complet, vérifier que le
+compilateur du projet est réglé sur `pdfLaTeX` (Menu > Compiler),
+et définir `main.tex` comme fichier maître si nécessaire (Menu > Main
+document).
+
+---
+
+## Arborescence du projet
+
+rapport-stage/
+├── main.tex # Fichier maître, assemble tout le document
+├── glossaire.tex # Acronymes (alimente la liste des abréviations)
+├── biblio.bib # Sources bibliographiques
+├── scan_structure_raport.sh # Génère un instantané du projet pour l'IA
+│
+├── config/ # Configuration centralisée (éditer ici en priorité)
+│ ├── 00_preambule.tex # Packages, police, bascules (impression/police)
+│ ├── 01_couleurs.tex # Palette de couleurs du document
+│ ├── 02_styles.tex # Style des titres, en-têtes, blocs de code
+│ └── 03_metadonnees.tex # Titre, auteur, tuteurs, dates
+│
+├── front/ # Pages liminaires
+│ ├── page_garde.tex
+│ ├── remerciements.tex
+│ └── liste_abreviations.tex
+│
+├── chapters/ # Corps du rapport, un fichier par chapitre
+│ ├── 00_introduction.tex
+│ ├── 01_presentation_entreprise.tex
+│ ├── 02_contexte_problematique.tex
+│ ├── 02_etat_art.tex
+│ ├── 03_analyse_conception.tex
+│ ├── 04_implementation.tex
+│ ├── 05_resultats_bilan.tex
+│ └── 06_conclusion.tex
+│
+├── annexes/
+│ └── annexe_a.tex
+│
+└── assets/ # Images, schémas, captures d'écran (à créer)
+
+
+---
+
+## Points de personnalisation
+
+Toute modification globale doit passer par `config/`, jamais par une
+édition directe dans un chapitre.
+
+| Je veux modifier... | Fichier à éditer | Ligne concernée |
+|---|---|---|
+| La couleur d'accent (titres, liens) | `config/01_couleurs.tex` | `reportprimary` |
+| Le titre, l'auteur, les tuteurs | `config/03_metadonnees.tex` | `\rapport...` |
+| Le motif ornemental et sa taille (page de garde, en-têtes) | `config/04_ornements.tex` | `\agtOrnCorner`, `\agtOrnSide`, `\agtOrnHeader`, `\agtOrnFooter` |
+| Basculer entre Times New Roman réel et clone métrique | `config/00_preambule.tex` | `\usetruetnrtrue/false` |
+| Basculer version imprimable (liens noirs) / numérique (liens colorés) | `config/00_preambule.tex` | `\modeimpressiontrue/false` |
+| Le style des blocs de code | `config/02_styles.tex` | `\lstdefinestyle{codeagt}` |
+| Ajouter un acronyme | `glossaire.tex` | `\newacronym{...}` |
+| Ajouter un chapitre | `main.tex` + nouveau fichier dans `chapters/` | `\include{}` |
+
+---
+
+## Conventions de rédaction
+
+- **Un chapitre = un fichier** dans `chapters/`, inclus via `\include{}`
+  dans `main.tex`. Ne jamais écrire deux chapitres dans le même fichier.
+- **Aucune couleur, police ou métadonnée en dur** dans un chapitre :
+  toujours passer par les commandes définies dans `config/`.
+- **Images** : à placer dans `assets/`, référencées via
+  `\includegraphics{assets/nom_fichier.png}`, toujours accompagnées
+  d'un `\caption{}` et d'un `\label{fig:...}`.
+- **Extraits de code** : utiliser l'environnement `lstlisting` (style
+  `codeagt` déjà configuré), jamais de code collé brut dans le texte.
+- **Renvois internes** : utiliser `\label{}` / `\ref{}` (jamais de
+  numéro de chapitre/figure écrit en dur, pour rester cohérent si
+  l'ordre change).
+- **Tableaux à plusieurs colonnes** : privilégier des colonnes à largeur
+  fixe (`p{...}`) et des symboles courts avec légende plutôt que du texte
+  long, pour éviter tout débordement.
+- **Accents français** : toujours utiliser les caractères accentués
+  corrects (é, è, à, ù, ç, î, ô), y compris dans les titres de
+  chapitre/section.
+- **Marqueurs de travail en cours** : chaque section à compléter
+  contient un commentaire `% TODO : ...` explicite. Rechercher
+  `TODO` dans le projet pour lister le travail restant.
+
+---
+
+## Limites connues et contournements
+
+| Limite | Cause | Contournement déjà en place |
+|---|---|---|
+| Times New Roman non disponible (Overleaf, Linux sans polices MS) | Police propriétaire Microsoft | `mathptmx` (pdfLaTeX) ou `Liberation Serif` (XeLaTeX) en repli automatique |
+| JetBrains Mono non disponible en pdfLaTeX | Police non standard TeX Live | Repli sur `\ttfamily` (police mono par défaut), visuellement proche |
+| Compilation glossaire échoue avec un simple `pdflatex` | `makeglossaries` nécessite une passe externe (appel `makeindex`) | Utiliser `latexmk -pdf -aux-directory=build main.tex`, qui gère l'enchaînement complet |
+| Figures qui "dérivent" dans le mauvais chapitre | Comportement par défaut de LaTeX avec les flottants | `\FloatBarrier` (package `placeins`) disponible, à insérer en fin de chapitre si besoin |
+| Liens colorés gênants à l'impression | `hyperref` avec `colorlinks=true` | Bascule `\modeimpressiontrue` dans `config/00_preambule.tex` |
+| Débordement de texte dans un tableau à colonnes larges | `tabularx`/`X` répartit l'espace mais ne force pas la coupure de mots longs | Utiliser `p{...}` (largeur fixe) et des symboles courts |
+| `pgfornament` non installé (distribution TeX incomplète) | Package parfois absent d'une installation minimale | Installer via `tlmgr install pgfornament pgf` |
+| Compilation plus lente sur la page de garde | Bordure ornementale complète (`\pageborderornament`) génère de nombreux motifs vectoriels | Effet limité à la page de garde uniquement, pas répété sur chaque page (voir `config/04_ornements.tex`) |
+| Motif exact du mini-sommaire ou de l'ornement pas conforme aux attentes | Rendu visuel non prévisualisable sans compilation réelle | Compiler et signaler l'erreur ou le rendu à corriger, comme pour toute nouvelle fonctionnalité visuelle |
+
+---
+
+## Workflow de rédaction recommandé
+
+1. Compléter `config/03_metadonnees.tex` (titre exact, noms des tuteurs,
+   dates de stage).
+2. Rédiger chapitre par chapitre, dans l'ordre du plan (`chapters/00_...`
+   à `chapters/07_...`).
+3. Compiler régulièrement (`latexmk -pdf -aux-directory=build main.tex`)
+   pour détecter les erreurs tôt plutôt qu'à la fin.
+4. Exécuter `./scan_structure_raport.sh` en début de nouvelle session IA
+   pour transmettre le contexte complet du projet sans le surcharger.
+5. Tenir à jour `TODO.md` à la racine du projet à chaque session de
+   rédaction.
+6. Relecture finale : vérifier l'absence de `% TODO` restants, la
+   cohérence des renvois (`\ref{}`), et la bibliographie complète.=== FIN FICHIER : README.md ===
+
+=== FICHIER : TODO.md ===
+# TODO - Rapport de stage AGT Infra
+
+Suivi d'avancement de la redaction. A mettre a jour a chaque session.
+Statuts : `[ ]` a faire · `[~]` en cours · `[x]` termine.
+
+---
+
+## Squelette du rapport (structure validee le 2026-09-03, numerotation
+## reelle corrigee le 2026-09-04 : Analyse et conception = chapitre 3,
+## Implementation = chapitre 4, Resultats et bilan = chapitre 5)
+
+1. Introduction generale [fait]
+2. Presentation de l'entreprise d'accueil [fait]
+3. Etat de l'art [fait]
+4. Analyse et conception [fait]
+   - 3.1 Analyse des besoins [fait]
+   - 3.2 Architecture generale [fait]
+   - 3.3 Modelisation des donnees [fait]
+   - 3.4 Comportements cles [fait]
+5. Implementation
+   - 4.1 Environnement et outils de developpement
+   - 4.2 Methodologie de travail
+   - 4.3 Realisations par module
+   - 4.4 Difficultes rencontrees
+   - 4.5 Deploiement (diagramme de deploiement)
+6. Resultats et bilan (resultats, workflows, captures d'ecran, tests,
+   limites/perspectives, risques)
+7. Conclusion generale
+
+Diagrammes reels du chapitre 3 (9, tous ancres dans le cahier des
+charges) : contexte, cas d'utilisation RBAC, cas d'utilisation
+Serveurs-Conteneurs, architecture generale, package, classes RBAC/IBAC,
+classes Serveurs-Conteneurs, etat-transition publication,
+etat-transition connectivite serveur, sequence resolution permission,
+sequence connexion serveur, sequence deploiement. Diagramme de
+deploiement physique reporte au chapitre 4 (section 4.5), diagrammes
+d'activite au chapitre 6.
+
+Images stockees dans `assets/diagrams/`, convention `NN-nom.png` (NN =
+numero de chapitre reel). Noms de fichiers en ASCII, sans accent
+(compilation LaTeX).
+
+---
+
+## Instructions permanentes de redaction
+
+Ces regles s'appliquent a tous les chapitres, sans qu'il soit necessaire
+de les repeter a chaque session.
+
+**Langue et style**
+1. Vocabulaire accessible, eviter le jargon non explique (introduire
+   l'acronyme ou le terme technique la premiere fois, via `glossaire.tex`
+   si recurrent).
+2. Aucun tiret cadratin (—) ni demi-cadratin (–) : utiliser des tirets
+   courts (-), virgules ou parentheses.
+3. Ton neutre et factuel, en particulier pour toute comparaison avec des
+   outils/entreprises existants (jamais de denigrement ni d'eloge
+   disproportionne, cf. methodologie du chapitre Etat de l'art).
+4. Pas de phrases toutes faites ni de remplissage generique : chaque
+   paragraphe doit apporter une information concrete, propre au contexte
+   AGT Infra.
+5. Utiliser l'expression "console web" plutot que "terminal web" pour
+   designer l'acces terminal integre a l'interface d'AGT Infra.
+
+**Sourcing et rigueur**
+6. Toute affirmation factuelle sur un outil, une technologie ou une
+   entreprise tierce doit etre verifiee par recherche web a jour (pas de
+   memoire non verifiee), puis citee via `\cite{}` avec entree
+   correspondante dans `biblio.bib`.
+7. Ne jamais recopier de texte source verbatim : toujours reformuler avec
+   ses propres mots.
+8. Ne jamais inventer un chiffre, une date, un nom propre, ou un fait
+   concernant AG Technologies ou AGT Infra : si l'information manque, la
+   signaler explicitement au lieu de la deviner.
+
+**Forme et livraison**
+9. demande explicite si une image est pertinante pour un point precis.
+10. Fichiers complets livres a chaque modification (jamais de diff
+    partiel), precedes du chemin et du statut `[nouveau]`/`[modifie]`,
+    numerotes `X/N`.
+11. Aucune couleur, police, metadonnee ou valeur repetee en dur dans un
+    chapitre : toujours passer par `config/`.
+
+**Methode de travail**
+12. Avant de rediger un chapitre, poser d'abord les questions de cadrage
+    necessaires (comme pour l'Etat de l'art), pas de contenu generique en
+    attendant les reponses.
+13. `TODO.md` mis a jour a la fin de chaque session (cases cochees + note
+    de session horodatee).
+14. Toujours verification qu'il y a pas de fautes d'orthographe ou de grammaire. Toujours  utiliser les caractères accentués français corrects (é, è,
+    à, ù, ç, î, ô, etc.), y compris dans les titres de chapitre/section,
+    jamais de version sans accent.
+15. Pour tout tableau à colonnes multiples, utiliser des colonnes a
+    largeur fixe (`p{...}`) plutot que `tabularx`/`X`, avec des expressions courtes, pour
+    eviter tout debordement de texte entre colonnes.
+
+16. (fusionnee dans la regle 17 ci-dessous)
+
+17. Canevas obligatoire pour chaque chapitre numérote (`\chapter{...}`) :
+    - `\label{...}` juste après le `\chapter{...}`
+    - Un court paragraphe de présentation du chapitre (3-5 phrases,
+      annonçant les sections à venir), portant la lettrine
+      `\agtlettrine{Lettre}{reste du mot}` sur son premier mot
+    - `\minisommaire` juste après ce paragraphe, jamais avant
+    - Puis les sections (`\section{...}`)
+    Ne s'applique pas aux chapitres non numérotés (Introduction,
+    Conclusion, Remerciements) : ceux-ci n'ont ni lettrine ni
+    minisommaire, et peuvent utiliser des titres non numerotes
+    (`\section*{...}`) pour structurer leur contenu.
+
+18. L'ancien chapitre "Contexte et problematique" a ete supprime et son
+    contenu fusionne dans l'introduction generale (sections non
+    numerotees "Contexte et problematique" et "Structure du rapport").
+    Toute information factuelle qui y est citee doit provenir d'un
+    document source reel (ex : cahier des charges), jamais devinee.
+
+---
+
+## Configuration et pages liminaires
+
+- [x] Squelette LaTeX initialisé (config/, chapters/, front/, annexes/)
+- [x] Compilation vérifiée (latexmk -pdf -aux-directory=build main.tex)
+- [x] Script scan_structure_raport.sh opérationnel
+- [x] Correction globale des accents manquants sur tous les fichiers
+- [x] Correction du débordement d'en-tête et du tableau du chapitre 3
+- [~] Style visuel ENSPY/Legrand Orange Book intégré (bordure page de
+      garde, en-têtes/pieds ornementés, bloc de chapitre coloré,
+      mini-sommaire par chapitre, lettrine) : à valider par compilation,
+      nouveaux packages jamais testés ensemble jusqu'ici (pgfornament,
+      tikz, lettrine, etoc)
+- [x] `config/03_metadonnees.tex` : dates de stage renseignées
+      (06 juillet 2026 - 05 août 2026)
+- [ ] `config/03_metadonnees.tex` : renseigner nom complet de l'auteur,
+      formation, école, tuteurs
+- [ ] `front/page_garde.tex` : ajouter logo école / logo AG Technologies
+      (dossier `assets/` à créer)
+- [ ] `front/remerciements.tex` : rédiger
+
+## Introduction generale
+
+- [x] Contexte general et cadre du stage (entreprise, dates, mission)
+- [x] Contexte et problematique (fusionne depuis l'ancien chapitre 2,
+      sourcee sur le cahier des charges : AGT-BOT, AGT ERP, MboaPay,
+      absence de point de controle unique)
+- [x] Objectifs du projet (objectif general + 7 objectifs specifiques,
+      sources sur le cahier des charges v2 : principe "chef d'orchestre",
+      domaines fonctionnels principaux)
+- [x] Feuille de route (listing par chapitre avec renvoi \ref{}, plutot
+      qu'un simple paragraphe de transition)
+- [ ] Relecture finale par Josue
+
+## Chapitre 1 - Presentation de l'entreprise d'accueil
+
+- [x] Section 1.1 : activite et organisation d'AG Technologies (redigee
+      a partir du contenu reel du site ag-technologies.tech)
+- [x] Section 1.2 : environnement technique avant AGT Infra
+      (VPS mutualise srv1434223 : AGT-BOT, team-tool, AGT TaskFlow,
+      gestion manuelle SSH)
+- [x] Canevas de chapitre (lettrine + paragraphe de presentation avant
+      minisommaire) applique retroactivement
+- [ ] Relecture finale du chapitre par Josue
+
+## Chapitre "Etat de l'art"
+
+- [x] Criteres de comparaison definis (8 criteres, section 3.2)
+- [x] Recherche des caracteristiques reelles des 6 outils compares
+      (Portainer, Rancher, Proxmox VE, Cockpit, Ansible AWX/Semaphore,
+      Coolify), sources datees 2025-2026
+- [x] Redaction complete des sous-sections 3.3 (panorama)
+- [x] Tableau comparatif rempli (`tab:comparatif-etat-art`)
+- [x] Synthese et justification du developpement interne redigee
+- [x] Neutralite du ton verifiee (aucune solution denigree, limites
+      d'AGT Infra assumees explicitement en fin de chapitre)
+- [x] Sources ajoutees a `biblio.bib` (17 references)
+- [x] Terminologie "terminal web" remplacee par "console web"
+- [ ] Relecture finale du chapitre par Josue
+- [ ] Renommage cosmetique de `chapters/02_etat_art.tex` a envisager
+      (numerotation reelle du chapitre a decale d'un cran, non urgent
+      car les numeros de chapitre sont generes automatiquement par
+      LaTeX et non lies au nom de fichier)
+
+## Chapitre "Analyse et conception" (chapitre 3 reel)
+
+- [x] Canevas de chapitre (lettrine + paragraphe + minisommaire)
+- [x] 3.1 Analyse des besoins : contexte (diagramme + perimetre en
+      listes), acteurs (liste), synthese des exigences (tableau sans
+      colonnes techniques, NF reparties en 3 categories : utilisateurs /
+      organisationnelles / systemes externes), 2 diagrammes de cas
+      d'utilisation (RBAC, Serveurs-Conteneurs) + 2 cas detailles
+      (creer/affecter un role, deployer une application)
+- [x] 3.2 Architecture generale : diagramme d'architecture globale
+      (frontiere AGT Infra / systemes externes, flux SSH centralise,
+      webhook Netdata hors SSH) + diagramme de package
+- [x] 3.3 Modelisation des donnees : diagramme de classes Controle
+      d'acces (RBAC/IBAC, refus explicite via PermissionDirecte) +
+      diagramme de classes Serveurs-Conteneurs
+- [x] 3.4 Comportements cles : etat-transition publication,
+      etat-transition connectivite serveur, sequence resolution de
+      permission, sequence connexion d'un nouveau serveur, sequence
+      deploiement (automatique/manuel)
+- [ ] Verifier noms de fichiers images sans accent dans
+      `assets/diagrams/` (ex: diagramme sequence resolution permission
+      mal nomme a la source, corrige en `03-diagramme_seq_resolution_permission.png`
+      dans le texte final)
+- [ ] Relecture finale du chapitre par Josue
+
+## Chapitre "Implementation"
+
+- [ ] 5.1 Environnement et outils de developpement (choix
+      technologiques deplaces ici, justifies a posteriori)
+- [ ] 5.2 Methodologie de travail (cycle audit -> plan -> validation ->
+      implementation)
+- [ ] 5.3 Realisations par module
+  - [ ] Gestion serveurs et conteneurs Docker
+  - [ ] Deploiement continu
+  - [ ] Publication applicative
+  - [ ] Supervision (Netdata)
+  - [ ] RBAC/IBAC dynamique
+- [ ] 5.4 Difficultes rencontrees et solutions apportees
+- [ ] 5.5 Deploiement (diagramme de deploiement, infrastructure
+      physique reelle)
+
+## Chapitre "Resultats et bilan"
+
+- [ ] Resultats obtenus
+- [ ] Workflows (diagrammes d'activite)
+- [ ] Captures d'ecran de l'application AGT Infra
+- [ ] Tests et validation (Swagger, alembic, npm build)
+- [ ] Limites actuelles et perspectives (backup, montee en charge
+      automatique, securite active, generalisation IBAC, resilience et
+      point unique de defaillance pour MboaPay)
+- [ ] Section risques et plans de contournement (source : cahier des
+      charges, table des risques)
+
+## Conclusion generale
+
+- [ ] Bilan personnel (competences techniques et humaines)
+- [ ] Apport du stage pour le projet professionnel
+
+## Annexes
+
+- [ ] Annexe A : selectionner les extraits de code complementaires
+
+## Bibliographie
+
+- [x] 3 sources techniques initiales (FastAPI, SQLAlchemy, Netdata)
+- [x] 17 sources ajoutees pour le chapitre Etat de l'art
+- [ ] Completer au fil de la redaction des chapitres suivants
+
+## Relecture finale (a faire en dernier)
+
+- [ ] Recherche globale des `% TODO` restants dans le projet
+- [ ] Verification des renvois internes (`\ref{}`, `\label{}`)
+- [ ] Verification liste des figures / tableaux / abreviations completes
+- [ ] Coherence des temps verbaux et de la terminologie technique
+- [ ] Export final version imprimable (`\modeimpressiontrue`) si necessaire
+
+---
+
+## Notes de session
+
+- 2026-09-03 : squelette LaTeX initialise, compilation validee
+  (probleme d'ordre de chargement des packages corrige), bibliographie
+  testee. Chapitre 3 (Etat de l'art) redige integralement avec recherche
+  web a jour (2025-2026) sur Portainer, Rancher, Proxmox VE, Cockpit,
+  Ansible AWX/Semaphore, Coolify.
+- 2026-09-03 (suite) : Chapitre 1 redige integralement (sections 1.1 et
+  1.2), a partir du contenu reel fourni par Josue (copie du site
+  ag-technologies.tech) et des precisions sur l'environnement technique
+  avant AGT Infra. Dates de stage integrees dans
+  `config/03_metadonnees.tex`. Regle 17 reformulee pour figer le canevas
+  de chapitre (lettrine + paragraphe de presentation avant
+  `\minisommaire`), applique retroactivement au chapitre 1.
+- 2026-09-03 (suite) : Decision de supprimer l'ancien chapitre 2
+  ("Contexte et problematique") et de fusionner son contenu dans
+  l'introduction generale, sous deux titres non numerotes ("Contexte et
+  problematique", "Structure du rapport"). Contenu source par le cahier
+  des charges v2. `main.tex` mis a jour (retrait de l'`\include` du
+  chapitre 2). Fichier `chapters/02_contexte_problematique.tex` a
+  supprimer manuellement par Josue (orphelin, plus inclus dans la
+  compilation).
+- 2026-09-04 : Audit et refonte du squelette du rapport (voir section
+  "Squelette du rapport" ci-dessus). Section 3.1 (Analyse des besoins)
+  redigee integralement. Diagrammes de contexte et cas d'utilisation
+  construits sous draw.io, compilation verifiee (latexmk, build a jour).
+- 2026-09-04 (suite) : Chapitre 3 (Analyse et conception) redige
+  integralement, sections 3.2 a 3.4. Neuf diagrammes construits sous
+  draw.io a partir du cahier des charges (architecture globale, package,
+  2 diagrammes de classes, 2 etats-transition, 3 sequences). Point de
+  vigilance signale : coherence des noms de fichiers image (accents a
+  eviter) entre `assets/diagrams/` et les `\includegraphics` du texte.
+  Prochaine session : Chapitre "Implementation" (4.1 Environnement et
+  outils de developpement, choix technologiques justifies a posteriori).=== FIN FICHIER : TODO.md ===
+
+============================================================
+FIN DU SCAN
+============================================================

@@ -1,0 +1,42 @@
+% ============================================================
+% main.tex - Fichier maître du rapport de stage
+% Compilation recommandée : latexmk -pdf -aux-directory=build main.tex
+% (enchaîne automatiquement pdflatex -> biber -> makeglossaries -> pdflatex)
+% ============================================================
+\documentclass[12pt, a4paper]{report}
+
+\input{config/00_preambule}
+\input{glossaire}
+
+\begin{document}
+
+% ---------- Pages liminaires (numérotation romaine) ----------
+\pagenumbering{roman}
+\input{front/page_garde}
+\input{front/remerciements}
+
+\tableofcontents
+\listoffigures
+\listoftables
+\input{front/liste_abreviations}
+
+% ---------- Corps du rapport (numérotation arabe) ----------
+\clearpage
+\pagenumbering{arabic}
+
+\include{chapters/00_introduction}
+\include{chapters/01_presentation_entreprise}
+\include{chapters/02_etat_art}
+\include{chapters/03_analyse_conception}
+\include{chapters/04_implementation}
+\include{chapters/05_resultats_bilan}
+\include{chapters/06_conclusion}
+
+% ---------- Annexes ----------
+\appendix
+\include{annexes/annexe_a}
+
+% ---------- Bibliographie ----------
+\printbibliography[title={Bibliographie et webographie}]
+
+\end{document}

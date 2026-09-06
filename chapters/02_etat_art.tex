@@ -1,0 +1,212 @@
+% ============================================================
+% chapters/02_etat_art.tex //  : solutions existantes et positionnement d'AGT Infra
+% ============================================================
+\chapter{État de l'art}
+\label{chap:etat-art}
+
+
+
+\agtlettrine{A}vant de détailler la conception d'AGT Infra, il est légitime de se demander
+pourquoi ce projet n'a pas simplement reposé sur un outil déjà existant sur
+le marché. Ce chapitre répond à cette question de manière factuelle : il
+présente les principales solutions utilisées aujourd'hui pour gérer des
+serveurs et des conteneurs Docker, puis explique en quoi leur périmètre ne
+correspondait pas exactement au besoin d'AG Technologies. L'objectif n'est
+pas de dénigrer ces outils, largement utilisés et éprouvés en production,
+mais de justifier un choix d'ingénierie à partir de critères objectifs.
+\minisommaire
+\section{Critères de comparaison retenus}
+
+Ces critères ont été définis à partir du contexte réel d'AG Technologies
+(chapitre \ref{chap:entreprise}), avant toute comparaison, afin d'éviter de
+choisir des critères qui favoriseraient artificiellement AGT Infra.
+
+\begin{itemize}
+  \item \textbf{Gestion multi-serveurs sans agent lourd} : capacité à piloter
+  plusieurs serveurs physiques ou VPS uniquement via SSH, sans installer de
+  démon ou d'agent supplémentaire exposé sur le réseau.
+  \item \textbf{Orchestration de conteneurs Docker existants} : capacité à
+  gérer des conteneurs Docker déjà en place, sans imposer une nouvelle couche
+  de virtualisation ou d'exécution.
+  \item \textbf{Contrôle d'accès granulaire et évolutif} : possibilité de
+  définir des rôles et des permissions fins (par ressource, par action), et
+  de les modifier sans redéployer l'outil.
+  \item \textbf{Supervision temps réel intégrée} : suivi des métriques
+  système (CPU, RAM, disque) avec des seuils d'alerte personnalisables.
+  \item \textbf{Console web intégrée} : accès direct à un terminal serveur
+  depuis l'interface, sans ouvrir une session SSH séparée.
+  \item \textbf{Coût} : licence, abonnement, ou infrastructure additionnelle
+  nécessaire pour obtenir les fonctionnalités recherchées.
+  \item \textbf{Maturité et activité du projet} : fréquence des mises à jour,
+  état réel de la maintenance.
+  \item \textbf{Cohabitation sur une infrastructure mutualisée} : capacité à
+  cohabiter proprement avec d'autres applications sur un même serveur, sans
+  nécessiter un cluster dédié.
+\end{itemize}
+
+\section{Panorama des solutions existantes}
+
+\subsection{Portainer}
+
+Portainer est une interface graphique de gestion Docker très répandue,
+disponible en version communautaire gratuite (Community Edition) couvrant
+Docker, Swarm, Kubernetes et Azure Container Instances depuis un même
+tableau de bord \cite{portainer_setup_2026}. Cette capacité à piloter
+plusieurs environnements Docker depuis un point unique est justement la
+raison principale pour laquelle de nombreuses équipes l'adoptent
+\cite{portainer_setup_2026}. En revanche, le contrôle d'accès fin (rôles
+par environnement comme administrateur, opérateur, ou lecteur seul) fait
+partie de l'édition payante Business Edition, pas de la version gratuite
+\cite{portainer_rbac_2026, portainer_security_2026}. Portainer reste par
+ailleurs une cible de choix pour les attaquants puisqu'il pilote directement
+Docker : une alerte de sécurité belge a signalé en 2026 des failles
+critiques touchant plusieurs versions du produit, rappelant l'importance
+de le maintenir à jour et de ne jamais l'exposer sans protection
+supplémentaire \cite{portainer_setup_2026}.
+
+\subsection{Rancher}
+
+Rancher est conçu pour administrer plusieurs clusters Kubernetes depuis une
+seule interface, avec un RBAC fin appliqué à la fois au niveau du cluster
+et au niveau du projet (équivalent d'un espace de noms Kubernetes)
+\cite{rancher_zesty}. Son modèle de permissions est puissant mais complexe :
+SUSE, l'éditeur du produit, a dû retravailler en profondeur le moteur RBAC
+de Rancher en 2025 pour améliorer ses performances face à la multiplication
+des liaisons de rôles dans les grands parcs de clusters
+\cite{rancher_suse_rbac}. Cette complexité est justifiée quand l'entreprise
+gère réellement des dizaines de clusters Kubernetes, mais représente un
+investissement disproportionné pour un parc de VPS gérés directement via
+Docker, sans orchestrateur Kubernetes sous-jacent.
+
+\subsection{Proxmox VE}
+
+Proxmox VE est avant tout un hyperviseur : il gère des machines virtuelles
+et des conteneurs système LXC sur du matériel physique
+\cite{proxmox_petronella}. Ce n'est qu'en 2026, avec les versions 8.3 et 9,
+que Proxmox a commencé à expérimenter l'exécution d'images au format OCI
+(le format utilisé par Docker) directement dans ses conteneurs LXC, sans
+passer par un démon Docker complet \cite{proxmox_techfuel}. Cette fonction
+reste toutefois qualifiée de version d'évaluation technologique par
+l'éditeur lui-même : il n'existe encore aucun équivalent de Docker Compose
+ni d'écosystème d'orchestration autour de cette approche
+\cite{proxmox_techfuel, proxmox_mrplanb}. Proxmox répond donc à un besoin
+de virtualisation d'infrastructure, différent du besoin d'AGT Infra qui est
+de piloter des conteneurs Docker déjà déployés sur des serveurs existants.
+
+\subsection{Cockpit}
+
+Cockpit est une console d'administration web légère, intégrée par défaut à
+plusieurs distributions Linux. Contrairement à une idée reçue, Cockpit sait
+gérer plusieurs serveurs depuis un même tableau de bord : il suffit
+d'ajouter un serveur distant, et la connexion s'établit ensuite via SSH
+\cite{cockpit_redhat, cockpit_rhel}. Sa limite pour le contexte d'AGT Infra
+se situe ailleurs : le contrôle d'accès repose entièrement sur les comptes
+système du serveur (utilisateurs Linux, droits sudo), et non sur un modèle
+de rôles et de permissions propre à l'application. Il n'existe donc pas de
+notion de permission granulaire par ressource (par exemple, autoriser un
+utilisateur à consulter la supervision d'un serveur sans lui donner accès
+à sa console web), ni de pipeline de déploiement intégré.
+
+\subsection{Ansible AWX et Semaphore}
+
+AWX et Semaphore sont des interfaces web pour exécuter des playbooks
+Ansible (des scripts d'automatisation de configuration), pas des outils de
+supervision temps réel. AWX propose un RBAC très détaillé, avec des
+permissions par objet (inventaire, modèle de tâche, identifiants) et une
+synchronisation possible avec un annuaire d'entreprise
+\cite{semaphore_awx_2026}. Ce niveau de détail a toutefois un coût : le
+développement d'AWX est à l'arrêt depuis juillet 2024, l'équipe ayant
+reconnu que l'architecture actuelle du projet limite sa capacité à évoluer,
+et qu'une refonte est en cours sans calendrier annoncé
+\cite{semaphore_awx_2026, rogerperkin_awx}. Semaphore, plus récent et plus
+activement maintenu, propose un modèle de rôles plus simple, limité à
+quatre rôles par projet (Owner, Manager, Task Runner, Guest), les
+permissions personnalisées plus fines étant réservées à une offre
+Entreprise payante \cite{semaphore_vs_awx, rogerperkin_awx}. Dans les deux
+cas, ces outils automatisent des tâches ponctuelles, ils ne fournissent pas
+de tableau de bord de supervision continue ni de console web intégrée.
+
+\subsection{Coolify}
+
+Coolify est une plateforme auto-hébergée de type PaaS (Platform as a
+Service) : elle automatise le déploiement d'applications à partir d'un
+dépôt Git, avec certificats SSL et sauvegardes programmées inclus
+\cite{coolify_github}. Son modèle de permissions est volontairement simple,
+limité à deux rôles (Administrateur ou Membre), et est explicitement
+documenté comme n'étant pas adapté à une logique stricte de moindre
+privilège : il n'existe pas de permission par service ou par action
+\cite{coolify_admin_it}. Coolify effectue par nature des opérations
+privilégiées sur le serveur hôte (déploiement, gestion Docker), ce qui en
+fait une cible sensible : plusieurs failles critiques (score de gravité
+maximal) ont été corrigées début 2026, liées à un défaut d'assainissement
+des commandes système générées automatiquement
+\cite{coolify_cve_2026}. Ce point rejoint une décision déjà actée dans
+AGT Infra (règle numéro 6) : le backend doit rester l'unique garde-fou de
+sécurité, précisément pour éviter ce type de surface d'attaque.
+
+\section{Tableau comparatif synthétique}
+
+% Colonnes a largeur fixe (p{}) plutot que tabularx : garantit qu'aucun
+% mot ne peut deborder ou chevaucher la colonne voisine, meme sans point
+% de cesure disponible (probleme rencontre avec des tokens comme
+% "Gratuit/payant" en colonnes trop etroites).
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{p{3.4cm}*{7}{>{\centering\arraybackslash}p{1.3cm}}}
+\toprule
+\textbf{Critère} & \textbf{AGT} & \textbf{Portai.} & \textbf{Ranch.} & \textbf{Proxm.} & \textbf{Cockpit} & \textbf{AWX/Sem.} & \textbf{Coolify} \\
+\midrule
+Multi-serveurs (SSH seul)        & O & O   & N   & N & O & P   & N \\
+Orchestration Docker existant    & O & O   & N   & N & P & N   & O \\
+RBAC/IBAC fin et dynamique       & O & € & O   & N & N & P/€ & N \\
+Supervision temps réel           & O & N   & P   & P & P & N   & N \\
+Console web intégrée             & O & O   & O   & O & O & N   & N \\
+Coût                             & Interne & 0/€ & 0/€ & 0 & 0 & 0/€ & 0/€ \\
+Développement actif              & O & O   & O   & O & O & V   & O \\
+Cohabitation VPS mutualisé       & O & P   & N   & N & P & P   & P \\
+\bottomrule
+\end{tabular}
+\caption{Comparaison synthétique des solutions existantes face aux besoins d'AG Technologies}
+\label{tab:comparatif-etat-art}
+\end{table}
+
+\begin{flushleft}
+\footnotesize
+\textbf{Légende} : O = Oui, N = Non, P = Partiel, V = Variable selon le
+sous-projet (Semaphore actif, AWX en pause), 0 = Gratuit ou open-source,
+€ = fonctionnalité payante requise pour couvrir ce critère.
+\end{flushleft}
+
+\section{Synthèse et justification du développement interne}
+
+Cette comparaison ne conduit pas à la conclusion que les solutions
+existantes seraient de mauvaise qualité, bien au contraire : Portainer,
+Rancher, Proxmox, Cockpit, AWX/Semaphore et Coolify sont des projets
+matures, largement adoptés, et bénéficient d'années de tests en production
+que ne possède évidemment pas un outil interne récemment développé. Construire un outil en
+interne signifie aussi en assumer seul la maintenance et la sécurité dans
+la durée, une responsabilité qu'un outil du marché, déjà éprouvé, aurait
+partiellement absorbée.
+
+Ce que révèle néanmoins le tableau comparatif, c'est qu'aucune de ces
+solutions ne réunit simultanément l'ensemble des critères retenus au
+paragraphe 3.2. Chaque outil couvre bien une partie du besoin, mais avec un
+angle différent : Portainer et Coolify ciblent la gestion ou le déploiement
+de conteneurs sans contrôle d'accès fin gratuit ; Rancher offre un RBAC
+puissant mais conçu pour Kubernetes, disproportionné pour un parc de VPS
+sous Docker simple ; Proxmox reste avant tout un hyperviseur de machines
+virtuelles ; Cockpit couvre bien plusieurs serveurs mais sans notion
+applicative de rôles ; AWX et Semaphore automatisent des tâches
+ponctuelles sans assurer de supervision continue.
+
+Le besoin d'AG Technologies combine plusieurs contraintes en même temps :
+un VPS partagé entre plusieurs applications internes (donc pas de cluster
+dédié), un contrôle d'accès qui doit pouvoir évoluer sans redéploiement
+(module RBAC/IBAC dynamique), une supervision continue avec des seuils
+personnalisables, et une console web intégrée, le tout en gardant une
+maîtrise complète du code dans un contexte où l'outil gère des accès
+privilégiés à des serveurs de production. C'est cette combinaison précise
+de contraintes, plus que l'absence d'alternative pour chaque besoin pris
+isolément, qui justifie le développement d'AGT Infra en interne.
