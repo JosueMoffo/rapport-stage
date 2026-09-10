@@ -17,12 +17,12 @@ Statuts : `[ ]` a faire · `[~]` en cours · `[x]` termine.
    - 3.2 Architecture generale [fait]
    - 3.3 Modelisation des donnees [fait]
    - 3.4 Comportements cles [fait]
-5. Implementation
-   - 4.1 Environnement et outils de developpement
-   - 4.2 Methodologie de travail
-   - 4.3 Realisations par module
-   - 4.4 Difficultes rencontrees
-   - 4.5 Deploiement (diagramme de deploiement)
+5. Implementation [fait]
+   - 4.1 Environnement et outils de developpement [fait]
+   - 4.2 Methodologie de travail [fait]
+   - 4.3 Realisations par module [fait]
+   - 4.4 Difficultes rencontrees [fait]
+   - 4.5 Deploiement (diagramme de deploiement) [fait]
 6. Resultats et bilan (resultats, workflows, captures d'ecran, tests,
    limites/perspectives, risques)
 7. Conclusion generale
@@ -33,12 +33,15 @@ Serveurs-Conteneurs, architecture generale, package, classes RBAC/IBAC,
 classes Serveurs-Conteneurs, etat-transition publication,
 etat-transition connectivite serveur, sequence resolution permission,
 sequence connexion serveur, sequence deploiement. Diagramme de
-deploiement physique reporte au chapitre 4 (section 4.5), diagrammes
-d'activite au chapitre 6.
+deploiement physique du chapitre 4 (section 4.5, generique/portable,
+base sur `12-8-GUIDE_DEPLOIEMENT_AGT_INFRA.md` sans specificite
+d'hebergeur). Diagrammes d'activite restants au chapitre 6.
 
 Images stockees dans `assets/diagrams/`, convention `NN-nom.png` (NN =
 numero de chapitre reel). Noms de fichiers en ASCII, sans accent
-(compilation LaTeX).
+(compilation LaTeX). Icones technologiques (logos) dans
+`assets/icons/`, convention `NN-icone_nom.png`.
+
 
 ---
 
@@ -198,27 +201,42 @@ de les repeter a chaque session.
       etat-transition connectivite serveur, sequence resolution de
       permission, sequence connexion d'un nouveau serveur, sequence
       deploiement (automatique/manuel)
-- [ ] Verifier noms de fichiers images sans accent dans
+- [x] Verifier noms de fichiers images sans accent dans
       `assets/diagrams/` (ex: diagramme sequence resolution permission
       mal nomme a la source, corrige en `03-diagramme_seq_resolution_permission.png`
       dans le texte final)
 - [ ] Relecture finale du chapitre par Josue
 
-## Chapitre "Implementation"
+## Chapitre "Implementation" (chapitre 4 reel)
 
-- [ ] 5.1 Environnement et outils de developpement (choix
-      technologiques deplaces ici, justifies a posteriori)
-- [ ] 5.2 Methodologie de travail (cycle audit -> plan -> validation ->
-      implementation)
-- [ ] 5.3 Realisations par module
-  - [ ] Gestion serveurs et conteneurs Docker
-  - [ ] Deploiement continu
-  - [ ] Publication applicative
-  - [ ] Supervision (Netdata)
-  - [ ] RBAC/IBAC dynamique
-- [ ] 5.4 Difficultes rencontrees et solutions apportees
-- [ ] 5.5 Deploiement (diagramme de deploiement, infrastructure
-      physique reelle)
+- [x] Canevas de chapitre (lettrine + paragraphe + minisommaire)
+- [x] 4.1 Environnement et outils de developpement : justification par
+      contrainte de conception (pas de comparatif avec alternatives),
+      3 tableaux (backend/frontend/outils transverses) avec logos,
+      logos manquants signales explicitement (SQLAlchemy, Alembic,
+      Pydantic, TypeScript, Tailwind, Nginx, Certbot)
+- [x] 4.2 Methodologie de travail : cycle audit -> plan ->
+      implementation -> test (redige au style impersonnel, sans "je"),
+      traçabilite des decisions (D-XX/B-XX/S-NN), continuite entre
+      sessions, note finale sur l'usage d'un assistant IA
+- [x] 4.3 Realisations par module (5 modules, niveau technique avec
+      mecanismes concrets sans extrait de code, structure en listes) :
+      Serveurs/Conteneurs, Deploiement continu, Publication applicative,
+      Supervision continue, RBAC/IBAC dynamique - source : TODO du code
+      et scan_structure.txt du projet
+- [x] 4.4 Difficultes rencontrees et solutions apportees (restructure en
+      listes constat/solution) : absence d'environnement de test
+      representatif (VPS Hostinger + VM VirtualBox), montee en charge du
+      perimetre en cours de stage, remise en cause du modele RBAC fige,
+      coordination de plusieurs systemes externes
+- [x] 4.5 Deploiement : diagramme de deploiement generique (portable,
+      sans specificite d'hebergeur), procedure pas a pas avec commandes
+      (clonage, verification des ports, configuration Nginx, demarrage
+      de la stack, verification locale, test du nom de domaine),
+      redeploiement continu (CI/CD + script de secours)
+- [x] Verifier noms de fichiers images sans accent dans
+      `assets/diagrams/`
+- [ ] Relecture finale du chapitre par Josue
 
 ## Chapitre "Resultats et bilan"
 
@@ -291,3 +309,20 @@ de les repeter a chaque session.
   eviter) entre `assets/diagrams/` et les `\includegraphics` du texte.
   Prochaine session : Chapitre "Implementation" (4.1 Environnement et
   outils de developpement, choix technologiques justifies a posteriori).
+
+- 2026-09-04 (suite) : Chapitre 4 (Implementation) redige integralement,
+  sections 4.1 a 4.5. Logos de technologies integres (conversion SVG a
+  prevoir en PNG/PDF pour compatibilite pdfLaTeX, signalee explicitement).
+  Section 4.3 (Realisations par module) construite a partir du TODO reel
+  du code et de scan_structure.txt fournis par Josue, plutot que du
+  cahier des charges seul, pour refleter l'etat d'avancement reel.
+  Section 4.4 recadree suite a discussion : distinction entre bugs
+  corriges (hors propos) et vraies difficultes de stage (environnement
+  de test, perimetre evolutif, refonte RBAC, coordination de systemes
+  externes). Diagramme de deploiement redessine en version generique et
+  portable, a partir du guide de deploiement reel du VPS Hostinger, sans
+  reprendre ses details specifiques (hostname, ports, utilisateur).
+  Chapitre 4 entierement boucle.
+  Prochaine session : Chapitre "Resultats et bilan" (resultats obtenus,
+  workflows/diagrammes d'activite, captures d'ecran, tests et
+  validation, limites/perspectives, section risques).

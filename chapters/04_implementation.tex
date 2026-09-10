@@ -368,38 +368,153 @@ avec une consultation partielle légitime via des permissions restreintes
 
 \section{Difficultés rencontrées et solutions apportées}
 
-\textbf{Absence d'environnement de test représentatif.} Le développement
-ne pouvait pas s'appuyer sur les serveurs de production de l'entreprise,
-qui hébergent des applications réelles et ne pouvaient pas être exposés
-à un risque d'instabilité. Ce constraint a été contourné en combinant un
-VPS Hostinger propre à l'entreprise et plusieurs machines virtuelles
-créées sous VirtualBox, ce qui a permis de tester librement la
-connectivité SSH, le déploiement et la supervision sans dépendre d'une
-infrastructure de production.
+\subsection{Absence d'environnement de test représentatif}
 
-\textbf{Montée en charge du périmètre en cours de stage.} La mission
-confiée portait initialement sur la prise en main d'outils existants,
-avant de porter sur ce qui est devenu AGT Infra. Le périmètre du projet
-a ensuite continué de s'étendre au fil des sessions, avec l'apparition
-de domaines entiers non prévus au départ (publication applicative,
-supervision continue). Cette évolution a nécessité de revoir la feuille
-de route à plusieurs reprises plutôt que de suivre un plan figé dès le
-premier jour.
+\begin{itemize}
+  \item \textbf{Constat} : le développement ne pouvait pas s'appuyer sur
+        les serveurs de production de l'entreprise, qui hébergent des
+        applications réelles et ne pouvaient pas être exposés à un
+        risque d'instabilité.
+  \item \textbf{Solution apportée} : cette constrainte a été contourné en
+        combinant un VPS Hostinger propre à l'entreprise et plusieurs
+        machines virtuelles créées sous VirtualBox, ce qui a permis de
+        tester librement la connectivité SSH, le déploiement et la
+        supervision sans dépendre d'une infrastructure de production.
+\end{itemize}
 
-\textbf{Remise en cause d'un choix de conception déjà en place.} Le
-contrôle d'accès reposait initialement sur un nombre fixe de rôles,
-codés en dur. Ce modèle s'est révélé trop rigide face au besoin réel, ce
-qui a conduit à une refonte complète vers un système entièrement piloté
-en base de données, en reprenant du code déjà écrit et validé plutôt
-qu'en l'ajoutant en périphérie.
+\subsection{Montée en charge du périmètre en cours de stage}
 
-\textbf{Coordination de plusieurs systèmes externes.} Le fonctionnement
-d'un module donné dépend souvent de plusieurs briques externes à la
-fois (SSH, Docker, GitHub, Nginx/Certbot, l'agent de supervision), dont
-le comportement réel devait être observé en pratique plutôt que déduit
-de leur seule documentation. Isoler chaque intégration derrière un
-adaptateur dédié a permis de circonscrire cette complexité, brique par
-brique, plutôt que de la laisser se propager dans le reste du code.
+\begin{itemize}
+  \item \textbf{Constat} : la mission confiée portait initialement sur
+        la prise en main d'outils existants, avant de porter sur ce qui
+        est devenu AGT Infra. Le périmètre du projet a ensuite continué
+        de s'étendre au fil des sessions, avec l'apparition de domaines
+        entiers non prévus au départ (publication applicative,
+        supervision continue).
+  \item \textbf{Solution apportée} : cette évolution a nécessité de
+        revoir la feuille de route à plusieurs reprises plutôt que de
+        suivre un plan figé dès le premier jour.
+\end{itemize}
 
+\subsection{Remise en cause d'un choix de conception déjà en place}
+
+\begin{itemize}
+  \item \textbf{Constat} : le contrôle d'accès reposait initialement sur
+        un nombre fixe de rôles, codés en dur. Ce modèle s'est révélé
+        trop rigide face au besoin réel.
+  \item \textbf{Solution apportée} : cela a conduit à une refonte
+        complète vers un système entièrement piloté en base de données,
+        en reprenant du code déjà écrit et validé plutôt qu'en
+        l'ajoutant en périphérie.
+\end{itemize}
+
+\subsection{Coordination de plusieurs systèmes externes}
+
+\begin{itemize}
+  \item \textbf{Constat} : le fonctionnement d'un module donné dépend
+        souvent de plusieurs briques externes à la fois (SSH, Docker,
+        GitHub, Nginx/Certbot, l'agent de supervision), dont le
+        comportement réel devait être observé en pratique plutôt que
+        déduit de leur seule documentation.
+  \item \textbf{Solution apportée} : isoler chaque intégration derrière
+        un adaptateur dédié a permis de circonscrire cette complexité,
+        brique par brique, plutôt que de la laisser se propager dans le
+        reste du code.
+\end{itemize}
 \section{Déploiement}
-% TODO : diagramme de deploiement, infrastructure physique reelle
+
+AGT Infra est entièrement conteneurisé, à la fois côté backend et côté
+frontend, ce qui lui permet d'être installé sur n'importe quel serveur
+disposant de Docker, sans dépendre d'un hébergeur ou d'une configuration
+particulière.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{assets/diagrams/04-diagramme_deploiement.png}
+  \caption{Diagramme de déploiement d'AGT Infra}
+  \label{fig:diagramme-deploiement}
+\end{figure}
+
+Trois conteneurs composent la stack applicative : le frontend (build
+statique servi par un Nginx interne au conteneur), le backend (serveur
+ASGI exposant l'API) et la base de données relationnelle. Un Nginx
+installé directement sur l'hôte, hors de Docker, joue le rôle de
+reverse proxy : il reçoit le trafic HTTPS entrant et le redirige vers le
+conteneur concerné selon le chemin demandé. Deux volumes Docker assurent
+la persistance : l'un pour les données de la base, l'autre pour les
+journaux de déploiement. Le renouvellement du certificat HTTPS est
+délégué à une autorité de certification externe, et chaque mise à jour
+du code est déclenchée par le dépôt Git via une connexion SSH dédiée.
+
+\subsection{Procédure de déploiement}
+
+La procédure suivante reste valable sur tout serveur cible disposant de
+Docker, Docker Compose et Nginx. Les valeurs entre chevrons sont propres
+à chaque installation.
+
+\begin{enumerate}
+  \item \textbf{Cloner le dépôt sur le serveur cible.}
+\begin{lstlisting}
+mkdir -p ~/apps/agt-infra && cd ~/apps/agt-infra
+git clone https://github.com/<compte>/agt-infra.git
+cd agt-infra
+\end{lstlisting}
+
+  \item \textbf{Vérifier la disponibilité des ports prévus}, en
+        particulier sur un serveur déjà utilisé par d'autres projets.
+\begin{lstlisting}
+docker ps --format '{{.Names}}\t{{.Ports}}'
+sudo ss -tlnp | grep -E ':(<port_backend>|<port_frontend>)'
+\end{lstlisting}
+
+  \item \textbf{Configurer le reverse proxy Nginx} sur l'hôte, pour le
+        nom de domaine visé, avec une redirection vers les deux
+        conteneurs.
+\begin{lstlisting}
+sudo nano /etc/nginx/sites-available/<nom_domaine>
+sudo nginx -t
+\end{lstlisting}
+
+  \item \textbf{Démarrer la stack applicative}, en combinant la
+        configuration commune et la configuration de production
+        (ports restreints à l'hôte local, redémarrage automatique).
+\begin{lstlisting}
+docker compose -f docker-compose.yml -f docker-compose.prod.yml \
+  up -d --build
+\end{lstlisting}
+
+  \item \textbf{Recharger le reverse proxy} pour prendre en compte la
+        nouvelle configuration.
+\begin{lstlisting}
+sudo systemctl reload nginx
+\end{lstlisting}
+
+  \item \textbf{Vérifier que chaque conteneur répond}, avant tout accès
+        externe.
+\begin{lstlisting}
+docker compose -f docker-compose.yml -f docker-compose.prod.yml ps
+curl -s http://127.0.0.1:<port_backend>/health
+curl -sI http://127.0.0.1:<port_frontend>/
+\end{lstlisting}
+
+  \item \textbf{Tester l'accès public sous le nom de domaine}, une fois
+        le certificat HTTPS émis.
+\begin{lstlisting}
+curl -sI https://<nom_domaine>
+\end{lstlisting}
+\end{enumerate}
+
+\subsection{Redéploiement continu}
+
+Une fois cette bascule initiale effectuée, tout push sur la branche
+principale du dépôt déclenche automatiquement un redéploiement, sans
+intervention manuelle : une clé SSH dédiée au déploiement, distincte de
+toute clé personnelle, autorise le serveur à recevoir cette connexion.
+Un script de redéploiement reste disponible en secours, pour le cas où
+ce déclenchement automatique échouerait :
+
+\begin{lstlisting}
+ssh <utilisateur>@<serveur>
+cd ~/apps/agt-infra/agt-infra
+./deploy.sh
+\end{lstlisting}

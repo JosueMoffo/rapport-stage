@@ -1,6 +1,6 @@
 ============================================================
 SCAN DE STRUCTURE - RAPPORT DE STAGE AGT INFRA
-Genere le : 2026-09-10 09:09:22
+Genere le : 2026-09-10 15:41:41
 Racine scannee : /media/josue-moffo/Secondaire/School/El_M/STAGE/AG-technologies/Theme/AGT-Infra/rapport/rapport-stage
 ============================================================
 
@@ -23,7 +23,9 @@ Racine scannee : /media/josue-moffo/Secondaire/School/El_M/STAGE/AG-technologies
 │   │   ├── 03-diagramme_packages.png
 │   │   ├── 03-diagramme_seq_connexion_serveur.png
 │   │   ├── 03-diagramme_seq_deploiement.png
-│   │   └── 03-diagramme_seq_resolution_permission.png
+│   │   ├── 03-diagramme_seq_resolution_permission.png
+│   │   ├── 04-diagramme_deploiement.png
+│   │   └── 05-diagramme_activite_deploiement_publication.png
 │   ├── icons
 │   │   ├── 04-icone_docker.png
 │   │   ├── 04-icone_fastapi.png
@@ -36,6 +38,14 @@ Racine scannee : /media/josue-moffo/Secondaire/School/El_M/STAGE/AG-technologies
 │   │   └── 04-icone_vite.png
 │   ├── logos
 │   ├── screenshots
+│   │   ├── 05-screenshot_catalogue-de-membre-avec-permission.png
+│   │   ├── 05-screenshot_cllecte-des-metriques.png
+│   │   ├── 05-screenshot_console-web.png
+│   │   ├── 05-screenshot_log-de-deploiement-en-cours.png
+│   │   ├── 05-screenshot_nouvelle-permission-directe.png
+│   │   ├── 05-screenshot_page-de-deploiement-application.png
+│   │   ├── 05-screenshot_page-documentation.png
+│   │   └── 05-screenshot_tableau_de_bord.png
 │   └── sources
 │       └── Diagrammes-agt-infra.drawio
 ├── chapters
@@ -66,7 +76,7 @@ Racine scannee : /media/josue-moffo/Secondaire/School/El_M/STAGE/AG-technologies
 ├── scan_structure_rapport.txt
 └── TODO.md
 
-11 directories, 47 files
+11 directories, 57 files
 
 ------------------------------------------------------------
 2. IMAGES DETECTEES (emplacement uniquement)
@@ -80,9 +90,19 @@ Racine scannee : /media/josue-moffo/Secondaire/School/El_M/STAGE/AG-technologies
   - assets/diagrams/03-diagramme_classe_srv_cnt.png (taille : 892K)
   - assets/diagrams/03-diagramme_ET_serveur.png (taille : 472K)
   - assets/diagrams/03-diagramme_cas_utilisation_SERVEUR-CONTENEUR.png (taille : 1,5M)
+  - assets/diagrams/04-diagramme_deploiement.png (taille : 548K)
   - assets/diagrams/03-diagramme_seq_deploiement.png (taille : 568K)
   - assets/diagrams/03-diagramme_packages.png (taille : 944K)
   - assets/diagrams/03-diagramme_contexte.png (taille : 656K)
+  - assets/diagrams/05-diagramme_activite_deploiement_publication.png (taille : 264K)
+  - assets/screenshots/05-screenshot_tableau_de_bord.png (taille : 104K)
+  - assets/screenshots/05-screenshot_nouvelle-permission-directe.png (taille : 120K)
+  - assets/screenshots/05-screenshot_log-de-deploiement-en-cours.png (taille : 208K)
+  - assets/screenshots/05-screenshot_console-web.png (taille : 148K)
+  - assets/screenshots/05-screenshot_page-de-deploiement-application.png (taille : 116K)
+  - assets/screenshots/05-screenshot_catalogue-de-membre-avec-permission.png (taille : 112K)
+  - assets/screenshots/05-screenshot_page-documentation.png (taille : 132K)
+  - assets/screenshots/05-screenshot_cllecte-des-metriques.png (taille : 92K)
   - assets/icons/04-icone_git.png (taille : 8,0K)
   - assets/icons/04-icone_postgresql.png (taille : 24K)
   - assets/icons/04-icone_vite.png (taille : 32K)
@@ -1375,22 +1395,525 @@ l'auteur à chaque étape.}
 
 
 \section{Réalisations par module}
-% TODO : gestion serveurs/conteneurs, deploiement continu, publication
-% applicative, supervision, RBAC/IBAC dynamique
+
+Cette section détaille cinq modules fonctionnels. Pour chacun, le
+fonctionnement technique réel est décrit (mécanismes, algorithmes,
+protocoles), sans extrait de code, ainsi que l'état d'avancement et les
+limites connues à ce jour.
+
+\subsection{Gestion des serveurs et des conteneurs Docker}
+
+\textbf{Connectivité SSH.} Le branchement d'un serveur s'authentifie par
+mot de passe ou par une paire de clés générée individuellement pour ce
+serveur. L'adaptateur SSH détecte automatiquement le format de la clé
+privée fournie (RSA, Ed25519, ECDSA ou DSA) en tentant successivement
+chaque analyse jusqu'à obtenir une clé exploitable. La clé privée est
+chiffrée avant stockage et n'est jamais restituée en clair par l'API,
+y compris pour le rôle disposant d'un accès total.
+
+\textbf{Cycle de vie d'une demande de clé dédiée.} Lorsqu'une clé
+dédiée est demandée plutôt qu'un mot de passe, une paire est générée et
+seule la clé publique est affichée, accompagnée d'un délai
+d'installation configurable. Si la clé publique n'est pas installée sur
+le serveur avant l'expiration de ce délai, la demande est invalidée et
+son secret associé supprimé, sans action manuelle.
+
+\textbf{Conteneurs et registres.} Docker est piloté par des commandes
+exécutées en ligne de commande via SSH, jamais par son API TCP native,
+ce qui évite d'exposer un port ou un socket Docker supplémentaire sur
+chaque serveur. Un registre de conteneurs privé peut être enregistré
+par utilisateur ; son secret d'accès suit le même principe de
+chiffrement au repos et de non-exposition que les clés SSH.
+
+\textbf{Console web.} L'ouverture d'une session sur un serveur ouvre un
+canal interactif direct sur la machine distante. Sur un conteneur, la
+session ouvre d'abord un canal SSH classique, puis y exécute une
+commande d'attachement interactif au conteneur ciblé, ce qui donne
+l'illusion d'une session directe sans exposer d'accès SSH séparé au
+conteneur lui-même. Le flux complet de chaque session, entrées et
+sorties confondues, est écrit ligne par ligne dans un fichier structuré,
+consultable ensuite par relecture intégrale.
+
+\subsection{Déploiement continu}
+
+\textbf{Déclenchement.} Un déploiement démarre soit par un évènement
+webhook GitHub, soit manuellement depuis l'interface. Dans le premier
+cas, la charge utile reçue est vérifiée par une signature HMAC-SHA256
+calculée à partir d'un secret propre à la configuration ; toute
+signature invalide entraîne un rejet immédiat, avant toute autre
+vérification.
+
+\textbf{Moteur d'exécution.} Aucune file de tâches externe n'est
+utilisée : chaque déploiement s'exécute comme une tâche asynchrone du
+serveur applicatif lui-même. Un verrou au niveau de la base de données,
+propre à chaque configuration, empêche deux déploiements concurrents sur
+la même configuration. Au démarrage du service, les exécutions restées
+bloquées à l'état "en cours" à la suite d'un arrêt inattendu sont
+détectées et réconciliées, plutôt que laissées indéfiniment ouvertes.
+
+\textbf{Séquence de phases.} Chaque déploiement traverse les phases
+suivantes, dans un ordre strict :
+
+\begin{enumerate}
+  \item connexion SSH au serveur cible ;
+  \item vérifications préalables (précondition), avec possibilité
+        d'exécution à blanc ;
+  \item synchronisation du dépôt Git, conçue pour être rejouée sans
+        effet différent si elle est répétée ;
+  \item génération du fichier de variables d'environnement, à partir de
+        secrets déchiffrés au moment de l'exécution seulement ;
+  \item construction de l'image et démarrage du conteneur ;
+  \item vérification de bon fonctionnement du conteneur démarré ;
+  \item nettoyage des ressources temporaires laissées par la
+        construction.
+\end{enumerate}
+
+Un échec à l'étape de vérification de bon fonctionnement déclenche un
+retour arrière automatique vers le dernier conteneur connu comme stable.
+
+\textbf{Journalisation.} Chaque phase écrit sa progression dans un
+fichier \textbf{jsonl} détaillé sur disque, diffusé simultanément en direct sur un
+canal WebSocket dédié. Une synthèse de l'exécution (résultat, durée,
+commit, acteur) est écrite séparément en base de données : la
+suppression ultérieure du fichier détaillé, lors d'une purge, ne fait
+donc pas disparaître cette synthèse. Cette méthode combinée évite de
+saturer la base de données avec un volume de texte potentiellement
+important, tout en conservant une trace consultable de chaque
+exécution.
+
+\subsection{Publication applicative}
+
+\textbf{Préconditions.} Une publication ne peut être créée que pour une
+configuration de déploiement ayant déjà connu au moins une exécution
+réussie, et associée à un conteneur du même serveur. La résolution DNS
+du domaine visé est vérifiée avant toute configuration du serveur ;
+aucun enregistrement DNS n'est créé par l'outil lui-même.
+
+\textbf{Configuration du proxy (Nginx) et de cerbot.} La configuration du serveur web et la
+demande de certificat HTTPS cerbotsont générées puis appliquées sur le
+serveur cible via SSH. Le port cible d'une route est proposé
+automatiquement à partir du port réel exposé par le conteneur ou la
+configuration associée, mais reste modifiable avant confirmation.
+
+\textbf{Détection d'incohérence.} Une fois active, une publication est
+périodiquement confrontée à l'état réel de sa cible (port, conteneur
+associé). Toute incohérence détectée fait passer la publication à
+l'état désynchronisée, sans correction automatique : seule une action
+volontaire de l'utilisateur permet de sortir de cet état.
+
+
+\subsection{Supervision continue}
+
+\textbf{Bootstrap.} L'agent de supervision est installé manuellement
+une seule fois sur chaque serveur. Sa configuration réseau est fixée en
+constante côté code pour n'écouter que sur l'interface locale de la
+machine, jamais accessible à distance directement : c'est AGT Infra qui
+vient chercher les métriques, pas l'inverse.
+
+\textbf{Double canal.} Deux flux distincts existent. Le premier est une
+notification autonome : lorsqu'un seuil est dépassé, l'agent envoie un
+webhook, vérifié par une signature selon le même principe que le
+webhook de déploiement. Le second est un flux de consultation en
+direct : un tunnel SSH est ouvert vers le port local de l'agent, puis
+relayé à l'interface par un canal WebSocket, ce qui donne accès aux
+métriques en direct sans jamais exposer le port de l'agent sur le
+réseau public du serveur.
+
+\textbf{Seuils personnalisés.} Une surcharge de seuils par serveur est
+écrite dans un fichier de configuration dédié, distinct des fichiers
+natifs de l'agent, afin de ne jamais écraser un réglage existant qui ne
+relèverait pas d'AGT Infra. Un changement de collecteurs actifs déclenche
+un redémarrage complet de l'agent, tandis qu'un changement limité aux
+seuils ou aux canaux de notification ne déclenche qu'un rechargement
+partiel, plus rapide et moins intrusif.
+
+\textbf{Filtrage des métriques.} Le flux de métriques brutes de l'agent
+étant disproportionné pour un usage direct, seules les valeurs
+correspondant aux collecteurs activés pour ce serveur sont retenues et
+transmises à l'interface.
+
+\subsection{Contrôle d'accès (RBAC/IBAC)}
+
+\textbf{Modèle de données.} Les rôles et les permissions ne pas
+des valeurs fixes définies dans le code, mais des enregistrements en
+base de données, librement composables depuis l'interface. Seul le rôle
+disposant d'un accès total reste immuable et non supprimable.
+
+\textbf{Algorithme de résolution.} Chaque requête sensible déclenche une
+vérification qui suit l'ordre déjà détaillé au
+chapitre~\ref{chap:etude-technique} : accès immédiat pour le rôle
+immuable, puis recherche d'un refus direct, puis d'une autorisation
+directe, puis d'une autorisation via un rôle, avec un refus par défaut
+si aucune de ces conditions n'est remplie. \\ 
+Cette vérification est appliquée de façon uniforme sur les routes classiques comme sur les
+connexions WebSocket, ces dernières étant authentifiées par un jeton
+transmis en paramètre de connexion plutôt que par un en-tête classique.
+
+\textbf{Filtrage par ressource.} Sur les listes de serveurs, de
+conteneurs et de configurations de déploiement, la liste retournée est
+désormais restreinte aux seules ressources auxquelles la personne a
+effectivement accès, plutôt que retournée en entier puis filtrée à
+l'affichage. Une personne sans permission de lecture globale reçoit
+ainsi une liste vide plutôt qu'un refus d'accès, ce qui reste cohérent
+avec une consultation partielle légitime via des permissions restreintes
+à certaines ressources.
 
 \section{Difficultés rencontrées et solutions apportées}
-% TODO
 
+\subsection{Absence d'environnement de test représentatif}
+
+\begin{itemize}
+  \item \textbf{Constat} : le développement ne pouvait pas s'appuyer sur
+        les serveurs de production de l'entreprise, qui hébergent des
+        applications réelles et ne pouvaient pas être exposés à un
+        risque d'instabilité.
+  \item \textbf{Solution apportée} : cette constrainte a été contourné en
+        combinant un VPS Hostinger propre à l'entreprise et plusieurs
+        machines virtuelles créées sous VirtualBox, ce qui a permis de
+        tester librement la connectivité SSH, le déploiement et la
+        supervision sans dépendre d'une infrastructure de production.
+\end{itemize}
+
+\subsection{Montée en charge du périmètre en cours de stage}
+
+\begin{itemize}
+  \item \textbf{Constat} : la mission confiée portait initialement sur
+        la prise en main d'outils existants, avant de porter sur ce qui
+        est devenu AGT Infra. Le périmètre du projet a ensuite continué
+        de s'étendre au fil des sessions, avec l'apparition de domaines
+        entiers non prévus au départ (publication applicative,
+        supervision continue).
+  \item \textbf{Solution apportée} : cette évolution a nécessité de
+        revoir la feuille de route à plusieurs reprises plutôt que de
+        suivre un plan figé dès le premier jour.
+\end{itemize}
+
+\subsection{Remise en cause d'un choix de conception déjà en place}
+
+\begin{itemize}
+  \item \textbf{Constat} : le contrôle d'accès reposait initialement sur
+        un nombre fixe de rôles, codés en dur. Ce modèle s'est révélé
+        trop rigide face au besoin réel.
+  \item \textbf{Solution apportée} : cela a conduit à une refonte
+        complète vers un système entièrement piloté en base de données,
+        en reprenant du code déjà écrit et validé plutôt qu'en
+        l'ajoutant en périphérie.
+\end{itemize}
+
+\subsection{Coordination de plusieurs systèmes externes}
+
+\begin{itemize}
+  \item \textbf{Constat} : le fonctionnement d'un module donné dépend
+        souvent de plusieurs briques externes à la fois (SSH, Docker,
+        GitHub, Nginx/Certbot, l'agent de supervision), dont le
+        comportement réel devait être observé en pratique plutôt que
+        déduit de leur seule documentation.
+  \item \textbf{Solution apportée} : isoler chaque intégration derrière
+        un adaptateur dédié a permis de circonscrire cette complexité,
+        brique par brique, plutôt que de la laisser se propager dans le
+        reste du code.
+\end{itemize}
 \section{Déploiement}
-% TODO : diagramme de deploiement, infrastructure physique reelle=== FIN FICHIER : chapters/04_implementation.tex ===
+
+AGT Infra est entièrement conteneurisé, à la fois côté backend et côté
+frontend, ce qui lui permet d'être installé sur n'importe quel serveur
+disposant de Docker, sans dépendre d'un hébergeur ou d'une configuration
+particulière.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{assets/diagrams/04-diagramme_deploiement.png}
+  \caption{Diagramme de déploiement d'AGT Infra}
+  \label{fig:diagramme-deploiement}
+\end{figure}
+
+Trois conteneurs composent la stack applicative : le frontend (build
+statique servi par un Nginx interne au conteneur), le backend (serveur
+ASGI exposant l'API) et la base de données relationnelle. Un Nginx
+installé directement sur l'hôte, hors de Docker, joue le rôle de
+reverse proxy : il reçoit le trafic HTTPS entrant et le redirige vers le
+conteneur concerné selon le chemin demandé. Deux volumes Docker assurent
+la persistance : l'un pour les données de la base, l'autre pour les
+journaux de déploiement. Le renouvellement du certificat HTTPS est
+délégué à une autorité de certification externe, et chaque mise à jour
+du code est déclenchée par le dépôt Git via une connexion SSH dédiée.
+
+\subsection{Procédure de déploiement}
+
+La procédure suivante reste valable sur tout serveur cible disposant de
+Docker, Docker Compose et Nginx. Les valeurs entre chevrons sont propres
+à chaque installation.
+
+\begin{enumerate}
+  \item \textbf{Cloner le dépôt sur le serveur cible.}
+\begin{lstlisting}
+mkdir -p ~/apps/agt-infra && cd ~/apps/agt-infra
+git clone https://github.com/<compte>/agt-infra.git
+cd agt-infra
+\end{lstlisting}
+
+  \item \textbf{Vérifier la disponibilité des ports prévus}, en
+        particulier sur un serveur déjà utilisé par d'autres projets.
+\begin{lstlisting}
+docker ps --format '{{.Names}}\t{{.Ports}}'
+sudo ss -tlnp | grep -E ':(<port_backend>|<port_frontend>)'
+\end{lstlisting}
+
+  \item \textbf{Configurer le reverse proxy Nginx} sur l'hôte, pour le
+        nom de domaine visé, avec une redirection vers les deux
+        conteneurs.
+\begin{lstlisting}
+sudo nano /etc/nginx/sites-available/<nom_domaine>
+sudo nginx -t
+\end{lstlisting}
+
+  \item \textbf{Démarrer la stack applicative}, en combinant la
+        configuration commune et la configuration de production
+        (ports restreints à l'hôte local, redémarrage automatique).
+\begin{lstlisting}
+docker compose -f docker-compose.yml -f docker-compose.prod.yml \
+  up -d --build
+\end{lstlisting}
+
+  \item \textbf{Recharger le reverse proxy} pour prendre en compte la
+        nouvelle configuration.
+\begin{lstlisting}
+sudo systemctl reload nginx
+\end{lstlisting}
+
+  \item \textbf{Vérifier que chaque conteneur répond}, avant tout accès
+        externe.
+\begin{lstlisting}
+docker compose -f docker-compose.yml -f docker-compose.prod.yml ps
+curl -s http://127.0.0.1:<port_backend>/health
+curl -sI http://127.0.0.1:<port_frontend>/
+\end{lstlisting}
+
+  \item \textbf{Tester l'accès public sous le nom de domaine}, une fois
+        le certificat HTTPS émis.
+\begin{lstlisting}
+curl -sI https://<nom_domaine>
+\end{lstlisting}
+\end{enumerate}
+
+\subsection{Redéploiement continu}
+
+Une fois cette bascule initiale effectuée, tout push sur la branche
+principale du dépôt déclenche automatiquement un redéploiement, sans
+intervention manuelle : une clé SSH dédiée au déploiement, distincte de
+toute clé personnelle, autorise le serveur à recevoir cette connexion.
+Un script de redéploiement reste disponible en secours, pour le cas où
+ce déclenchement automatique échouerait :
+
+\begin{lstlisting}
+ssh <utilisateur>@<serveur>
+cd ~/apps/agt-infra/agt-infra
+./deploy.sh
+\end{lstlisting}=== FIN FICHIER : chapters/04_implementation.tex ===
 
 === FICHIER : chapters/05_resultats_bilan.tex ===
 \chapter{Résultats et bilan}
 \label{chap:resultats}
+
+\agtlettrine{C}e dernier chapitre dresse le bilan du projet : les
+résultats obtenus domaine par domaine, un parcours applicatif de bout en
+bout illustrant leur articulation, un aperçu visuel de l'application,
+les tests de validation effectués, puis les limites actuelles et les
+risques assumés à ce jour.
 \minisommaire
 
-\section{Resultats obtenus}
-=== FIN FICHIER : chapters/05_resultats_bilan.tex ===
+\section{Résultats obtenus}
+
+Le tableau~\ref{tab:resultats-domaines} reprend, sous une forme
+condensée, la synthèse des quatorze domaines fonctionnels déjà détaillée
+au chapitre~\ref{chap:etude-technique}, confirmée par l'implémentation
+réalisée au chapitre~\ref{chap:realisation}.
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{p{5.5cm}p{8cm}}
+\toprule
+\textbf{Domaine} & \textbf{Résultat} \\
+\midrule
+Serveurs physiques et connectivité SSH & Réalisé \\
+Conteneurs Docker et registres privés & Réalisé \\
+Environnements & Réalisé \\
+Console web & Réalisé \\
+Diagnostic à la demande et alertes & Réalisé \\
+Supervision continue & Réalisé \\
+Déploiement continu & Réalisé \\
+Publication applicative & Réalisé \\
+Sauvegardes & Non réalisé \\
+Montée en charge & Non réalisé \\
+Contrôle d'accès dynamique & Réalisé \\
+Sécurité & Non réalisé \\
+Journal d'audit & Traçabilité réalisée, écran dédié non branché \\
+Documentation intégrée & Réalisé \\
+\bottomrule
+\end{tabular}
+\caption{Synthèse des résultats par domaine}
+\label{tab:resultats-domaines}
+\end{table}
+
+\section{Parcours applicatif de bout en bout}
+
+Le diagramme d'activité de la figure~\ref{fig:workflow-e2e} illustre
+l'articulation complète de trois modules, présentés séparément aux
+chapitres précédents : brancher un serveur, y déployer une application,
+puis la publier publiquement sous un nom de domaine, en HTTPS.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{assets/diagrams/05-diagramme_activite_deploiement_publication.png}
+  \caption{Parcours de bout en bout : brancher, déployer, publier}
+  \label{fig:workflow-e2e}
+\end{figure}
+
+Ce parcours met en évidence un principe déjà énoncé au
+chapitre~\ref{chap:etude-technique} : aucune étape n'est corrigée
+automatiquement en cas d'échec. Une connexion SSH refusée, un domaine
+mal résolu ou un certificat non émis interrompent le parcours avec un
+message explicite, plutôt que de tenter une correction silencieuse.
+
+\section{Aperçu de l'application}
+
+Les captures suivantes illustrent l'interface réelle d'AGT Infra, sur
+les écrans les plus représentatifs des domaines déjà détaillés dans ce
+rapport.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{assets/screenshots/05-screenshot_tableau_de_bord.png}
+  \caption{Tableau de bord}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{assets/screenshots/05-screenshot_catalogue-de-membre-avec-permission.png}
+  \caption{Gestion des rôles et des permissions directes}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{assets/screenshots/05-screenshot_nouvelle-permission-directe.png}
+  \caption{Octroi d'une permission directe scopée à un serveur précis}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{assets/screenshots/05-screenshot_page-de-deploiement-application.png}
+  \caption{Orchestration des déploiements}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{assets/screenshots/05-screenshot_log-de-deploiement-en-cours.png}
+  \caption{Suivi en direct d'un déploiement}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{assets/screenshots/05-screenshot_cllecte-des-metriques.png}
+  \caption{Métriques d'un serveur}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{assets/screenshots/05-screenshot_console-web.png}
+  \caption{Console web ouverte sur un serveur}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{assets/screenshots/05-screenshot_page-documentation.png}
+  \caption{Documentation intégrée}
+\end{figure}
+
+\section{Tests et validation}
+
+Le moteur de déploiement a été validé sur deux dépôts créés
+spécifiquement pour cette occasion, afin de couvrir les deux modes
+d'orchestration de conteneurs pris en charge par AGT Infra : l'un
+reposant sur un simple \texttt{Dockerfile}, l'autre sur un
+\texttt{docker-compose}. Chacun a été configuré et déployé sur plusieurs
+environnements distincts (développement, test, production), avec un
+serveur cible réel.
+
+Ces déploiements ont permis de vérifier, en conditions réelles plutôt
+que sur simple lecture de code :
+
+\begin{itemize}
+  \item la connexion SSH au serveur cible et l'exécution effective des
+        huit phases de la séquence de déploiement ;
+  \item la diffusion en direct des journaux d'exécution sur le canal
+        temps réel dédié ;
+  \item la bonne gestion d'un échec de déploiement, sans blocage du
+        reste de l'application ;
+  \item l'ouverture d'une session de console web sur le serveur cible,
+        avec exécution de commandes réelles.
+\end{itemize}
+
+\section{Limites actuelles et perspectives}
+
+Plusieurs limites, déjà identifiées au fil des chapitres précédents,
+restent assumées à ce jour :
+
+\begin{itemize}
+  \item \textbf{Sauvegardes} : aucune sauvegarde automatique des bases
+        de données n'est encore implémentée.
+  \item \textbf{Montée en charge} : l'ajustement des ressources d'un
+        conteneur reste manuel ; aucune réaction automatique à une
+        charge excessive n'est prévue à ce stade.
+  \item \textbf{Sécurité active} : le moteur de règles de sécurité reste
+        à l'état de besoin identifié, non implémenté.
+  \item \textbf{Résilience et disponibilité} : chaque serveur reste
+        aujourd'hui un point unique de défaillance. Ce point est
+        particulièrement sensible pour une application de paiement par exemple, qui ne tolère pas l'indisponibilité.
+\end{itemize}
+
+\section{Risques et plans de contournement}
+
+Le tableau~\ref{tab:risques} synthétise les principaux risques déjà
+identifiés pour le projet, avec le plan retenu pour en limiter l'impact.
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{p{5.5cm}p{8cm}}
+\toprule
+\textbf{Risque} & \textbf{Plan de contournement} \\
+\midrule
+Absence de sauvegardes automatiques & Documenter ce manque auprès des
+  équipes exploitantes et prioriser ce domaine avant toute mise en
+  production d'une application sensible. \\
+Exposition de la console web, sans filtrage de contenu & Contrôle
+  d'accès strict par permission scopée, enregistrement intégral de
+  chaque session. \\
+Sécurité des évènements webhook entrants & Vérification systématique de
+  la signature avant toute exécution, quel que soit le domaine
+  concerné. \\
+Gestion manuelle du DNS pour la publication & L'outil guide et vérifie
+  la résolution avant de poursuivre, sans jamais automatiser cette
+  étape. \\
+Dérive de configuration de l'agent de supervision entre serveurs & Guide
+  de bootstrap tenu à jour, vérification manuelle recommandée à chaque
+  ajout de serveur supervisé. \\
+Dépendance à un éditeur tiers pour l'agent de supervision & Limiter la
+  dépendance à l'agent lui-même et à son interface documentée. \\
+Dépendance aux briques externes pilotées par SSH & Isoler chaque
+  intégration derrière un adaptateur dédié, sans jamais bloquer
+  l'existant en cas d'erreur. \\
+Fuite de secrets (clés SSH, jetons, webhooks) & Chiffrement au repos
+  hors du code, isolation par ressource, injection au seul moment de
+  l'action. \\
+\bottomrule
+\end{tabular}
+\caption{Risques identifiés et plans de contournement}
+\label{tab:risques}
+\end{table}=== FIN FICHIER : chapters/05_resultats_bilan.tex ===
 
 === FICHIER : chapters/06_conclusion.tex ===
 \chapter*{Conclusion générale}
@@ -1985,12 +2508,12 @@ Statuts : `[ ]` a faire · `[~]` en cours · `[x]` termine.
    - 3.2 Architecture generale [fait]
    - 3.3 Modelisation des donnees [fait]
    - 3.4 Comportements cles [fait]
-5. Implementation
-   - 4.1 Environnement et outils de developpement
-   - 4.2 Methodologie de travail
-   - 4.3 Realisations par module
-   - 4.4 Difficultes rencontrees
-   - 4.5 Deploiement (diagramme de deploiement)
+5. Implementation [fait]
+   - 4.1 Environnement et outils de developpement [fait]
+   - 4.2 Methodologie de travail [fait]
+   - 4.3 Realisations par module [fait]
+   - 4.4 Difficultes rencontrees [fait]
+   - 4.5 Deploiement (diagramme de deploiement) [fait]
 6. Resultats et bilan (resultats, workflows, captures d'ecran, tests,
    limites/perspectives, risques)
 7. Conclusion generale
@@ -2001,12 +2524,15 @@ Serveurs-Conteneurs, architecture generale, package, classes RBAC/IBAC,
 classes Serveurs-Conteneurs, etat-transition publication,
 etat-transition connectivite serveur, sequence resolution permission,
 sequence connexion serveur, sequence deploiement. Diagramme de
-deploiement physique reporte au chapitre 4 (section 4.5), diagrammes
-d'activite au chapitre 6.
+deploiement physique du chapitre 4 (section 4.5, generique/portable,
+base sur `12-8-GUIDE_DEPLOIEMENT_AGT_INFRA.md` sans specificite
+d'hebergeur). Diagrammes d'activite restants au chapitre 6.
 
 Images stockees dans `assets/diagrams/`, convention `NN-nom.png` (NN =
 numero de chapitre reel). Noms de fichiers en ASCII, sans accent
-(compilation LaTeX).
+(compilation LaTeX). Icones technologiques (logos) dans
+`assets/icons/`, convention `NN-icone_nom.png`.
+
 
 ---
 
@@ -2166,27 +2692,42 @@ de les repeter a chaque session.
       etat-transition connectivite serveur, sequence resolution de
       permission, sequence connexion d'un nouveau serveur, sequence
       deploiement (automatique/manuel)
-- [ ] Verifier noms de fichiers images sans accent dans
+- [x] Verifier noms de fichiers images sans accent dans
       `assets/diagrams/` (ex: diagramme sequence resolution permission
       mal nomme a la source, corrige en `03-diagramme_seq_resolution_permission.png`
       dans le texte final)
 - [ ] Relecture finale du chapitre par Josue
 
-## Chapitre "Implementation"
+## Chapitre "Implementation" (chapitre 4 reel)
 
-- [ ] 5.1 Environnement et outils de developpement (choix
-      technologiques deplaces ici, justifies a posteriori)
-- [ ] 5.2 Methodologie de travail (cycle audit -> plan -> validation ->
-      implementation)
-- [ ] 5.3 Realisations par module
-  - [ ] Gestion serveurs et conteneurs Docker
-  - [ ] Deploiement continu
-  - [ ] Publication applicative
-  - [ ] Supervision (Netdata)
-  - [ ] RBAC/IBAC dynamique
-- [ ] 5.4 Difficultes rencontrees et solutions apportees
-- [ ] 5.5 Deploiement (diagramme de deploiement, infrastructure
-      physique reelle)
+- [x] Canevas de chapitre (lettrine + paragraphe + minisommaire)
+- [x] 4.1 Environnement et outils de developpement : justification par
+      contrainte de conception (pas de comparatif avec alternatives),
+      3 tableaux (backend/frontend/outils transverses) avec logos,
+      logos manquants signales explicitement (SQLAlchemy, Alembic,
+      Pydantic, TypeScript, Tailwind, Nginx, Certbot)
+- [x] 4.2 Methodologie de travail : cycle audit -> plan ->
+      implementation -> test (redige au style impersonnel, sans "je"),
+      traçabilite des decisions (D-XX/B-XX/S-NN), continuite entre
+      sessions, note finale sur l'usage d'un assistant IA
+- [x] 4.3 Realisations par module (5 modules, niveau technique avec
+      mecanismes concrets sans extrait de code, structure en listes) :
+      Serveurs/Conteneurs, Deploiement continu, Publication applicative,
+      Supervision continue, RBAC/IBAC dynamique - source : TODO du code
+      et scan_structure.txt du projet
+- [x] 4.4 Difficultes rencontrees et solutions apportees (restructure en
+      listes constat/solution) : absence d'environnement de test
+      representatif (VPS Hostinger + VM VirtualBox), montee en charge du
+      perimetre en cours de stage, remise en cause du modele RBAC fige,
+      coordination de plusieurs systemes externes
+- [x] 4.5 Deploiement : diagramme de deploiement generique (portable,
+      sans specificite d'hebergeur), procedure pas a pas avec commandes
+      (clonage, verification des ports, configuration Nginx, demarrage
+      de la stack, verification locale, test du nom de domaine),
+      redeploiement continu (CI/CD + script de secours)
+- [x] Verifier noms de fichiers images sans accent dans
+      `assets/diagrams/`
+- [ ] Relecture finale du chapitre par Josue
 
 ## Chapitre "Resultats et bilan"
 
@@ -2258,7 +2799,24 @@ de les repeter a chaque session.
   vigilance signale : coherence des noms de fichiers image (accents a
   eviter) entre `assets/diagrams/` et les `\includegraphics` du texte.
   Prochaine session : Chapitre "Implementation" (4.1 Environnement et
-  outils de developpement, choix technologiques justifies a posteriori).=== FIN FICHIER : TODO.md ===
+  outils de developpement, choix technologiques justifies a posteriori).
+
+- 2026-09-04 (suite) : Chapitre 4 (Implementation) redige integralement,
+  sections 4.1 a 4.5. Logos de technologies integres (conversion SVG a
+  prevoir en PNG/PDF pour compatibilite pdfLaTeX, signalee explicitement).
+  Section 4.3 (Realisations par module) construite a partir du TODO reel
+  du code et de scan_structure.txt fournis par Josue, plutot que du
+  cahier des charges seul, pour refleter l'etat d'avancement reel.
+  Section 4.4 recadree suite a discussion : distinction entre bugs
+  corriges (hors propos) et vraies difficultes de stage (environnement
+  de test, perimetre evolutif, refonte RBAC, coordination de systemes
+  externes). Diagramme de deploiement redessine en version generique et
+  portable, a partir du guide de deploiement reel du VPS Hostinger, sans
+  reprendre ses details specifiques (hostname, ports, utilisateur).
+  Chapitre 4 entierement boucle.
+  Prochaine session : Chapitre "Resultats et bilan" (resultats obtenus,
+  workflows/diagrammes d'activite, captures d'ecran, tests et
+  validation, limites/perspectives, section risques).=== FIN FICHIER : TODO.md ===
 
 ============================================================
 FIN DU SCAN
