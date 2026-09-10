@@ -203,8 +203,202 @@ l'auteur à chaque étape.}
 
 
 \section{Réalisations par module}
-% TODO : gestion serveurs/conteneurs, deploiement continu, publication
-% applicative, supervision, RBAC/IBAC dynamique
+
+Cette section détaille cinq modules fonctionnels. Pour chacun, le
+fonctionnement technique réel est décrit (mécanismes, algorithmes,
+protocoles), sans extrait de code, ainsi que l'état d'avancement et les
+limites connues à ce jour.
+
+\subsection{Gestion des serveurs et des conteneurs Docker}
+
+\textbf{Connectivité SSH.} Le branchement d'un serveur s'authentifie par
+mot de passe ou par une paire de clés générée individuellement pour ce
+serveur. L'adaptateur SSH détecte automatiquement le format de la clé
+privée fournie (RSA, Ed25519, ECDSA ou DSA) en tentant successivement
+chaque analyse jusqu'à obtenir une clé exploitable. La clé privée est
+chiffrée avant stockage et n'est jamais restituée en clair par l'API,
+y compris pour le rôle disposant d'un accès total.
+
+\textbf{Cycle de vie d'une demande de clé dédiée.} Lorsqu'une clé
+dédiée est demandée plutôt qu'un mot de passe, une paire est générée et
+seule la clé publique est affichée, accompagnée d'un délai
+d'installation configurable. Si la clé publique n'est pas installée sur
+le serveur avant l'expiration de ce délai, la demande est invalidée et
+son secret associé supprimé, sans action manuelle.
+
+\textbf{Conteneurs et registres.} Docker est piloté par des commandes
+exécutées en ligne de commande via SSH, jamais par son API TCP native,
+ce qui évite d'exposer un port ou un socket Docker supplémentaire sur
+chaque serveur. Un registre de conteneurs privé peut être enregistré
+par utilisateur ; son secret d'accès suit le même principe de
+chiffrement au repos et de non-exposition que les clés SSH.
+
+\textbf{Console web.} L'ouverture d'une session sur un serveur ouvre un
+canal interactif direct sur la machine distante. Sur un conteneur, la
+session ouvre d'abord un canal SSH classique, puis y exécute une
+commande d'attachement interactif au conteneur ciblé, ce qui donne
+l'illusion d'une session directe sans exposer d'accès SSH séparé au
+conteneur lui-même. Le flux complet de chaque session, entrées et
+sorties confondues, est écrit ligne par ligne dans un fichier structuré,
+consultable ensuite par relecture intégrale.
+
+\textbf{État d'avancement.} L'ensemble de ce module est réalisé et
+vérifié, y compris la console web activable ou désactivable
+indépendamment par serveur ou par conteneur.
+
+\subsection{Déploiement continu}
+
+\textbf{Déclenchement.} Un déploiement démarre soit par un évènement
+webhook GitHub, soit manuellement depuis l'interface. Dans le premier
+cas, la charge utile reçue est vérifiée par une signature HMAC-SHA256
+calculée à partir d'un secret propre à la configuration ; toute
+signature invalide entraîne un rejet immédiat, avant toute autre
+vérification.
+
+\textbf{Moteur d'exécution.} Aucune file de tâches externe n'est
+utilisée : chaque déploiement s'exécute comme une tâche asynchrone du
+serveur applicatif lui-même. Un verrou au niveau de la base de données,
+propre à chaque configuration, empêche deux déploiements concurrents sur
+la même configuration. Au démarrage du service, les exécutions restées
+bloquées à l'état "en cours" à la suite d'un arrêt inattendu sont
+détectées et réconciliées, plutôt que laissées indéfiniment ouvertes.
+
+\textbf{Séquence de phases.} Chaque déploiement traverse les phases
+suivantes, dans un ordre strict :
+
+\begin{enumerate}
+  \item connexion SSH au serveur cible ;
+  \item vérifications préalables (précondition), avec possibilité
+        d'exécution à blanc ;
+  \item synchronisation du dépôt Git, conçue pour être rejouée sans
+        effet différent si elle est répétée ;
+  \item génération du fichier de variables d'environnement, à partir de
+        secrets déchiffrés au moment de l'exécution seulement ;
+  \item construction de l'image et démarrage du conteneur ;
+  \item vérification de bon fonctionnement du conteneur démarré ;
+  \item nettoyage des ressources temporaires laissées par la
+        construction.
+\end{enumerate}
+
+Un échec à l'étape de vérification de bon fonctionnement déclenche un
+retour arrière automatique vers le dernier conteneur connu comme stable.
+
+\textbf{Journalisation.} Chaque phase écrit sa progression dans un
+fichier détaillé sur disque, diffusé simultanément en direct sur un
+canal WebSocket dédié. Une synthèse de l'exécution (résultat, durée,
+commit, acteur) est écrite séparément en base de données : la
+suppression ultérieure du fichier détaillé, lors d'une purge, ne fait
+donc pas disparaître cette synthèse. Cette méthode combinée évite de
+saturer la base de données avec un volume de texte potentiellement
+important, tout en conservant une trace consultable de chaque
+exécution.
+
+\textbf{État d'avancement.} Le socle du module est réalisé et vérifié
+en conditions réelles. Restent non commencées : la mise en place d'un
+délai d'expiration propre à chaque phase, la déduplication des
+évènements de webhook reçus en double, et l'annulation coopérative d'un
+déploiement en cours d'exécution.
+
+\subsection{Publication applicative}
+
+\textbf{Préconditions.} Une publication ne peut être créée que pour une
+configuration de déploiement ayant déjà connu au moins une exécution
+réussie, et associée à un conteneur du même serveur. La résolution DNS
+du domaine visé est vérifiée avant toute configuration du serveur ;
+aucun enregistrement DNS n'est créé par l'outil lui-même.
+
+\textbf{Configuration du proxy.} La configuration du serveur web et la
+demande de certificat HTTPS sont générées puis appliquées sur le
+serveur cible via SSH. Le port cible d'une route est proposé
+automatiquement à partir du port réel exposé par le conteneur ou la
+configuration associée, mais reste modifiable avant confirmation.
+
+\textbf{Détection d'incohérence.} Une fois active, une publication est
+périodiquement confrontée à l'état réel de sa cible (port, conteneur
+associé). Toute incohérence détectée fait passer la publication à
+l'état désynchronisée, sans correction automatique : seule une action
+volontaire de l'utilisateur permet de sortir de cet état.
+
+\textbf{État d'avancement.} Le module est considéré comme
+fonctionnellement clos. Deux points restent non implémentés :
+la dégradation gracieuse vers un mode HTTP seul en cas d'échec de
+l'émission du certificat, et le filtrage par ressource du contrôle
+d'accès sur les routes indexées directement par une publication (ces
+routes restent protégées par une permission globale, faute d'une portée
+dédiée à ce type de ressource dans le modèle RBAC/IBAC).
+
+\subsection{Supervision continue}
+
+\textbf{Bootstrap.} L'agent de supervision est installé manuellement
+une seule fois sur chaque serveur. Sa configuration réseau est fixée en
+constante côté code pour n'écouter que sur l'interface locale de la
+machine, jamais accessible à distance directement : c'est AGT Infra qui
+vient chercher les métriques, pas l'inverse.
+
+\textbf{Double canal.} Deux flux distincts existent. Le premier est une
+notification autonome : lorsqu'un seuil est dépassé, l'agent envoie un
+webhook, vérifié par une signature selon le même principe que le
+webhook de déploiement. Le second est un flux de consultation en
+direct : un tunnel SSH est ouvert vers le port local de l'agent, puis
+relayé à l'interface par un canal WebSocket, ce qui donne accès aux
+métriques en direct sans jamais exposer le port de l'agent sur le
+réseau public du serveur.
+
+\textbf{Seuils personnalisés.} Une surcharge de seuils par serveur est
+écrite dans un fichier de configuration dédié, distinct des fichiers
+natifs de l'agent, afin de ne jamais écraser un réglage existant qui ne
+relèverait pas d'AGT Infra. Un changement de collecteurs actifs déclenche
+un redémarrage complet de l'agent, tandis qu'un changement limité aux
+seuils ou aux canaux de notification ne déclenche qu'un rechargement
+partiel, plus rapide et moins intrusif.
+
+\textbf{Filtrage des métriques.} Le flux de métriques brutes de l'agent
+étant disproportionné pour un usage direct, seules les valeurs
+correspondant aux collecteurs activés pour ce serveur sont retenues et
+transmises à l'interface.
+
+\textbf{État d'avancement.} Le module a été vérifié en conditions
+réelles jusqu'au déclenchement puis à la résolution automatique d'une
+alerte. Une limite connue subsiste : le filtrage des métriques liées à
+Docker capture l'ensemble des conteneurs présents sur l'hôte, pas
+seulement ceux gérés par AGT Infra.
+
+\subsection{Contrôle d'accès dynamique (RBAC/IBAC)}
+
+\textbf{Modèle de données.} Les rôles et les permissions ne sont plus
+des valeurs fixes définies dans le code, mais des enregistrements en
+base de données, librement composables depuis l'interface. Seul le rôle
+disposant d'un accès total reste immuable et non supprimable.
+
+\textbf{Algorithme de résolution.} Chaque requête sensible déclenche une
+vérification qui suit l'ordre déjà détaillé au
+chapitre~\ref{chap:etude-technique} : accès immédiat pour le rôle
+immuable, puis recherche d'un refus direct, puis d'une autorisation
+directe, puis d'une autorisation via un rôle, avec un refus par défaut
+si aucune de ces conditions n'est remplie. Cette vérification est
+appliquée de façon uniforme sur les routes classiques comme sur les
+connexions WebSocket, ces dernières étant authentifiées par un jeton
+transmis en paramètre de connexion plutôt que par un en-tête classique.
+
+\textbf{Filtrage par ressource.} Sur les listes de serveurs, de
+conteneurs et de configurations de déploiement, la liste retournée est
+désormais restreinte aux seules ressources auxquelles la personne a
+effectivement accès, plutôt que retournée en entier puis filtrée à
+l'affichage. Une personne sans permission de lecture globale reçoit
+ainsi une liste vide plutôt qu'un refus d'accès, ce qui reste cohérent
+avec une consultation partielle légitime via des permissions restreintes
+à certaines ressources.
+
+\textbf{Correctif de sécurité.} La révocation de l'affectation du rôle
+immuable a été bloquée après qu'un scénario de test a révélé qu'elle
+pouvait conduire à un verrouillage total de l'application si plus aucun
+compte ne disposait de ce rôle. Cette opération est désormais rejetée
+côté serveur et masquée dans l'interface.
+
+\textbf{État d'avancement.} Le socle est réalisé et vérifié. Le
+filtrage par ressource reste à généraliser aux publications, aux
+alertes et aux sessions de terminal, encore protégées par une
+permission globale à ce jour.
 
 \section{Difficultés rencontrées et solutions apportées}
 % TODO
