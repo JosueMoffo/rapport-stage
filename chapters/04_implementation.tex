@@ -242,10 +242,6 @@ conteneur lui-même. Le flux complet de chaque session, entrées et
 sorties confondues, est écrit ligne par ligne dans un fichier structuré,
 consultable ensuite par relecture intégrale.
 
-\textbf{État d'avancement.} L'ensemble de ce module est réalisé et
-vérifié, y compris la console web activable ou désactivable
-indépendamment par serveur ou par conteneur.
-
 \subsection{Déploiement continu}
 
 \textbf{Déclenchement.} Un déploiement démarre soit par un évènement
@@ -284,7 +280,7 @@ Un échec à l'étape de vérification de bon fonctionnement déclenche un
 retour arrière automatique vers le dernier conteneur connu comme stable.
 
 \textbf{Journalisation.} Chaque phase écrit sa progression dans un
-fichier détaillé sur disque, diffusé simultanément en direct sur un
+fichier \textbf{jsonl} détaillé sur disque, diffusé simultanément en direct sur un
 canal WebSocket dédié. Une synthèse de l'exécution (résultat, durée,
 commit, acteur) est écrite séparément en base de données : la
 suppression ultérieure du fichier détaillé, lors d'une purge, ne fait
@@ -292,12 +288,6 @@ donc pas disparaître cette synthèse. Cette méthode combinée évite de
 saturer la base de données avec un volume de texte potentiellement
 important, tout en conservant une trace consultable de chaque
 exécution.
-
-\textbf{État d'avancement.} Le socle du module est réalisé et vérifié
-en conditions réelles. Restent non commencées : la mise en place d'un
-délai d'expiration propre à chaque phase, la déduplication des
-évènements de webhook reçus en double, et l'annulation coopérative d'un
-déploiement en cours d'exécution.
 
 \subsection{Publication applicative}
 
@@ -307,8 +297,8 @@ réussie, et associée à un conteneur du même serveur. La résolution DNS
 du domaine visé est vérifiée avant toute configuration du serveur ;
 aucun enregistrement DNS n'est créé par l'outil lui-même.
 
-\textbf{Configuration du proxy.} La configuration du serveur web et la
-demande de certificat HTTPS sont générées puis appliquées sur le
+\textbf{Configuration du proxy (Nginx) et de cerbot.} La configuration du serveur web et la
+demande de certificat HTTPS cerbotsont générées puis appliquées sur le
 serveur cible via SSH. Le port cible d'une route est proposé
 automatiquement à partir du port réel exposé par le conteneur ou la
 configuration associée, mais reste modifiable avant confirmation.
@@ -319,13 +309,6 @@ associé). Toute incohérence détectée fait passer la publication à
 l'état désynchronisée, sans correction automatique : seule une action
 volontaire de l'utilisateur permet de sortir de cet état.
 
-\textbf{État d'avancement.} Le module est considéré comme
-fonctionnellement clos. Deux points restent non implémentés :
-la dégradation gracieuse vers un mode HTTP seul en cas d'échec de
-l'émission du certificat, et le filtrage par ressource du contrôle
-d'accès sur les routes indexées directement par une publication (ces
-routes restent protégées par une permission globale, faute d'une portée
-dédiée à ce type de ressource dans le modèle RBAC/IBAC).
 
 \subsection{Supervision continue}
 
@@ -357,15 +340,9 @@ partiel, plus rapide et moins intrusif.
 correspondant aux collecteurs activés pour ce serveur sont retenues et
 transmises à l'interface.
 
-\textbf{État d'avancement.} Le module a été vérifié en conditions
-réelles jusqu'au déclenchement puis à la résolution automatique d'une
-alerte. Une limite connue subsiste : le filtrage des métriques liées à
-Docker capture l'ensemble des conteneurs présents sur l'hôte, pas
-seulement ceux gérés par AGT Infra.
+\subsection{Contrôle d'accès (RBAC/IBAC)}
 
-\subsection{Contrôle d'accès dynamique (RBAC/IBAC)}
-
-\textbf{Modèle de données.} Les rôles et les permissions ne sont plus
+\textbf{Modèle de données.} Les rôles et les permissions ne pas
 des valeurs fixes définies dans le code, mais des enregistrements en
 base de données, librement composables depuis l'interface. Seul le rôle
 disposant d'un accès total reste immuable et non supprimable.
@@ -375,8 +352,8 @@ vérification qui suit l'ordre déjà détaillé au
 chapitre~\ref{chap:etude-technique} : accès immédiat pour le rôle
 immuable, puis recherche d'un refus direct, puis d'une autorisation
 directe, puis d'une autorisation via un rôle, avec un refus par défaut
-si aucune de ces conditions n'est remplie. Cette vérification est
-appliquée de façon uniforme sur les routes classiques comme sur les
+si aucune de ces conditions n'est remplie. \\ 
+Cette vérification est appliquée de façon uniforme sur les routes classiques comme sur les
 connexions WebSocket, ces dernières étant authentifiées par un jeton
 transmis en paramètre de connexion plutôt que par un en-tête classique.
 
@@ -389,19 +366,40 @@ ainsi une liste vide plutôt qu'un refus d'accès, ce qui reste cohérent
 avec une consultation partielle légitime via des permissions restreintes
 à certaines ressources.
 
-\textbf{Correctif de sécurité.} La révocation de l'affectation du rôle
-immuable a été bloquée après qu'un scénario de test a révélé qu'elle
-pouvait conduire à un verrouillage total de l'application si plus aucun
-compte ne disposait de ce rôle. Cette opération est désormais rejetée
-côté serveur et masquée dans l'interface.
-
-\textbf{État d'avancement.} Le socle est réalisé et vérifié. Le
-filtrage par ressource reste à généraliser aux publications, aux
-alertes et aux sessions de terminal, encore protégées par une
-permission globale à ce jour.
-
 \section{Difficultés rencontrées et solutions apportées}
-% TODO
+
+\textbf{Absence d'environnement de test représentatif.} Le développement
+ne pouvait pas s'appuyer sur les serveurs de production de l'entreprise,
+qui hébergent des applications réelles et ne pouvaient pas être exposés
+à un risque d'instabilité. Ce constraint a été contourné en combinant un
+VPS Hostinger propre à l'entreprise et plusieurs machines virtuelles
+créées sous VirtualBox, ce qui a permis de tester librement la
+connectivité SSH, le déploiement et la supervision sans dépendre d'une
+infrastructure de production.
+
+\textbf{Montée en charge du périmètre en cours de stage.} La mission
+confiée portait initialement sur la prise en main d'outils existants,
+avant de porter sur ce qui est devenu AGT Infra. Le périmètre du projet
+a ensuite continué de s'étendre au fil des sessions, avec l'apparition
+de domaines entiers non prévus au départ (publication applicative,
+supervision continue). Cette évolution a nécessité de revoir la feuille
+de route à plusieurs reprises plutôt que de suivre un plan figé dès le
+premier jour.
+
+\textbf{Remise en cause d'un choix de conception déjà en place.} Le
+contrôle d'accès reposait initialement sur un nombre fixe de rôles,
+codés en dur. Ce modèle s'est révélé trop rigide face au besoin réel, ce
+qui a conduit à une refonte complète vers un système entièrement piloté
+en base de données, en reprenant du code déjà écrit et validé plutôt
+qu'en l'ajoutant en périphérie.
+
+\textbf{Coordination de plusieurs systèmes externes.} Le fonctionnement
+d'un module donné dépend souvent de plusieurs briques externes à la
+fois (SSH, Docker, GitHub, Nginx/Certbot, l'agent de supervision), dont
+le comportement réel devait être observé en pratique plutôt que déduit
+de leur seule documentation. Isoler chaque intégration derrière un
+adaptateur dédié a permis de circonscrire cette complexité, brique par
+brique, plutôt que de la laisser se propager dans le reste du code.
 
 \section{Déploiement}
 % TODO : diagramme de deploiement, infrastructure physique reelle
