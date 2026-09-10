@@ -1,6 +1,6 @@
 ============================================================
 SCAN DE STRUCTURE - RAPPORT DE STAGE AGT INFRA
-Genere le : 2026-09-10 15:41:41
+Genere le : 2026-09-10 19:32:59
 Racine scannee : /media/josue-moffo/Secondaire/School/El_M/STAGE/AG-technologies/Theme/AGT-Infra/rapport/rapport-stage
 ============================================================
 
@@ -37,6 +37,8 @@ Racine scannee : /media/josue-moffo/Secondaire/School/El_M/STAGE/AG-technologies
 │   │   ├── 04-icone_ssh.png
 │   │   └── 04-icone_vite.png
 │   ├── logos
+│   │   ├── logo-AGT.png
+│   │   └── logo-ENSPY.png
 │   ├── screenshots
 │   │   ├── 05-screenshot_catalogue-de-membre-avec-permission.png
 │   │   ├── 05-screenshot_cllecte-des-metriques.png
@@ -63,12 +65,15 @@ Racine scannee : /media/josue-moffo/Secondaire/School/El_M/STAGE/AG-technologies
 │   ├── 03_metadonnees.tex
 │   └── 04_ornements.tex
 ├── front
+│   ├── dedicace.tex
 │   ├── liste_abreviations.tex
+│   ├── page_garde_sans_bordure.tex
 │   ├── page_garde.tex
 │   └── remerciements.tex
 ├── biblio.bib
 ├── .gitignore
 ├── glossaire.tex
+├── .latexmkrc
 ├── main.pdf
 ├── main.tex
 ├── README.md
@@ -76,7 +81,7 @@ Racine scannee : /media/josue-moffo/Secondaire/School/El_M/STAGE/AG-technologies
 ├── scan_structure_rapport.txt
 └── TODO.md
 
-11 directories, 57 files
+11 directories, 62 files
 
 ------------------------------------------------------------
 2. IMAGES DETECTEES (emplacement uniquement)
@@ -95,6 +100,8 @@ Racine scannee : /media/josue-moffo/Secondaire/School/El_M/STAGE/AG-technologies
   - assets/diagrams/03-diagramme_packages.png (taille : 944K)
   - assets/diagrams/03-diagramme_contexte.png (taille : 656K)
   - assets/diagrams/05-diagramme_activite_deploiement_publication.png (taille : 264K)
+  - assets/logos/logo-ENSPY.png (taille : 52K)
+  - assets/logos/logo-AGT.png (taille : 8,0K)
   - assets/screenshots/05-screenshot_tableau_de_bord.png (taille : 104K)
   - assets/screenshots/05-screenshot_nouvelle-permission-directe.png (taille : 120K)
   - assets/screenshots/05-screenshot_log-de-deploiement-en-cours.png (taille : 208K)
@@ -2010,7 +2017,7 @@ Fuite de secrets (clés SSH, jetons, webhooks) & Chiffrement au repos
 % --- Glossaire / acronymes ---
 % LIMITE ANTICIPEE : necessite une passe "makeglossaries" en plus de
 % pdflatex/biber. latexmk gere cela automatiquement (voir main.tex).
-\usepackage[acronym, toc]{glossaries}
+\usepackage[acronym, toc, nonumberlist]{glossaries}
 \makeglossaries
 
 % --- Liens cliquables ---
@@ -2147,20 +2154,35 @@ Fuite de secrets (clés SSH, jetons, webhooks) & Chiffrement au repos
 % ============================================================
 
 % Titre complet : utilise uniquement sur la page de garde.
-\newcommand{\rapporttitre}{Conception et implémentation d'AGT Infra : plateforme interne de gestion d'infrastructure et de supervision}
+\newcommand{\rapporttitre}{\MakeUppercase{Conception et implémentation d'AGT Infra : plateforme interne de gestion d'infrastructure et de supervision}}
 
 % Titre court : utilise dans l'en-tete de page (evite tout debordement
 % lie a la longueur du titre complet ci-dessus).
 \newcommand{\rapporttitrecourt}{AGT Infra, rapport de stage}
 
-\newcommand{\rapportauteur}{Josué [Nom de famille]}
-\newcommand{\rapportformation}{[Intitulé de la formation / diplôme visé]}
-\newcommand{\rapportecole}{[Nom de l'établissement]}
+% --- Identite institutionnelle bilingue (page de garde) ---
+% ATTENTION : le departement ci-dessous est repris de l'image de
+% reference fournie par Josue (autre rapport ENSPY), confirme par lui
+% au fil de la session. A corriger ici si ce n'est pas exact.
+\newcommand{\rapportuniversitefr}{UNIVERSITÉ DE YAOUNDÉ I}
+\newcommand{\rapportuniversiteen}{UNIVERSITY OF YAOUNDÉ I}
+\newcommand{\rapportecolefr}{ÉCOLE NATIONALE SUPÉRIEURE POLYTECHNIQUE}
+\newcommand{\rapportecoleen}{NATIONAL ADVANCED SCHOOL OF ENGINEERING}
+\newcommand{\rapportdepartementfr}{DÉPARTEMENT DE GÉNIE INFORMATIQUE}
+\newcommand{\rapportdepartementen}{DEPARTMENT OF COMPUTER ENGINEERING}
+
+% --- Type de stage, auteur, entreprise, tuteur ---
+\newcommand{\rapporttypestage}{PRÉ-INGÉNIEUR}
+\newcommand{\rapportauteur}{MBAH MOFFO Josué}
 \newcommand{\rapportentreprise}{AG Technologies}
-\newcommand{\rapporttuteurentreprise}{[Nom du tuteur en entreprise]}
+\newcommand{\rapporttuteurentreprise}{Ing. NOMO BODIANGA Gabriel}
 \newcommand{\rapporttuteuracademique}{[Nom du tuteur académique]}
-\newcommand{\rapportperiode}{Du 06 juillet 2026 au 05 août 2026}
-\newcommand{\rapportannee}{2025 - 2026}=== FIN FICHIER : config/03_metadonnees.tex ===
+\newcommand{\rapportperiode}{Du 06 juillet 2026 au 05 septembre 2026}
+\newcommand{\rapportannee}{2025 - 2026}
+
+% --- Logos (page de garde) ---
+\newcommand{\rapportlogoecole}{assets/logos/logo-ENSPY.png}
+\newcommand{\rapportlogoentreprise}{assets/logos/logo-AGT.png}=== FIN FICHIER : config/03_metadonnees.tex ===
 
 === FICHIER : config/04_ornements.tex ===
 % ============================================================
@@ -2182,6 +2204,11 @@ Fuite de secrets (clés SSH, jetons, webhooks) & Chiffrement au repos
 \newcommand{\agtOrnFooter}{83}
 \newcommand{\agtOrnHeaderSize}{5mm}
 \newcommand{\agtOrnFooterSize}{4.5mm}
+
+% --- Motif de la page de dedicace (reutilise le motif de coin,
+% \agtOrnCorner, deja valide a la compilation sur la page de garde,
+% plutot qu'un nouvel identifiant non teste) ---
+\newcommand{\agtOrnDedicaceSize}{16mm}
 
 % --- Bordure complete (page de garde uniquement) ---
 % CORRECTION : l'ancienne version (boucle \foreach avec rotation
@@ -2212,12 +2239,84 @@ Fuite de secrets (clés SSH, jetons, webhooks) & Chiffrement au repos
 \setcounter{DefaultLines}{3}
 \newcommand{\agtlettrine}[2]{\lettrine[lines=3]{\color{reportprimary}#1}{#2}}=== FIN FICHIER : config/04_ornements.tex ===
 
+=== FICHIER : front/dedicace.tex ===
+% ============================================================
+% front/dedicace.tex
+% Page de dedicace : texte volontairement minimal, mise en valeur
+% par un motif ornemental deja utilise (page de garde), cf.
+% config/04_ornements.tex pour la taille (\agtOrnDedicaceSize).
+% ============================================================
+\chapter*{Dédicace}
+\addcontentsline{toc}{chapter}{Dédicace}
+%\thispagestyle{empty}
+
+\vspace*{\fill}
+
+\begin{center}
+{\color{reportprimary}\pgfornament[width=\agtOrnDedicaceSize]{\agtOrnCorner}}
+
+\vspace{1.4cm}
+
+{\Large \itshape À mes parents.}
+
+\vspace{1.4cm}
+
+{\color{reportprimary}\pgfornament[width=\agtOrnDedicaceSize]{\agtOrnCorner}}
+\end{center}
+
+\vspace*{\fill}=== FIN FICHIER : front/dedicace.tex ===
+
 === FICHIER : front/liste_abreviations.tex ===
 % ============================================================
 % front/liste_abreviations.tex
 % Alimentée automatiquement par glossaire.tex (via \newacronym)
+% \glsaddall force l'affichage de toutes les entrées definies,
+% independamment de la presence d'un \gls{cle} dans les chapitres.
 % ============================================================
+\glsaddall
 \printglossary[type=\acronymtype, title={Liste des abréviations}]=== FIN FICHIER : front/liste_abreviations.tex ===
+
+=== FICHIER : front/page_garde_sans_bordure.tex ===
+% ============================================================
+% front/page_garde_sans_bordure.tex
+% ============================================================
+\begin{titlepage}
+\centering
+
+\vspace*{1.5cm}
+
+\begin{minipage}[c]{0.4\textwidth}
+\centering
+\includegraphics[height=3.2cm]{\rapportlogoecole}
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.4\textwidth}
+\centering
+\includegraphics[height=3.0cm]{\rapportlogoentreprise}
+\end{minipage}
+
+\vspace{1.0cm}
+{\color{reportprimary}\rule{0.85\textwidth}{0.6pt}}\\[0.4cm]
+\begin{minipage}{0.85\textwidth}
+\centering
+{\Large \bfseries \color{reportprimary} \rapporttitre \par}
+\end{minipage}\\[0.4cm]
+{\color{reportprimary}\rule{0.85\textwidth}{0.6pt}}
+
+\vspace{1cm}
+{\large \bfseries Rapport de stage \rapporttypestage \par}
+\vspace{1.2cm}
+
+{\large Présenté par : \par}
+{\Large \bfseries \scshape \color{reportprimary} \rapportauteur \par}
+\vspace{1.2cm}
+
+{\large Sous la supervision de : \par}
+{\normalsize \bfseries \scshape {\color{reportprimary}\rapporttuteurentreprise{}}, au sein de \rapportentreprise \par}
+
+\vspace{1.2cm}
+{\large Année académique : \rapportannee \par}
+\end{titlepage}=== FIN FICHIER : front/page_garde_sans_bordure.tex ===
 
 === FICHIER : front/page_garde.tex ===
 % ============================================================
@@ -2226,53 +2325,129 @@ Fuite de secrets (clés SSH, jetons, webhooks) & Chiffrement au repos
 \begin{titlepage}
 \pageborderornament
 \centering
-\vspace*{1.5cm}
-% \includegraphics[width=4cm]{assets/logo_ecole.png}
+
+\begin{minipage}[t]{0.46\textwidth}
+\centering
+\small
+\textsc{\rapportuniversitefr}\\
+*******\\
+\textbf{\rapportecolefr}\\
+*******\\
+\rapportdepartementfr
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.46\textwidth}
+\centering
+\small
+\textsc{\rapportuniversiteen}\\
+*******\\
+\textbf{\rapportecoleen}\\
+*******\\
+\rapportdepartementen
+\end{minipage}
+
+\vspace{0.5cm}
+
+\begin{minipage}[c]{0.4\textwidth}
+\centering
+\includegraphics[height=3.2cm]{\rapportlogoecole}
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.4\textwidth}
+\centering
+\includegraphics[height=3.0cm]{\rapportlogoentreprise}
+\end{minipage}
+
+\vspace{1.0cm}
+{\color{reportprimary}\rule{0.85\textwidth}{0.6pt}}\\[0.4cm]
+\begin{minipage}{0.85\textwidth}
+\centering
+{\Large \bfseries \color{reportprimary} \rapporttitre \par}
+\end{minipage}\\[0.4cm]
+{\color{reportprimary}\rule{0.85\textwidth}{0.6pt}}
+
 \vspace{1cm}
+{\large \bfseries Rapport de stage \rapporttypestage \par}
+\vspace{1.2cm}
 
-{\Large \rapportecole \par}
-{\large \rapportformation \par}
-\vspace{2cm}
+{\large Présenté par : \par}
+{\Large \bfseries \scshape \color{reportprimary} \rapportauteur \par}
+\vspace{1.2cm}
 
-{\Huge \bfseries \color{reportprimary} \rapporttitre \par}
-\vspace{1.5cm}
-
-{\large Rapport de stage présenté par \par}
-{\Large \bfseries \rapportauteur \par}
-\vspace{2cm}
-
-% \includegraphics[width=3cm]{assets/logo_entreprise.png}
-{\large Stage effectué au sein de \rapportentreprise \par}
-{\normalsize \rapportperiode \par}
-\vspace{2cm}
-
-\begin{tabular}{ll}
-Tuteur entreprise : & \rapporttuteurentreprise \\
-Tuteur académique : & \rapporttuteuracademique \\
-\end{tabular}
+{\large Sous la supervision de : \par}
+{\normalsize \bfseries \scshape {\color{reportprimary}\rapporttuteurentreprise{}}, au sein de \rapportentreprise \par}
 
 \vfill
-{\large \rapportannee \par}
+{\large Année académique : \rapportannee \par}
 \end{titlepage}=== FIN FICHIER : front/page_garde.tex ===
 
 === FICHIER : front/remerciements.tex ===
+% ============================================================
+% front/remerciements.tex
+% ============================================================
 \chapter*{Remerciements}
 \addcontentsline{toc}{chapter}{Remerciements}
 
-% TODO : tuteur entreprise, tuteur académique, équipe AG Technologies, proches=== FIN FICHIER : front/remerciements.tex ===
+Je tiens à exprimer ma reconnaissance à toutes les personnes qui ont
+contribué, chacune à leur niveau, à la réalisation de ce travail.
+
+Je remercie l'Ing. NOMO BODIANGA Gabriel, mon encadrant professionnel
+au sein d'AG Technologies, pour son accompagnement tout au long du
+stage.
+
+Je remercie M. ATSAMA Guy Thierry, Directeur Général d'AG
+Technologies, pour m'avoir accueilli au sein de l'entreprise et permis
+de mener ce projet dans de bonnes conditions.
+
+Je remercie le corps professoral de l'École Nationale Supérieure
+Polytechnique de Yaoundé, en particulier les enseignants du
+département de Génie Informatique, pour la formation reçue tout au
+long de mon parcours.
+
+Je remercie l'Ing. MBIAMY Steven, ainsi que MOFFO Stevinie, HAPKET
+Darelle et YAMENJEU Charline, pour leur disponibilité et leur
+collaboration durant le stage, et plus largement l'ensemble de
+l'équipe d'AGT pour son accueil.
+
+Je remercie ma famille et mes camarades pour leur soutien
+constant tout au long de mon parcours académique.=== FIN FICHIER : front/remerciements.tex ===
 
 === FICHIER : glossaire.tex ===
 % ============================================================
-% glossaire.tex - Acronymes utilisés dans le rapport
+% glossaire.tex
+% Acronymes utilisés dans le rapport
 % Ajouter une ligne ici suffit à mettre à jour la liste automatiquement
+% NOTE : une entrée n'apparaît dans "Liste des abréviations" que si
+% elle est appelée au moins une fois via \gls{clé} dans un chapitre.
 % ============================================================
-\newacronym{api}{API}{Application Programming Interface}
+
+% --- Déjà présents avant cette session ---
+\newacronym{agt}{AGT}{AG Technologies}
+\newacronym{vps}{VPS}{Virtual Private Server}
 \newacronym{rbac}{RBAC}{Role-Based Access Control}
 \newacronym{ibac}{IBAC}{Identity-Based Access Control}
 \newacronym{ssh}{SSH}{Secure Shell}
 \newacronym{orm}{ORM}{Object-Relational Mapping}
 \newacronym{ci}{CI/CD}{Intégration continue / Déploiement continu}
-\newacronym{vps}{VPS}{Virtual Private Server}=== FIN FICHIER : glossaire.tex ===
+
+% --- Réseau / protocoles ---
+\newacronym{https}{HTTPS}{HyperText Transfer Protocol Secure}
+\newacronym{dns}{DNS}{Domain Name System}
+\newacronym{ssl}{SSL}{Secure Sockets Layer}
+
+% --- Systèmes / infrastructure ---
+\newacronym{cpu}{CPU}{Central Processing Unit}
+\newacronym{ram}{RAM}{Random Access Memory}
+\newacronym{lxc}{LXC}{Linux Containers}
+\newacronym{asgi}{ASGI}{Asynchronous Server Gateway Interface}
+
+% --- Cryptographie ---
+\newacronym{rsa}{RSA}{Rivest-Shamir-Adleman}
+\newacronym{ecdsa}{ECDSA}{Elliptic Curve Digital Signature Algorithm}
+\newacronym{hmac}{HMAC}{Hash-based Message Authentication Code}
+
+% --- Données / interface ---
+\newacronym{jsonl}{JSONL}{JavaScript Object Notation Lines}=== FIN FICHIER : glossaire.tex ===
 
 === FICHIER : main.tex ===
 % ============================================================
@@ -2290,12 +2465,14 @@ Tuteur académique : & \rapporttuteuracademique \\
 % ---------- Pages liminaires (numérotation romaine) ----------
 \pagenumbering{roman}
 \input{front/page_garde}
+\input{front/page_garde_sans_bordure}
+\input{front/dedicace}
 \input{front/remerciements}
 
+\input{front/liste_abreviations}
 \tableofcontents
 \listoffigures
 \listoftables
-\input{front/liste_abreviations}
 
 % ---------- Corps du rapport (numérotation arabe) ----------
 \clearpage
