@@ -1,25 +1,21 @@
-% ============================================================
-% front/dedicace.tex
-% Page de dedicace : texte volontairement minimal, mise en valeur
-% par un motif ornemental deja utilise (page de garde), cf.
-% config/04_ornements.tex pour la taille (\agtOrnDedicaceSize).
-% ============================================================
 \chapter*{Dédicace}
 \addcontentsline{toc}{chapter}{Dédicace}
-%\thispagestyle{empty}
 
 \vspace*{\fill}
 
 \begin{center}
-{\color{reportprimary}\pgfornament[width=\agtOrnDedicaceSize]{\agtOrnCorner}}
-
-\vspace{1.4cm}
-
-{\Large \itshape À mes parents.}
-
-\vspace{1.4cm}
-
-{\color{reportprimary}\pgfornament[width=\agtOrnDedicaceSize]{\agtOrnCorner}}
+\begin{tikzpicture}
+  % Trait haut et bas très fins avec nœud central
+  \draw[line width=0.6pt, color=reportprimary] (-3,0) -- (3,0);
+  \node[fill=white, inner sep=6pt] at (0,0) {\color{reportprimary}\pgfornament[width=0.8cm]{9}};
+  
+  % Texte au centre
+  \node at (0,-1.2) {\Large\itshape À mes parents.};
+  
+  \draw[line width=0.6pt, color=reportprimary] (-3,-2.4) -- (3,-2.4);
+  \node[fill=white, inner sep=6pt] at (0,-2.4) {\color{reportprimary}\pgfornament[width=0.8cm]{9}};
+\end{tikzpicture}
 \end{center}
 
 \vspace*{\fill}
+\newpage

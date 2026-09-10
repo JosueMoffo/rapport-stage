@@ -1,6 +1,94 @@
 \chapter*{Conclusion générale}
 \addcontentsline{toc}{chapter}{Conclusion générale}
 
-% TODO :
-% - Bilan personnel (compétences techniques et humaines)
-% - Apport du stage pour votre projet professionnel
+\section*{Rappel du contexte et de la démarche}
+
+Ce rapport a présenté la conception et l'implémentation d'AGT Infra, une
+plateforme interne de gestion d'infrastructure et de supervision
+développée au sein d'AG Technologies. Le constat de départ était simple
+mais concret : un parc de serveurs physiques hébergeant des applications
+critiques, piloté de façon manuelle et dispersée, sans point de contrôle
+unique ni traçabilité homogène des actions effectuées.
+
+L'état de l'art a montré qu'aucune solution existante ne réunissait
+simultanément l'ensemble des contraintes propres au contexte d'AG
+Technologies, ce qui a justifié un développement interne. L'analyse et
+la conception ont ensuite posé les fondations du système : une
+architecture qui pilote des briques externes déjà éprouvées sans jamais
+les réimplémenter, et un modèle de contrôle d'accès dynamique où un
+refus explicite prévaut toujours sur une autorisation plus large.
+
+\section*{Bilan du projet}
+
+L'implémentation a confirmé la viabilité de cette conception. Sur les
+quatorze domaines fonctionnels définis, la majorité est aujourd'hui
+réalisée et vérifiée en conditions réelles :
+
+\begin{itemize}
+  \item gestion des serveurs et des conteneurs Docker ;
+  \item déploiement continu, avec retour arrière automatique en cas
+        d'échec ;
+  \item publication applicative sécurisée, sous HTTPS ;
+  \item supervision autonome par agent dédié ;
+  \item contrôle d'accès entièrement piloté en base de données.
+\end{itemize}
+
+Certaines limites restent assumées, en particulier l'absence de
+sauvegardes automatiques, de montée en charge automatique et d'un
+moteur de sécurité actif, qui demeurent les axes les plus critiques pour
+une éventuelle suite du projet.
+
+\section*{Compétences techniques développées}
+
+Ce stage a permis de mettre en pratique un cycle de développement
+rigoureux (audit, plan, implémentation, test) sur un projet de taille
+réelle, ainsi que de concevoir et manipuler des mécanismes qui dépassent
+le cadre d'un exercice académique classique :
+
+\begin{itemize}
+  \item conception d'un système de contrôle d'accès à la fois flexible
+        et sûr (RBAC/IBAC dynamique) ;
+  \item orchestration de serveurs et de conteneurs à distance, sans
+        agent installé sur les cibles ;
+  \item mise en place de flux temps réel par WebSocket ;
+  \item sécurisation d'évènements entrants par signature (webhooks) ;
+  \item conception d'une architecture volontairement dépourvue de tâche
+        de fond côté serveur.
+\end{itemize}
+
+\section*{Bilan personnel}
+
+Au delà des aspects techniques, ce stage a été l'occasion de développer
+des compétences méthodologiques et humaines, en particulier :
+
+\begin{itemize}
+  \item mieux découper un travail complexe en étapes maîtrisables,
+        plutôt que de l'aborder d'un seul bloc ;
+  \item adopter une pensée orientée besoin, en partant systématiquement
+        de ce qu'un module doit accomplir avant de choisir comment le
+        construire ;
+  \item savoir remettre en question un choix déjà fait, lorsque
+        l'expérience montre qu'il ne tient plus face au besoin réel ;
+  \item être plus rigoureux sur la documentation, condition nécessaire
+        pour reprendre un travail complexe après une interruption ;
+  \item recourir à des maquettes pour se donner une vue d'ensemble,
+        dès qu'un sujet devient trop complexe pour être abordé
+        directement dans le code.
+\end{itemize}
+
+Travailler avec une équipe, au delà du travail individuel sur le code,
+a également demandé une capacité de remise en question, une
+compréhension approfondie des choix effectués (chaque décision devant
+pouvoir être justifiée), ainsi qu'une rigueur de ponctualité dans le
+suivi des échanges et des livraisons.
+
+\section*{Apport pour le projet professionnel}
+
+Ce stage a confirmé et affiné mon orientation professionnelle. Avant
+cette expérience, je me dirigeais vers un profil de développeur backend
+et SecOps. Ce projet m'a permis de découvrir le \textit{platform
+engineering}, une discipline qui prolonge naturellement le DevOps en
+construisant des plateformes internes destinées à outiller d'autres
+équipes, et que je considère désormais comme une direction d'avenir pour
+ce domaine. Cette découverte oriente aujourd'hui plus précisément la
+suite de mon parcours professionnel.

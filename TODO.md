@@ -23,9 +23,14 @@ Statuts : `[ ]` a faire · `[~]` en cours · `[x]` termine.
    - 4.3 Realisations par module [fait]
    - 4.4 Difficultes rencontrees [fait]
    - 4.5 Deploiement (diagramme de deploiement) [fait]
-6. Resultats et bilan (resultats, workflows, captures d'ecran, tests,
-   limites/perspectives, risques)
-7. Conclusion generale
+6. Resultats et bilan [fait]
+   - Resultats obtenus (tableau synthese 14 domaines) [fait]
+   - Parcours applicatif de bout en bout (diagramme d'activite) [fait]
+   - Apercu de l'application (8 captures commentees) [fait]
+   - Tests et validation (2 depots de test crees specifiquement) [fait]
+   - Limites actuelles et perspectives [fait]
+   - Risques et plans de contournement [fait]
+7. Conclusion generale [fait]
 
 Diagrammes reels du chapitre 3 (9, tous ancres dans le cahier des
 charges) : contexte, cas d'utilisation RBAC, cas d'utilisation
@@ -33,14 +38,13 @@ Serveurs-Conteneurs, architecture generale, package, classes RBAC/IBAC,
 classes Serveurs-Conteneurs, etat-transition publication,
 etat-transition connectivite serveur, sequence resolution permission,
 sequence connexion serveur, sequence deploiement. Diagramme de
-deploiement physique du chapitre 4 (section 4.5, generique/portable,
-base sur `12-8-GUIDE_DEPLOIEMENT_AGT_INFRA.md` sans specificite
-d'hebergeur). Diagrammes d'activite restants au chapitre 6.
+deploiement physique du chapitre 4 (section 4.5, generique/portable).
+Diagramme d'activite du chapitre 5 (parcours brancher/deployer/publier).
 
-Images stockees dans `assets/diagrams/`, convention `NN-nom.png` (NN =
+Images stockees dans `assets/diagrams/` (diagrammes) et
+`assets/screenshots/` (captures d'ecran), convention `NN-nom.png` (NN =
 numero de chapitre reel). Noms de fichiers en ASCII, sans accent
-(compilation LaTeX). Icones technologiques (logos) dans
-`assets/icons/`, convention `NN-icone_nom.png`.
+(compilation LaTeX). Icones technologiques dans `assets/icons/`.
 
 
 ---
@@ -240,20 +244,27 @@ de les repeter a chaque session.
 
 ## Chapitre "Resultats et bilan"
 
-- [ ] Resultats obtenus
-- [ ] Workflows (diagrammes d'activite)
-- [ ] Captures d'ecran de l'application AGT Infra
-- [ ] Tests et validation (Swagger, alembic, npm build)
-- [ ] Limites actuelles et perspectives (backup, montee en charge
+- [x] Resultats obtenus
+- [x] Workflows (diagrammes d'activite)
+- [x] Captures d'ecran de l'application AGT Infra
+- [x] Limites actuelles et perspectives (backup, montee en charge
       automatique, securite active, generalisation IBAC, resilience et
       point unique de defaillance pour MboaPay)
-- [ ] Section risques et plans de contournement (source : cahier des
+- [x] Section risques et plans de contournement (source : cahier des
       charges, table des risques)
+- [ ] Relecture finale du chapitre par Josue
 
 ## Conclusion generale
 
-- [ ] Bilan personnel (competences techniques et humaines)
-- [ ] Apport du stage pour le projet professionnel
+- [x] Rappel du contexte et de la demarche
+- [x] Bilan du projet (liste des domaines realises + limites assumees)
+- [x] Competences techniques developpees (liste)
+- [x] Bilan personnel (methode de travail, remise en question, travail
+      en equipe) - contenu fourni par Josue
+- [x] Apport pour le projet professionnel (confirmation orientation
+      DevOps/SecOps, decouverte du platform engineering) - contenu
+      fourni par Josue
+- [ ] Relecture finale par Josue
 
 ## Annexes
 

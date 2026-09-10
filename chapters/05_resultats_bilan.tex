@@ -69,11 +69,21 @@ Les captures suivantes illustrent l'interface réelle d'AGT Infra, sur
 les écrans les plus représentatifs des domaines déjà détaillés dans ce
 rapport.
 
+Le tableau de bord donne une vue d'ensemble immédiate du parc : nombre
+de serveurs connectés, conteneurs actifs, pipelines de déploiement en
+cours, applications en erreur et alertes actives, avec un état détaillé
+par serveur.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.85\linewidth]{assets/screenshots/05-screenshot_tableau_de_bord.png}
   \caption{Tableau de bord}
 \end{figure}
+
+L'écran de gestion des rôles et des accès liste les membres de l'équipe,
+le rôle qui leur est affecté, ainsi que les permissions directes
+accordées ou refusées à une personne précise, avec leur portée
+(ressource concernée) et leur statut ALLOW ou DENY.
 
 \begin{figure}[H]
   \centering
@@ -81,11 +91,21 @@ rapport.
   \caption{Gestion des rôles et des permissions directes}
 \end{figure}
 
+Ce formulaire illustre l'octroi d'une permission directe : la
+permission concernée, son statut, sa portée restreinte à une ressource
+précise plutôt que globale, et un motif obligatoire justifiant cette
+dérogation.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.7\linewidth]{assets/screenshots/05-screenshot_nouvelle-permission-directe.png}
   \caption{Octroi d'une permission directe scopée à un serveur précis}
 \end{figure}
+
+L'écran d'orchestration des déploiements présente l'ensemble des
+configurations existantes sous forme de pipelines, chacun rattaché à un
+dépôt, une branche, un serveur et un mode d'orchestration (Dockerfile ou
+Docker Compose), avec le résultat de sa dernière exécution.
 
 \begin{figure}[H]
   \centering
@@ -93,11 +113,20 @@ rapport.
   \caption{Orchestration des déploiements}
 \end{figure}
 
+Cette fenêtre correspond au suivi en direct d'un déploiement déclenché
+manuellement : les informations de contexte (branche, serveur, durée,
+phase en cours) apparaissent en en-tête, tandis que la sortie de chaque
+commande exécutée à distance s'affiche au fil de l'eau dans la console.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.7\linewidth]{assets/screenshots/05-screenshot_log-de-deploiement-en-cours.png}
   \caption{Suivi en direct d'un déploiement}
 \end{figure}
+
+La fiche détail d'un serveur affiche ses métriques de charge (CPU, RAM,
+disque) sous forme de jauges, complétées d'un historique graphique sur
+une période choisie, à partir des données collectées à la demande.
 
 \begin{figure}[H]
   \centering
@@ -105,11 +134,21 @@ rapport.
   \caption{Métriques d'un serveur}
 \end{figure}
 
+La console web ouvre une session interactive directement depuis
+l'interface, sans ouverture d'un client SSH séparé : la capture montre
+une session active sur un serveur, avec l'exécution réelle de commandes
+système.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.7\linewidth]{assets/screenshots/05-screenshot_console-web.png}
   \caption{Console web ouverte sur un serveur}
 \end{figure}
+
+Enfin, la documentation intégrée est consultable directement dans
+l'interface, organisée par domaine, sans nécessiter de quitter
+l'application pour accéder aux prérequis ou aux instructions
+d'installation d'un module.
 
 \begin{figure}[H]
   \centering
