@@ -254,6 +254,12 @@ de les repeter a chaque session.
       charges, table des risques)
 - [ ] Relecture finale du chapitre par Josue
 
+## Bibliographie
+
+- [x] 3 sources techniques initiales (FastAPI, SQLAlchemy, Netdata)
+- [x] 17 sources ajoutees pour le chapitre Etat de l'art
+- [ ] Completer au fil de la redaction des chapitres suivants
+
 ## Conclusion generale
 
 - [x] Rappel du contexte et de la demarche
@@ -268,13 +274,18 @@ de les repeter a chaque session.
 
 ## Annexes
 
-- [ ] Annexe A : selectionner les extraits de code complementaires
-
-## Bibliographie
-
-- [x] 3 sources techniques initiales (FastAPI, SQLAlchemy, Netdata)
-- [x] 17 sources ajoutees pour le chapitre Etat de l'art
-- [ ] Completer au fil de la redaction des chapitres suivants
+- [x] Annexe A : 3 extraits de code representatifs, choisis pour
+      illustrer des mecanismes deja modelises dans le rapport plutot que
+      du code arbitraire :
+  - [x] Orchestration des phases de deploiement + rollback automatique
+        (deployment_engine.py, _build_steps + boucle d'execution)
+  - [x] Synchronisation Git idempotente (deployment_phases.py,
+        run_git_sync_phase, capture PREV_COMMIT)
+  - [x] Resolution d'une permission, refus explicite prioritaire
+        (deps.py, check_permission, 5 etapes alignees sur le diagramme
+        de sequence du chapitre 3)
+- [ ] Annexe B : demonstration video (lien(s) YouTube d'AGT Infra), en
+      attente de publication de la video par Josue
 
 ## Relecture finale (a faire en dernier)
 
@@ -337,3 +348,23 @@ de les repeter a chaque session.
   Prochaine session : Chapitre "Resultats et bilan" (resultats obtenus,
   workflows/diagrammes d'activite, captures d'ecran, tests et
   validation, limites/perspectives, section risques).
+
+- 2026-09-10 : Ajout des sections liminaires manquantes : Resume
+  (francais) et Abstract (anglais), chacun avec mots-cles, rediges par
+  synthese du rapport existant, sans fait nouveau. Glossaire de termes
+  ajoute (distinct de la liste d'abreviations existante), 19 entrees
+  definies a partir d'un modele fourni par Josue, avec correction d'une
+  entree obsolete ("Role") pour rester coherent avec la refonte RBAC/IBAC
+  dynamique deja actee aux chapitres 3 et 4 (jeu de roles fixes remplace
+  par un seul role immuable, le reste compose librement). `main.tex` mis
+  a jour (front/resume, front/abstract, front/glossaire, glossaire_termes).
+  Annexe A redigee integralement : 3 extraits de code representatifs
+  fournis par Josue (deployment_engine.py, deployment_phases.py,
+  deps.py), choisis pour illustrer des mecanismes deja modelises dans le
+  rapport (sequence de phases + rollback, synchronisation Git idempotente,
+  algorithme de resolution de permission deny-first). Annexe B laissee en
+  attente (video de demonstration non encore publiee par Josue).
+  **Rapport complet, y compris pages liminaires et annexes, a l'exception
+  de l'annexe B (video) et de la relecture finale.**
+  Prochaine session : relecture finale complete (voir section dediee),
+  puis integration du lien video en annexe B des sa publication.

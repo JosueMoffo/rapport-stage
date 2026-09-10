@@ -6,7 +6,10 @@
 \documentclass[12pt, a4paper]{report}
 
 \input{config/00_preambule}
-\input{glossaire}
+
+% Chargement des définitions de glossaires dans le préambule
+\input{glossaire}        % Acronymes
+\input{glossaire_termes} % Définitions des termes
 
 \begin{document}
 
@@ -21,6 +24,7 @@
 \input{front/abstract}
 
 \input{front/liste_abreviations}
+\input{front/glossaire}
 \tableofcontents
 \listoffigures
 \listoftables
@@ -37,11 +41,13 @@
 \include{chapters/05_resultats_bilan}
 \include{chapters/06_conclusion}
 
-% ---------- Annexes ----------
-\appendix
-\include{annexes/annexe_a}
-
 % ---------- Bibliographie ----------
 \printbibliography[title={Bibliographie et webographie}]
+
+% ---------- Annexes ----------
+\clearpage
+\pagenumbering{roman}
+\appendix
+\include{annexes/annexe_a}
 
 \end{document}

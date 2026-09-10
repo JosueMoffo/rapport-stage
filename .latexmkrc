@@ -1,3 +1,5 @@
+$clean_ext .= ' %R.gls %R.glo %R.glg %R.acr %R.acn %R.alg';
+
 add_cus_dep('glo', 'gls', 0, 'run_makeglossaries');
 add_cus_dep('acn', 'acr', 0, 'run_makeglossaries');
 

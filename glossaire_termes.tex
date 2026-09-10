@@ -1,0 +1,91 @@
+% ============================================================
+% glossaire_termes.tex
+% Définitions des termes et expressions utilisés dans le rapport
+% (distinct de glossaire.tex, qui ne porte que les acronymes)
+% NOTE : une entrée n'apparaît dans le glossaire que si elle est
+% appelée au moins une fois via \gls{clé} dans un chapitre, sauf
+% usage de \glsaddall (voir front/glossaire.tex).
+% ============================================================
+
+\newglossaryentry{serveurphysique}{
+  name={Serveur},
+  description={Machine hôte, branchée à l'outil, hébergeant
+    des conteneurs et exposant ses ressources à la supervision}
+}
+
+\newglossaryentry{conteneur}{
+  name={Conteneur},
+  description={Unité d'exécution isolée hébergeant une application,
+    rattachée à un serveur hôte et à un environnement}
+}
+
+\newglossaryentry{application}{
+  name={Application},
+  description={Logiciel métier exécuté dans un ou plusieurs conteneurs}
+}
+
+\newglossaryentry{depot}{
+  name={Dépôt},
+  description={Source de code versionnée, indépendante de la ressource
+    physique sur laquelle elle est déployée}
+}
+
+\newglossaryentry{deploiement}{
+  name={Déploiement},
+  description={Mise à disposition d'une application à partir d'un
+    dépôt, activable ou désactivable par serveur et par dépôt}
+}
+
+\newglossaryentry{sauvegarde}{
+  name={Sauvegarde},
+  description={Copie horodatée, restaurable et vérifiée d'une base de
+    données, activable ou désactivable par serveur}
+}
+
+\newglossaryentry{metrique}{
+  name={Métrique},
+  description={Mesure de consommation d'une ressource (processeur,
+    mémoire, disque) relevée à la demande ou en continu}
+}
+
+\newglossaryentry{seuil}{
+  name={Seuil},
+  description={Valeur limite définie pour une ressource, servant de
+    référence au déclenchement d'une alerte}
+}
+
+\newglossaryentry{alerte}{
+  name={Alerte},
+  description={Signalement déclenché au franchissement d'un seuil}
+}
+
+\newglossaryentry{supervision}{
+  name={Supervision},
+  description={Surveillance centralisée de l'état et des métriques de
+    l'ensemble du parc, à la demande ou en continu}
+}
+
+\newglossaryentry{consoleweb}{
+  name={Console web},
+  description={Moyen d'exécuter des commandes sur un serveur ou un
+    conteneur directement depuis l'interface, dont chaque session est
+    intégralement journalisée}
+}
+
+\newglossaryentry{perimetre}{
+  name={Périmètre (scope)},
+  description={Étendue sur laquelle porte une permission : globale, ou
+    restreinte à un serveur, un conteneur ou un dépôt précis}
+}
+
+\newglossaryentry{permission}{
+  name={Permission},
+  description={Droit d'effectuer une action donnée, dans un périmètre
+    défini}
+}
+
+\newglossaryentry{secret}{
+  name={Secret},
+  description={Donnée sensible propre à une ressource (clé SSH, jeton),
+    chiffrée et non restituée en clair par l'API}
+}

@@ -1,4 +1,166 @@
 \chapter{Annexe A : Extraits de code complémentaires}
 \label{annexe:code}
+
+\agtlettrine{C}ette annexe rassemble trois extraits de code
+représentatifs du projet AGT Infra, choisis pour illustrer concrètement
+des mécanismes déjà décrits de façon abstraite dans le corps de ce
+rapport : la logique de programmation plutôt que son détail exhaustif.
 \minisommaire
-% TODO : extraits longs, diagrammes complets, glossaire technique détaillé
+
+\section{Orchestration des phases de déploiement et rollback automatique}
+
+L'extrait suivant, tiré de \texttt{deployment\_engine.py}, montre la
+construction de la séquence de phases d'un déploiement ainsi que le
+déclenchement du retour arrière automatique lorsque la phase de
+vérification sanitaire échoue, comportement déjà détaillé au
+chapitre~\ref{chap:realisation}.
+
+\begin{lstlisting}[language=Python]
+def _build_steps(log_writer, server, credentials, configuration, env_vars):
+    return [
+        (DeploymentPhase.SSH_CONNECTION,
+         lambda: deployment_phases.run_ssh_connection_phase(log_writer, server, credentials)),
+        (DeploymentPhase.PRECHECK,
+         lambda: deployment_precheck.run_precheck_phase(log_writer, server, credentials, configuration)),
+        (DeploymentPhase.GIT_SYNC,
+         lambda: deployment_phases.run_git_sync_phase(log_writer, server, credentials, configuration)),
+        (DeploymentPhase.ENV_GENERATION,
+         lambda: deployment_phases.run_env_generation_phase(
+             log_writer, server, credentials, configuration, env_vars
+         )),
+        (DeploymentPhase.DOCKER_BUILD,
+         lambda: deployment_phases.run_build_and_start_phase(log_writer, server, credentials, configuration)),
+        (DeploymentPhase.HEALTHCHECK,
+         lambda: deployment_phases.run_healthcheck_phase(log_writer, server, credentials, configuration)),
+    ]
+
+# Extrait de la boucle d'execution (_execute_job) :
+for phase, step_fn in steps:
+    execution.current_phase = phase
+    await db.commit()
+    result = await step_fn()
+    if not result.success:
+        await deployment_execution_lifecycle.fail_execution(
+            db, execution, job, log_writer, started_at, result.last_error_line
+        )
+        if phase == DeploymentPhase.HEALTHCHECK and deployment_rollback.should_attempt_rollback(execution):
+            await deployment_rollback.run_rollback(db, execution, configuration, server, credentials)
+        return
+    if phase == DeploymentPhase.GIT_SYNC and result.previous_commit_sha:
+        execution.previous_commit_sha = result.previous_commit_sha
+\end{lstlisting}
+
+Chaque phase est représentée par une fonction anonyme plutôt que par un
+appel direct, afin qu'aucune coroutine ne soit construite avant que la
+phase précédente n'ait effectivement réussi. Seul un échec survenant
+précisément à la phase de vérification sanitaire déclenche un rollback :
+un échec à une autre phase (connexion SSH, synchronisation Git) interrompt
+simplement l'exécution, sans tentative de retour en arrière, puisqu'aucun
+changement n'aurait encore été appliqué au conteneur en service.
+
+\section{Synchronisation Git idempotente}
+
+L'extrait suivant, tiré de \texttt{deployment\_phases.py}, montre la
+phase de synchronisation du dépôt Git. Sa particularité est d'être
+rejouable sans effet différent, qu'un dépôt existe déjà sur le serveur
+cible ou non, et de capturer le commit précédent pour permettre un
+rollback ultérieur.
+
+\begin{lstlisting}[language=Python]
+command = (
+    f'export GIT_SSH_COMMAND="ssh -i {key_path} -o StrictHostKeyChecking=no"; '
+    f'mkdir -p {path}; '
+    f'if [ -d {path}/.git ]; then '
+    f'cd {path} && echo "PREV_COMMIT:$(git rev-parse HEAD)" '
+    f'&& git fetch origin {branch} '
+    f'&& git reset --hard origin/{branch} '
+    f'&& git clean -fd; '
+    f'else '
+    f'git clone --branch {branch} --single-branch {clone_url} {path} '
+    f'&& echo "PREV_COMMIT:none"; '
+    f'fi'
+)
+ok, output = await run_and_log(log_writer, "GIT_SYNC", server, credentials, command)
+if not ok:
+    return PhaseResult(success=False, last_error_line=last_nonempty_line(output))
+
+previous_commit_sha = _extract_previous_commit(output)
+return PhaseResult(success=True, previous_commit_sha=previous_commit_sha)
+\end{lstlisting}
+
+La commande distante teste d'abord si un dépôt existe déjà à l'emplacement
+cible. Si c'est le cas, elle imprime le commit courant avant de le
+réinitialiser sur la dernière version de la branche suivie ; sinon, elle
+clone le dépôt pour la première fois. Le marqueur textuel
+\texttt{PREV\_COMMIT} est ensuite extrait de la sortie de la commande,
+côté serveur applicatif, pour être conservé sur l'exécution : c'est cette
+valeur qui permet à un rollback ultérieur de revenir précisément au
+dernier commit connu comme stable.
+
+\section{Résolution d'une permission (refus explicite prioritaire)}
+
+L'extrait suivant, tiré de \texttt{deps.py}, implémente l'algorithme de
+résolution d'une permission déjà modélisé par le diagramme de séquence du
+chapitre~\ref{chap:etude-technique} : un refus explicite l'emporte
+toujours sur une autorisation, qu'elle soit directe ou portée par un
+rôle.
+
+\begin{lstlisting}[language=Python]
+async def check_permission(
+    db: AsyncSession,
+    user: User,
+    permission_key: str,
+    scope_type: ScopeType | None = None,
+    resource_id: UUID | None = None,
+) -> bool:
+    # Etape 1 : SUPER_ADMIN, bypass absolu
+    if await _is_super_admin(db, user.id):
+        return True
+
+    direct_perms = (await db.execute(
+        select(DirectPermission)
+        .join(Permission, Permission.id == DirectPermission.permission_id)
+        .where(DirectPermission.user_id == user.id, Permission.key == permission_key)
+    )).scalars().all()
+
+    # Etape 2 : refus explicite, prioritaire sur tout
+    for perm in direct_perms:
+        if perm.status != PermissionStatus.DENY:
+            continue
+        if _scope_matches(perm.scope_type, perm.resource_id, resource_id,
+                           scope_type, enforce_expected_scope=False):
+            return False
+
+    # Etape 3 : autorisation directe
+    for perm in direct_perms:
+        if perm.status != PermissionStatus.ALLOW:
+            continue
+        if _scope_matches(perm.scope_type, perm.resource_id, resource_id,
+                           scope_type, enforce_expected_scope=True):
+            return True
+
+    # Etape 4 : autorisation portee par un role assigne
+    assignments = (await db.execute(
+        select(RoleAssignment)
+        .join(RolePermission, RolePermission.role_id == RoleAssignment.role_id)
+        .join(Permission, Permission.id == RolePermission.permission_id)
+        .where(RoleAssignment.user_id == user.id, Permission.key == permission_key)
+    )).scalars().all()
+    for assignment in assignments:
+        if _scope_matches(assignment.scope_type, assignment.resource_id, resource_id,
+                           scope_type, enforce_expected_scope=True):
+            return True
+
+    # Etape 5 : refus par defaut
+    return False
+\end{lstlisting}
+
+Les cinq étapes suivent exactement l'ordre déjà présenté au
+chapitre~\ref{chap:etude-technique} : seul le rôle immuable court-circuite
+entièrement la vérification, un refus explicite est toujours contrôlé
+avant toute autorisation, et l'absence de toute correspondance se
+résout par un refus par défaut plutôt que par une autorisation implicite.
+
+\section{Annexe B : démonstration vidéo}
+% TODO : lien(s) YouTube vers la demonstration video d'AGT Infra, a
+% publier par Josue avant integration dans cette section.
