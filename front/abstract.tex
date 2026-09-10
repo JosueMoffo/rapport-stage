@@ -1,0 +1,32 @@
+% ============================================================
+% front/abstract.tex
+% ============================================================
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+AG Technologies, a Cameroonian company specializing in digital
+solutions, operated a fleet of physical servers hosting critical
+applications, managed manually and separately, with no single point of
+control and no consistent traceability of actions performed. This
+observation led to the design of AGT Infra, an internal platform that
+centralizes the management of this fleet from a single entry point.
+
+AGT Infra positions itself as an orchestrator rather than an engine: it
+drives already proven building blocks (Docker, SSH, GitHub, Nginx,
+Certbot) without ever reimplementing them, relying on a dynamic access
+control model (RBAC/IBAC) in which an explicit denial always takes
+precedence over a broader grant, together with systematic traceability
+of every sensitive action. The tool covers server and Docker container
+management, continuous deployment from Git repositories, secure
+application publication under HTTPS, autonomous monitoring through a
+dedicated agent, and an integrated web console.
+
+Most of these domains are now implemented and verified under real
+conditions. Automated backups, automatic scaling, and an active security
+engine remain identified needs that have not yet been implemented, and
+constitute the main areas for future development of the project.
+
+\bigskip
+\noindent\textbf{Keywords:} infrastructure management, DevOps, dynamic
+access control (RBAC/IBAC), continuous deployment, containerization,
+monitoring, SSH orchestration.
