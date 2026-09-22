@@ -30,15 +30,13 @@ diffuse plusieurs flux temps réel (journaux, console web). FastAPI
 propose nativement les deux : une gestion asynchrone des requêtes et un
 support intégré des WebSocket, sans bibliothèque tierce. \\
 \addlinespace
-\includegraphics[height=1cm]{assets/icons/04-icone_postgresql.png} & PostgreSQL et SQLAlchemy 2.0 &
+\includegraphics[height=1cm]{assets/icons/04-icone_postgresql.png} & PostgreSQL &
 La base de données relationnelle porte des entités aux relations
-riches (utilisateurs, rôles, permissions, portées). Un ORM mature,
-compatible avec l'écriture asynchrone de FastAPI, évite d'écrire du SQL
-brut pour chaque requête. \\
+riches (utilisateurs, rôles, permissions, portées).\\
 \addlinespace
-(logo non disponible) & Alembic &
-Le modèle de données évolue au fil de l'implémentation du projet. Alembic
-permet de versionner chaque évolution du schéma sans perte de données
+\includegraphics[height=1cm]{assets/icons/04-icone_sqlalchemy.png} & SQLAlchemy et Alembic &
+ Un ORM mature, compatible avec l'écriture asynchrone de FastAPI, évite d'écrire du SQL
+brut pour chaque requête. Alembic permet de versionner chaque évolution du schéma sans perte de données
 sur un environnement déjà en service. \\
 % \addlinespace
 % (logo non disponible) & Pydantic v2 &
@@ -74,7 +72,7 @@ adapter dynamiquement l'affichage selon les permissions reçues de l'API.
 Un modèle par composants facilite ce masquage conditionnel, écran par
 écran. \\
 \addlinespace
-(logo non disponnible) & TypeScript &
+\includegraphics[height=1cm]{assets/icons/04-icone_typescript.png} & TypeScript &
 L'interface consomme des contrats de données définis côté backend. Le typage statique évite
 une classe entière d'erreurs d'intégration entre les deux couches. \\
 \addlinespace
@@ -85,7 +83,7 @@ module par module, tout au long des sessions d'implémentation. Vite réduit le
 temps de rechargement à chaque modification, ce qui a compté sur un
 développement aussi séquentiel. \\
 \addlinespace
-(logo non disponible) & Tailwind CSS &
+\includegraphics[height=1cm]{assets/icons/04-icone_tailwind.png} & Tailwind CSS &
 L'interface gère simultanément un mode clair et un mode sombre, avec
 une palette sémantique de statuts (succès, erreur, avertissement).
 Tailwind permet de centraliser ces jetons de style sans dupliquer de
@@ -118,7 +116,9 @@ Le déploiement continu se déclenche par un évènement webhook signé,
 émis par le dépôt du projet à déployer. GitHub héberge ces dépôts et
 fournit ce mécanisme de webhook nativement. \\
 \addlinespace
-(logo non fourni) & Nginx / Certbot &
+\includegraphics[height=1cm]{assets/icons/04-icone_nginx.png}
+\includegraphics[height=1cm]{assets/icons/04-icone_certbot.png} &
+Nginx / Certbot &
 La publication applicative expose une application déjà déployée, sous
 HTTPS, sans que l'outil ne réimplémente de serveur web ni d'autorité de
 certification. Nginx et Certbot, pilotés par SSH comme le reste,
@@ -196,8 +196,7 @@ et l'intervention de plusieurs domaines fonctionnels en parallèle.
 \bigskip
 \noindent\textit{Note : une partie de ce cycle de développement,
 notamment la relecture de code existant, a été accélérée par l'usage d'un assistant d'intelligence
-artificielle, sous la supervision et la validation systématique de
-l'auteur à chaque étape.}
+artificielle, sous la supervision et la validation systématique du développeur à chaque étape.}
 
 
 
@@ -385,12 +384,9 @@ avec une consultation partielle légitime via des permissions restreintes
 \subsection{Montée en charge du périmètre en cours de stage}
 
 \begin{itemize}
-  \item \textbf{Constat} : la mission confiée portait initialement sur
-        la prise en main d'outils existants, avant de porter sur ce qui
-        est devenu AGT Infra. Le périmètre du projet a ensuite continué
+  \item \textbf{Constat} : Le périmètre du projet a continué
         de s'étendre au fil des sessions, avec l'apparition de domaines
-        entiers non prévus au départ (publication applicative,
-        supervision continue).
+        entiers non prévus au départ.
   \item \textbf{Solution apportée} : cette évolution a nécessité de
         revoir la feuille de route à plusieurs reprises plutôt que de
         suivre un plan figé dès le premier jour.
