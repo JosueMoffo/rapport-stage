@@ -25,5 +25,5 @@ build/
 *.fls
 *.fdb_latexmk
 *.synctex.gz
-scan_structure_raport.sh
-scan_structure_raport.txt
+scan_structure_rapport.sh
+scan_structure_rapport.txt
