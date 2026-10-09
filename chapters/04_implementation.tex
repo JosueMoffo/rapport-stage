@@ -258,25 +258,33 @@ la même configuration. Au démarrage du service, les exécutions restées
 bloquées à l'état "en cours" à la suite d'un arrêt inattendu sont
 détectées et réconciliées, plutôt que laissées indéfiniment ouvertes.
 
-\textbf{Séquence de phases.} Chaque déploiement traverse les phases
-suivantes, dans un ordre strict :
+\textbf{Séquence de phases.} Chaque déploiement traverse huit phases,
+dans un ordre strict :
 
 \begin{enumerate}
   \item connexion SSH au serveur cible ;
-  \item vérifications préalables (précondition), avec possibilité
-        d'exécution à blanc ;
+  \item vérifications préalables : présence de Docker, droit d'écriture
+        dans le répertoire cible et, pour un projet Docker Compose,
+        version de Docker Compose prise en charge ;
   \item synchronisation du dépôt Git, conçue pour être rejouée sans
         effet différent si elle est répétée ;
   \item génération du fichier de variables d'environnement, à partir de
-        secrets déchiffrés au moment de l'exécution seulement ;
-  \item construction de l'image et démarrage du conteneur ;
+        secrets déchiffrés au moment de l'exécution seulement, suivie,
+        pour un projet Docker Compose, d'une validation à blanc du
+        fichier de composition ;
+  \item construction de l'image ;
+  \item démarrage du conteneur ;
   \item vérification de bon fonctionnement du conteneur démarré ;
   \item nettoyage des ressources temporaires laissées par la
         construction.
 \end{enumerate}
 
-Un échec à l'étape de vérification de bon fonctionnement déclenche un
-retour arrière automatique vers le dernier conteneur connu comme stable.
+Les phases 5 et 6 sont exécutées par une même commande distante, mais
+journalisées séparément ; une phase de préparation initiale, qui se
+limite à ouvrir le journal, précède ces huit phases. Un échec à l'étape
+de vérification de bon fonctionnement déclenche un retour arrière
+automatique vers le commit précédent, capturé lors de la synchronisation
+Git.
 
 \textbf{Journalisation.} Chaque phase écrit sa progression dans un
 fichier \textbf{jsonl} détaillé sur disque, diffusé simultanément en direct sur un

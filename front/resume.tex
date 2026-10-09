@@ -21,11 +21,14 @@ serveurs et des conteneurs Docker, le déploiement continu à partir de
 dépôts Git, la publication sécurisée d'applications sous HTTPS, la
 supervision autonome par agent dédié, et une console web intégrée.
 
-La majorité de ces domaines est aujourd'hui réalisée et vérifiée en
-conditions réelles. Les sauvegardes automatiques, la montée en charge
-automatique et un moteur de sécurité actif restent des besoins
-identifiés mais non encore implémentés, et constituent les principaux
-axes d'évolution du projet.
+Sur ces domaines fonctionnels retenus, huit sont entièrement
+réalisés, trois le sont pour leur socle (déploiement continu,
+publication applicative, journal d'audit) et trois restent à l'état de
+besoin : les sauvegardes automatiques, la montée en charge automatique
+et l'audit de sécurité automatisé des serveurs et des applications. Le
+contrôle d'accès est réalisé ; l'audit de règles de sécurité, composant
+distinct, ne l'est pas. Les fonctionnalités réalisées ont été éprouvées
+lors d'essais sur un VPS et des machines virtuelles.
 
 \bigskip
 \noindent\textbf{Mots-clés :} infrastructure, DevOps, contrôle d'accès

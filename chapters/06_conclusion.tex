@@ -21,8 +21,8 @@ refus explicite prévaut toujours sur une autorisation plus large.
 \section*{Bilan du projet}
 
 L'implémentation a confirmé la viabilité de cette conception. Sur les
-quatorze domaines fonctionnels définis, la majorité est aujourd'hui
-réalisée et vérifiée en conditions réelles :
+quatorze domaines fonctionnels définis, huit sont entièrement réalisés
+et trois le sont pour leur socle. Parmi eux :
 
 \begin{itemize}
   \item gestion des serveurs et des conteneurs Docker ;
@@ -33,10 +33,21 @@ réalisée et vérifiée en conditions réelles :
   \item contrôle d'accès entièrement piloté en base de données.
 \end{itemize}
 
-Certaines limites restent assumées, en particulier l'absence de
-sauvegardes automatiques, de montée en charge automatique et d'un
-moteur de sécurité actif, qui demeurent les axes les plus critiques pour
-une éventuelle suite du projet.
+Trois domaines restent à l'état de besoin identifié :
+
+\begin{itemize}
+  \item les sauvegardes automatiques des bases de données ;
+  \item la montée en charge automatique ;
+  \item l'audit de sécurité automatisé des serveurs et des applications
+        (règles de contrôle, alerte et recommandation).
+\end{itemize}
+
+Le contrôle d'accès, réalisé, ne doit pas être confondu avec cet audit :
+le premier décide qui peut faire quoi dans l'outil, le second
+vérifierait la sécurité des serveurs et des applications eux-mêmes, et
+n'existe pas encore. Ces trois domaines constituent les principaux axes
+d'une éventuelle suite du projet. Les fonctionnalités réalisées ont été
+éprouvées lors d'essais sur un VPS et des machines virtuelles.
 
 \section*{Compétences techniques développées}
 
